@@ -1,0 +1,65 @@
+<% layout('../layouts/layout.ejs') -%>
+<div class="container-fluid" ng-controller="listController">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-primary" style="z-index: 1 !important">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h4 class="card-title" style="line-height: 50px">Notification</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table" id="transactions-table" style="width: 100% !important">
+                            <thead class="text-primary">
+                                <tr>
+                                    <th style="width: 10%">Created Date</th>
+                                    <th style="width: 15%">Tree ID</th>
+                                    <th style="width: 30%">Content</th>
+                                    <th style="width: 10%">Priority</th>
+                                    <th style="width: 15%">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- <tr ng-repeat="transaction in transactions">
+                                    <td data-order="{{transaction.createdTime}}">
+                                        <a href="/bill/{{transaction.code}}">
+                                            {{transaction.createdTime | date:'dd/MM/yyyy HH:mm:ss'}}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a href="/bill/{{transaction.code}}">
+                                            {{transaction.apartment.name}}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a href="/bill/{{transaction.code}}">
+                                            {{transaction.room.roomNumber}}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a href="/bill/{{transaction.code}}">
+                                            {{transaction.user.name}}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a href="/bill/{{transaction.code}}">
+                                            {{transaction.payments | currency:'':0}}
+                                        </a>
+                                    </td>
+                                </tr> -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script>
+<script>
+ 
+    clickSideBar('notification-page')
+</script>

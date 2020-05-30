@@ -6,22 +6,18 @@
 </head>
 
 <body>
-    <div id="loading">
+    <!-- <div id="loading">
         <img src="/images/logo.png" />
-    </div>
+    </div> -->
     <div class="wrapper ">
-        <%if (role === 'Supervisor'){%>
-            <% include ./sidebar.ejs -%>
-        <%} else if (role === 'Manager') {%>
-            <% include ./sidebar_manager.ejs -%>
-        <%}%>
+        <% include ./sidebar.ejs -%>
         <div class="main-panel">
             <% include ./header.ejs %>
-        <div class="content">
-            <%- body %>
+            <div class="content">
+                <%- body %>
+            </div>
+            <% include ./footer.ejs %>
         </div>
-        <% include ./footer.ejs %>
-    </div>
     </div>
 
     <script>
@@ -199,7 +195,6 @@
         $(document).ready(function () {
             // Javascript method's body can be found in assets/js/demos.js
             md.initDashboardPageCharts();
-
         });
     </script>
 </body>
