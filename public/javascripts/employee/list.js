@@ -3,11 +3,9 @@ app.controller('listController', ['$scope', 'apiService', function ($scope, apiS
     // $scope.listEmployees = await apiService.getListEmployee();
     let options = {
         language: {
-            lengthMenu: "Hiển thị _MENU_ dòng mỗi trang",
-            zeroRecords: "Không có dữ liệu - xin lỗi",
-            info: "Hiển thị _PAGE_ của _PAGES_",
-            infoEmpty: "Không có dữ liệu phù hợp",
-            infoFiltered: "(Lọc từ _MAX_ tổng bản ghi)"
+            decimal: '.',
+            thousands: ',',
+            url: '//cdn.datatables.net/plug-ins/1.10.19/i18n/Vietnamese.json'
         },
         ajax: {
             url: '/javascripts/employee/MOCK_DATA.json',
