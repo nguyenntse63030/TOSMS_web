@@ -17,4 +17,9 @@ router.get('/employee/:id', function (req, res, next) {
 router.get('/notification', function (req, res, next) {
   res.render('notification/list', { title: 'Notification' })
 })
+
+router.get('/notification/:id', function (req, res, next) {
+  let treeID = req.params.id
+  res.render('notification/detail', { title: 'Notification Detail', treeID: treeID })
+})
 module.exports = router;
