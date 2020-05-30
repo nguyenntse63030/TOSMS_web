@@ -21,7 +21,7 @@
     <div class="logo">
         <a href="/profile" class="simple-text logo-normal">
             <div class="card-avatar">
-                <img class="img" id="sb-photoURL" src="/images/logo.png" />
+                <img class="img" id="sb-photoURL" src="/images/logo/user-avatar.jpg" />
             </div>
             <div>
                 <h4 id="side-bar-role" class="sb-user-infor"></h4>
@@ -48,10 +48,10 @@
         }
         else $('#dashboard-page').addClass('active');
 
-        let user = JSON.parse(COMMON.getCookie('user'))
-        $('#side-bar-role').text(user.role)
-        $('#side-bar-name').text(user.name)
-        $('#sb-photoURL').attr('src', user.photoURL)
+    //     let user = JSON.parse(COMMON.getCookie('user'))
+    //     $('#side-bar-role').text(user.role)
+    //     $('#side-bar-name').text(user.name)
+    //     $('#sb-photoURL').attr('src', user.photoURL)
     });
     function clickSideBar(id) {
         COMMON.setCookie('current-tab', id)

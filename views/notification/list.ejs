@@ -1,4 +1,5 @@
 <% layout('../layouts/layout.ejs') -%>
+<link href="/stylesheets/notification/list.css" rel="stylesheet" />
 <div class="container-fluid" ng-controller="listController">
     <div class="row">
         <div class="col-md-12">
@@ -12,44 +13,44 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table" id="transactions-table" style="width: 100% !important">
+                        <table class="table" id="notification-table" style="width: 100% !important">
                             <thead class="text-primary">
                                 <tr>
-                                    <th style="width: 10%">Created Date</th>
-                                    <th style="width: 15%">Tree ID</th>
-                                    <th style="width: 30%">Content</th>
-                                    <th style="width: 10%">Priority</th>
-                                    <th style="width: 15%">Status</th>
+                                    <th style="width: 10%">Ngày cập nhật</th>
+                                    <th style="width: 15%">Cây ID</th>
+                                    <th style="width: 30%">Nội dung</th>
+                                    <th style="width: 10%">Độ ưu tiên</th>
+                                    <th style="width: 15%">Trạng thái xử lý</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- <tr ng-repeat="transaction in transactions">
-                                    <td data-order="{{transaction.createdTime}}">
-                                        <a href="/bill/{{transaction.code}}">
-                                            {{transaction.createdTime | date:'dd/MM/yyyy HH:mm:ss'}}
+                                <tr ng-repeat="notification in notifications">
+                                    <td data-order="{{notification.createdTime}}">
+                                        <a href="">
+                                            {{notification.createdTime | date:'dd/MM/yyyy HH:mm:ss'}}
                                         </a>
                                     </td>
                                     <td>
-                                        <a href="/bill/{{transaction.code}}">
-                                            {{transaction.apartment.name}}
+                                        <a href="">
+                                            {{notification.treeID}}
                                         </a>
                                     </td>
                                     <td>
-                                        <a href="/bill/{{transaction.code}}">
-                                            {{transaction.room.roomNumber}}
+                                        <a href="">
+                                            {{notification.content}}
                                         </a>
                                     </td>
                                     <td>
-                                        <a href="/bill/{{transaction.code}}">
-                                            {{transaction.user.name}}
+                                        <a href="">
+                                            {{notification.priority}}
                                         </a>
                                     </td>
                                     <td>
-                                        <a href="/bill/{{transaction.code}}">
-                                            {{transaction.payments | currency:'':0}}
+                                        <a href="">
+                                            {{notification.status}}
                                         </a>
                                     </td>
-                                </tr> -->
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -59,7 +60,8 @@
     </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script>
+<script src="/javascripts/notification/list.js"></script>
+
 <script>
- 
     clickSideBar('notification-page')
 </script>
