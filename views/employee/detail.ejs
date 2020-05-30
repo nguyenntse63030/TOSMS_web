@@ -1,0 +1,281 @@
+<% layout('../layouts/layout.ejs') -%>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" rel="stylesheet" />
+<style>
+    .modal-footer {
+        display: initial
+    }
+</style>
+<p id="code" class="hide"> <%= code %></p>
+<div class="container-fluid" ng-controller="detailController">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header card-header-primary">
+                    <h4 class="card-title">Hồ Sơ Nhân Viên</h4>
+                </div>
+                <div class="card-body">
+                    <form>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="bmd-label-floating">Tên</label>
+                                    <input type="text" class="form-control" ng-model="employee.fullname" id="fullname"
+                                        value="{{employee.fullname}} " ng-disabled="isNotEditing">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="bmd-label-floating">SĐT</label>
+                                    <input type="text" class="form-control numberInput" ng-model="employee.phone"
+                                        value="{{employee.phone}} " ng-disabled="true">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="bmd-label-floating">Giới tính</label>
+                                    <input type="text" class="form-control" value=" " ng-hide="true">
+                                    <select style="width: 100%;" class="form-control select2-single"
+                                        ng-model="employee.gender" ng-disabled="isNotEditing">
+                                        <option value="Male">Nam</option>
+                                        <option value="Female">Nữ</option>
+                                        <option value="Other">Khác</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="bmd-label-floating">Ngày sinh</label>
+                                    <input type="text" class="form-control" name="birthdate" id="birthdate"
+                                        value="{{employee.dateOfBirth | date:'dd/MM/yyyy'}}" ng-disabled="isNotEditing">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="bmd-label-floating">Email</label>
+                                    <input type="text" class="form-control" ng-model="employee.email"
+                                        value="{{employee.email}} " ng-disabled="isNotEditing">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="bmd-label-floating">Chức vụ</label>
+                                    <input type="text" class="form-control" value=" " ng-hide="true">
+                                    <select style="width: 100%;" class="form-control select2-single"
+                                        ng-model="employee.role" id="role" ng-disabled="isNotEditing">
+                                        <option value="1">Giám Sát</option>
+                                        <option value="0">Công Nhân</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="bmd-label-floating">Địa chỉ</label>
+                                    <input type="text" class="form-control" ng-model="employee.address"
+                                        value="{{employee.address}} " ng-disabled="isNotEditing">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="note">Ghi chú</label>
+                                    <textarea type="text" rows="3" class="form-control" ng-model="employee.note"
+                                        ng-disabled="isNotEditing" id="note"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div ng-show="isNotEditing" ng-hide="bill.status === 'PAID'">
+                            <button type="submit" class="btn btn-danger pull-left" data-toggle="modal"
+                                data-target="#deleteEmployeeModal">Xóa</button>
+                            <button type="submit" class="btn btn-primary pull-right"
+                                ng-click="isNotEditing=false;">Chỉnh sửa</button>
+                        </div>
+
+                        <div ng-show="!isNotEditing">
+                            <button type="submit" class="btn btn-success pull-right"
+                                ng-click="isNotEditing=true;updateEmployee()">Lưu</button>
+                            <button type="submit" class="btn btn-danger pull-left"
+                                ng-click="isNotEditing=true">Hủy bỏ</button>
+                        </div>
+                        <div class="clearfix"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card card-profile">
+                <div class="card-avatar" onclick="showModalChangeAvatar()">
+                    <a href="">
+                        <img class="img" src="{{employee.photoURL || 'https://iweb.tatthanh.com.vn/pic/3/blog/logo-cay-xanh.jpg'}}" />
+                    </a>
+                </div>
+                <div class="card-body">
+                    <h6 class="card-category text-gray">Nhân Viên</h6>
+                    <h4 class="card-title">{{employee.fullname}}</h4>
+                </div>
+            </div>
+            <!-- <button ng-click="getRoom()" type="submit" class="btn btn-primary pull-left" data-toggle="modal"
+                data-target="#addRoomModel">Add Room</button> -->
+
+        </div>
+    </div>
+    <!-- <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header card-header-primary">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h4 class="card-title" style="line-height: 50px">Room List</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table" id="rooms-table">
+                            <thead class=" text-primary">
+                                <th style="width: 10%">Number</th>
+                                <th style="width: 30%">Apartment</th>
+                                <th style="width: 15%">Sign Date</th>
+                                <th style="width: 15%">Expired Date</th>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="room in roomsForCustomer">
+                                    <td>
+                                        <a href="/room/{{room.code}}">
+                                            {{room.roomNumber}}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a href="/room/{{room.code}}">
+                                            {{room.apartment.name}}
+                                        </a>
+                                    </td>
+                                    <td data-order="{{room.signDate}}">
+                                        <a href="/room/{{room.code}}">
+                                            {{room.signDate == 0 ? 'N/A' : room.signDate | date:'dd/MM/yyyy HH:mm:ss'}}
+                                        </a>
+                                    </td>
+                                    <td data-order="{{room.expiredDate}}">
+                                        <a href="/room/{{room.code}}">
+                                            {{room.expiredDate == 0 ? 'N/A' : room.expiredDate | date:'dd/MM/yyyy HH:mm:ss'}}
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+
+    <!-- Modal -->
+    <div class="modal fade model-center" id="deleteEmployeeModal" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="deleteRoomModelLabel" data-color="purple">Delete Employee Confirm</h3>
+                    <button type="button" class="close btn-close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h3 class="model-content text-center">Are you sure to delete this employee?</h3>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary pull-right" ng-click="deleteEmployee()">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade model-center" id="addRoomModel" role="dialog" aria-labelledby="addRoomModelLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="addRoomModelLabel" data-color="purple">Add New Room</h3>
+                    <button type="button" class="close btn-close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row" style="display: flex">
+                        <div class="col-md-6" style="margin: 0 auto;">
+                            <div class="form-group">
+                                <select style="width: 100%" class="form-control" name="selected-room" id="selected-room"
+                                    ng-model="selectedRoom">
+                                    <option ng-disabled="room.user" ng-repeat="room in rooms" value="{{room._id}}">
+                                        {{room.user ? room.roomNumber  + ' - ' + room.user.name : room.roomNumber}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary pull-right" ng-click="addRoomForUser()">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script>
+
+
+
+
+<script src="/javascripts/employee/detail.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+    clickSideBar('employee-page')
+    $(document).ready(function () {
+        $('#birthdate').datepicker({
+            dateFormat: 'dd/mm/yy',
+            autoclose: true,
+            changeMonth: true,
+            changeYear: true,
+            yearRange: '-100:' + new Date().getFullYear()
+        })
+        $('#selected-apartment').select2({
+            placeholder: 'Select a apartment'
+        });
+        $('#selected-room').select2({
+            placeholder: 'Select a room'
+        });
+        $('.select2-single').select2()
+        setTimeout(() => {
+            numberFormat()
+        }, 200);
+    });
+</script>
