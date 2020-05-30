@@ -6,6 +6,14 @@ router.get('/', function (req, res, next) {
   res.render('index', { title: 'Login' });
 })
 
+router.get('/employee', function (req, res, next) {
+  res.render('employee/list', { title: 'Nhân Viên' })
+})
+
+router.get('/employee/:id', function (req, res, next) {
+  res.render('employee/detail', { title: 'Hồ Sơ', code: '' })
+})
+
 router.get('/notification', function (req, res, next) {
   res.render('notification/list', { title: 'Notification' })
 })
