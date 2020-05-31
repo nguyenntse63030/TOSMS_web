@@ -1,0 +1,50 @@
+<% layout('../layouts/layout.ejs') -%>
+<style>
+    .table-row-link {
+        color: #ab47bc;
+    }
+
+    .table-row-link:hover {
+        color: white
+    }
+
+    .img-data-row {
+        width: 70px;
+        height: 70px;
+    }
+</style>
+<div class="container-fluid" ng-controller="listController">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header-primary" style="z-index: 1 !important">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h4 class="card-title" style="line-height: 50px">Nhân Viên</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table" id="tree-table" style="width: 100% !important">
+                            <thead class="text-primary">
+                                <tr>
+                                    <th style="width: 10%">Ngày Tạo</th>
+                                    <th style="width: 10%">Id Cây</th>
+                                    <th style="width: 15%">Hình Ảnh</th>
+                                    <th style="width: 10%">Vị Trí</th>
+                                    <th style="width: 5%">Trạng Thái</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/javascripts/tree/list.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script>
+<script>
+    clickSideBar('tree-page')
+</script>
