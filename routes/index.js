@@ -18,6 +18,10 @@ router.get('/tree', function (req, res, next) {
   res.render('tree/list', { title: 'Cây' })
 })
 
+router.get('/tree/:id', function (req, res, next) {
+  res.render('tree/detail', { title: 'Chi Tiết Cây', code: '' })
+})
+
 router.get('/notification', function (req, res, next) {
   res.render('notification/list', { title: 'Notification' })
 })
