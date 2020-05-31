@@ -10,21 +10,21 @@ app.controller('listController', ['$scope', 'apiService', function ($scope, apiS
             dataSrc: (response) => {
                return response.map((tree) => {
                     return {
-                        createdTime: generateATag(tree, 'createdTime'),
                         id: generateATag(tree, 'id'),
                         img: generateATag(tree, 'img'),
                         location: generateATag(tree, 'location'),
                         status: generateATag(tree, 'status'),
+                        createdTime: generateATag(tree, 'createdTime'),
                     }
                })
             }
         },
         columns: [
-            { data: 'createdTime' },
             { data: 'id' },
             { data: 'img' },
             { data: 'location' },
-            { data: 'status' }
+            { data: 'status' },
+            { data: 'createdTime' },
         ]
     }
     $('#tree-table').DataTable(options);

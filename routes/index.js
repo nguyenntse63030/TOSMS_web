@@ -27,9 +27,19 @@ router.get("/camera/create", function (req, res, next) {
   res.render("camera/create", { title: "Tạo Thông Tin Camera" });
 });
 
+<<<<<<< HEAD
 router.get("/notification", function (req, res, next) {
   res.render("notification/list", { title: "Notification" });
 });
+=======
+router.get('/tree/:id', function (req, res, next) {
+  res.render('tree/detail', { title: 'Chi Tiết Cây', code: '' })
+})
+
+router.get('/notification', function (req, res, next) {
+  res.render('notification/list', { title: 'Notification' })
+})
+>>>>>>> 7fd61204c79c0570a5eb2479c89b5177ac7dfcd1
 
 router.get("/notification/:id", function (req, res, next) {
   let treeID = req.params.id;
