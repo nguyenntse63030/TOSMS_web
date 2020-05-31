@@ -1,0 +1,126 @@
+<% layout('../layouts/layout.ejs') -%>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" rel="stylesheet" />
+<style>
+
+</style>
+<p id="treeID" ng-hide="true"><%= treeID %></p>
+<div class="container-fluid" ng-controller="detailController">
+    <div class="row flex">
+        <div class="col-md-8 mg-0-auto">
+            <div class="card">
+                <div class="card-header card-header-primary">
+                    <h4 class="card-title"><%= title %></h4>
+                </div>
+                <div class="card-body">
+                    <form>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="bmd-label-floating">Ngày cập nhật</label>
+                                    <input type="text" class="form-control"
+                                        value="{{notification.createdTime | date:'dd/MM/yyyy HH:mm:ss'}}" disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="bmd-label-floating">Độ ưu tiên</label>
+                                    <input type="text" class="form-control" value="{{notification.priority}}" disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="bmd-label-floating">Trạng thái xử lý</label>
+                                    <input type="text" class="form-control" value="{{notification.status}}" disabled>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="note">Nội dung</label>
+                                    <textarea type="text" rows="3" class="form-control" ng-model="notification.content"
+                                        ng-disabled="isNotEditing"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- <div ng-show="isNotEditing" ng-hide="bill.status === 'PAID'">
+                            <button type="submit" class="btn btn-danger pull-left" data-toggle="modal"
+                                data-target="#deleteBillModal">Delete</button>
+                            <button type="submit" class="btn btn-primary pull-right"
+                                ng-click="isNotEditing=false;">Edit</button>
+                        </div>
+
+                        <div ng-show="!isNotEditing">
+                            <button type="submit" class="btn btn-success pull-right"
+                                ng-click="isNotEditing=true;updateBill()">Save</button>
+                            <button type="submit" class="btn btn-danger pull-left"
+                                ng-click="isNotEditing=true">Cancel</button>
+                        </div> -->
+                        <div class="clearfix"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card card-profile">
+                <div class="card-avatar">
+                    <a href="#">
+                        <img class="img" src="{{room.user.photoURL || '/images/logo/tree-avatar.jpg'}}" />
+                    </a>
+                </div>
+                <div class="card-body">
+                    <h6 class="card-category text-gray">{{treeID}}</h6>
+                    <!-- <h4 class="card-title">{{}}</h4> -->
+                    <!-- <br> -->
+                    <!-- <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="signDate">Sign Date</label>
+                                <input type="text" class="form-control" ng-model="room.signDate | date: 'dd/MM/yyyy'"
+                                    id="signDate" disabled>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="expiredDate pull-right">Expired Date</label>
+                                <input type="text" class="form-control"
+                                    ng-value="room.expiredDate > 0 ? (room.expiredDate | date: 'dd/MM/yyyy') : 'N/A'"
+                                    id="expiredDate" disabled>
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <!-- <div class="modal fade model-center" id="deleteBillModal" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="addRoomModelLabel" data-color="purple">Delete Bill Confirm</h3>
+                    <button type="button" class="close btn-close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h3 class="model-content">Are you sure to delete this bill?</h3>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary pull-right" ng-click="deleteBill()">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div> -->
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script>
+<script src="/javascripts/notification/detail.js"></script>
+<script>
+    clickSideBar('notification-page')
+    $(document).ready(function () {
+        $('.select2-single').select2()
+    })
+</script>

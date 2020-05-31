@@ -26,27 +26,27 @@
                             <tbody>
                                 <tr ng-repeat="notification in notifications">
                                     <td data-order="{{notification.createdTime}}">
-                                        <a href="">
+                                        <a href="/notification/{{notification.treeID}}">
                                             {{notification.createdTime | date:'dd/MM/yyyy HH:mm:ss'}}
                                         </a>
                                     </td>
                                     <td>
-                                        <a href="">
+                                        <a href="/notification/{{notification.treeID}}">
                                             {{notification.treeID}}
                                         </a>
                                     </td>
                                     <td>
-                                        <a href="">
+                                        <a href="/notification/{{notification.treeID}}">
                                             {{notification.content}}
                                         </a>
                                     </td>
                                     <td>
-                                        <a href="">
+                                        <a href="/notification/{{notification.treeID}}">
                                             {{notification.priority}}
                                         </a>
                                     </td>
                                     <td>
-                                        <a href="">
+                                        <a href="/notification/{{notification.treeID}}">
                                             {{notification.status}}
                                         </a>
                                     </td>
