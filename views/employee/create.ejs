@@ -1,0 +1,139 @@
+<% layout('../layouts/layout.ejs') -%>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" rel="stylesheet" />
+<style>
+  .modal-footer {
+    display: initial;
+  }
+</style>
+<div class="container-fluid" ng-controller="createController">
+  <div class="row flex">
+    <div class="col-md-12 mg-0-auto">
+      <div class="card">
+        <div class="card-header card-header-primary">
+          <h4 class="card-title">Tạo Mới Nhân Viên</h4>
+        </div>
+        <div class="card-body">
+          <form>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="bmd-label-floating">Họ & Tên</label>
+                  <input type="text" class="form-control" ng-model="employee.name" id="fullname" />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="bmd-label-floating">Số Điện Thoại</label>
+                  <input type="text" class="form-control numberInput" ng-model="employee.phone" />
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="bmd-label-floating">Giới Tính</label>
+                  <select style="width: 100%;" class="form-control select2-single" ng-model="employee.gender">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="bmd-label-floating">Chức Vụ</label>
+                  <select style="width: 100%;" class="form-control select2-single" ng-model="employee.role">
+                    <option value="Male">Giám Sát</option>
+                    <option value="Female">Công Nhân</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group" style="margin-top: 29px;">
+                  <label class="bmd-label-floating">Ngày Sinh</label>
+                  <input type="text" class="form-control" name="birthdate" id="birthdate" value=" " />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group" style="margin-top: 29px;">
+                  <label class="bmd-label-floating">Quận Làm Việc</label>
+                  <input type="text" class="form-control" ng-model="employee.address" />
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group" style="margin-top: 29px;">
+                  <label class="bmd-label-floating">Tên Tài Khoản</label>
+                  <input type="text" class="form-control" ng-model="employee.username" />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group" style="margin-top: 29px;">
+                  <label class="bmd-label-floating">Mật Khẩu</label>
+                  <input type="text" class="form-control" ng-model="employee.password" />
+                </div>
+              </div>
+            </div>
+            <!-- <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label class="bmd-label-floating">Address</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    ng-model="customer.address"
+                  />
+                </div>
+              </div>
+            </div> -->
+            <!-- <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label for="note">Note</label>
+                  <textarea
+                    type="text"
+                    rows="3"
+                    class="form-control"
+                    ng-model="customer.note"
+                    ng-disabled="isNotEditing"
+                    id="note"
+                  ></textarea>
+                </div>
+              </div>
+            </div> -->
+            <button type="submit" class="btn btn-primary pull-right" ng-click="createUser()">
+              Tạo Nhân Viên
+            </button>
+            <div class="clearfix"></div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script>
+<script src="/javascripts/supervisor/user/create.js"></script>
+<script>
+  clickSideBar("user-page");
+  $(document).ready(function () {
+    $(".select2-single").select2().val("Male").trigger("change");
+
+    $("#birthdate")
+      .datepicker({
+        dateFormat: "dd/mm/yy",
+        autoclose: true,
+        changeMonth: true,
+        changeYear: true,
+        yearRange: "-100:" + new Date().getFullYear(),
+      })
+      .datepicker("setDate", "today");
+    setTimeout(() => {
+      numberFormat();
+      $("#fullname").focus();
+    }, 200);
+  });
+</script>

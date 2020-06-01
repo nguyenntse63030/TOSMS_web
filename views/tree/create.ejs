@@ -1,0 +1,124 @@
+<% layout('../layouts/layout.ejs') -%>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" rel="stylesheet" />
+<style>
+  .modal-footer {
+    display: initial;
+  }
+</style>
+<div class="container-fluid" ng-controller="createController">
+  <div class="row flex">
+    <div class="col-md-12 mg-0-auto">
+      <div class="card">
+        <div class="card-header card-header-primary">
+          <h4 class="card-title">Tạo Mới Cây</h4>
+        </div>
+        <div class="card-body">
+          <form>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="bmd-label-floating">Mã Cây</label>
+                  <input type="text" class="form-control" ng-model="tree.idtree" id="idtree" />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="bmd-label-floating">Loại Cây</label>
+                  <input type="text" class="form-control numberInput" ng-model="tree.typetree" />
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group" style="margin-top: 29px;">
+                  <label class="bmd-label-floating">Ngày Trồng</label>
+                  <input type="text" class="form-control" name="birthdate" id="birthdate" value=" " />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="bmd-label-floating">Trạng Thái</label>
+                  <select style="width: 100%;" class="form-control select2-single" ng-model="tree.status">
+                    <option value="normal">Bình Thường</option>
+                    <option value="danger">Nguy hiểm</option>
+                    <option value="maintenance">Đang Bảo Dưỡng</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group" style="margin-top: 29px;">
+                  <label class="bmd-label-floating">Vị Trí</label>
+                  <input type="text" class="form-control" ng-model="tree.location" />
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group" style="margin-top: 29px;">
+                  <label class="bmd-label-floating">Mã Camera</label>
+                  <input type="text" class="form-control" ng-model="tree.idcamera" />
+                </div>
+              </div>
+            </div>
+            <!-- <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label class="bmd-label-floating">Address</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    ng-model="customer.address"
+                  />
+                </div>
+              </div>
+            </div> -->
+            <!-- <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label for="note">Note</label>
+                  <textarea
+                    type="text"
+                    rows="3"
+                    class="form-control"
+                    ng-model="customer.note"
+                    ng-disabled="isNotEditing"
+                    id="note"
+                  ></textarea>
+                </div>
+              </div>
+            </div> -->
+            <button type="submit" class="btn btn-primary pull-right" ng-click="createUser()">
+              Tạo Thông Tin Cây
+            </button>
+            <div class="clearfix"></div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script>
+<script src="/javascripts/supervisor/user/create.js"></script>
+<script>
+  clickSideBar("user-page");
+  $(document).ready(function () {
+    $(".select2-single").select2().val("normal").trigger("change");
+
+    $("#birthdate")
+      .datepicker({
+        dateFormat: "dd/mm/yy",
+        autoclose: true,
+        changeMonth: true,
+        changeYear: true,
+        yearRange: "-100:" + new Date().getFullYear(),
+      })
+      .datepicker("setDate", "today");
+    setTimeout(() => {
+      numberFormat();
+      $("#idtree").focus();
+    }, 200);
+  });
+</script>

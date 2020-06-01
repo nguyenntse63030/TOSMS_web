@@ -1,0 +1,104 @@
+<% layout('../layouts/layout.ejs') -%>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" rel="stylesheet" />
+<style>
+  .modal-footer {
+    display: initial;
+  }
+
+  .display {
+    padding-left: 150px;
+  }
+</style>
+<div class="container-fluid" ng-controller="createController">
+  <div class="row flex">
+    <div class="display col-md-10 mg-0-auto">
+      <div class="card">
+        <div class="card-header card-header-primary">
+          <h4 class="card-title">Tạo Mới Camera</h4>
+        </div>
+        <div class="card-body">
+          <form>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label class="bmd-label-floating">Mã Camera</label>
+                  <input type="text" class="form-control" ng-model="camera.idcamera" id="idcamera" />
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label class="bmd-label-floating">Trạng Thái</label>
+                  <input type="text" class="form-control numberInput" ng-model="camera.status" />
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group" style="margin-top: 29px;">
+                  <label class="bmd-label-floating">Ngày Lắp</label>
+                  <input type="text" class="form-control" name="birthdate" id="birthdate" value=" " />
+                </div>
+              </div>
+            </div>
+            <!-- <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label class="bmd-label-floating">Address</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    ng-model="customer.address"
+                  />
+                </div>
+              </div>
+            </div> -->
+            <!-- <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label for="note">Note</label>
+                  <textarea
+                    type="text"
+                    rows="3"
+                    class="form-control"
+                    ng-model="customer.note"
+                    ng-disabled="isNotEditing"
+                    id="note"
+                  ></textarea>
+                </div>
+              </div>
+            </div> -->
+            <button type="submit" class="btn btn-primary pull-right" ng-click="createUser()">
+              Tạo Thông Tin Camera
+            </button>
+            <div class="clearfix"></div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script>
+<script src="/javascripts/supervisor/user/create.js"></script>
+<script>
+  clickSideBar("user-page");
+  $(document).ready(function () {
+    // $(".select2-single").select2().val("Male").trigger("change");
+
+    $("#birthdate")
+      .datepicker({
+        dateFormat: "dd/mm/yy",
+        autoclose: true,
+        changeMonth: true,
+        changeYear: true,
+        yearRange: "-100:" + new Date().getFullYear(),
+      })
+      .datepicker("setDate", "today");
+    setTimeout(() => {
+      numberFormat();
+      $("#idcamera").focus();
+    }, 200);
+  });
+</script>
