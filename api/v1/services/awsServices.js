@@ -1,6 +1,8 @@
 const aws = require("aws-sdk");
 const config = require("../../../config");
 const fs = require("fs");
+const common = require('../../common')
+const responseStatus = require('../../../configs/responseStatus')
 
 let s3bucket = new aws.S3({
   accessKeyId: config.AWS.ACCESS_KEY_ID,
@@ -9,11 +11,12 @@ let s3bucket = new aws.S3({
 });
 
 async function uploadImageToS3(file) {
-  //   let data = fs.readFileSync(file.path);
   let data = fs.createReadStream(file.path);
+  let fileName = common.formatDate(Date.now())
+  fileName = fileName.replace(/\/|:/g, '-');
   var params = {
     Bucket: config.AWS.BUCKET_NAME,
-    Key: "Imagetree/" + file.name,
+    Key: "Imagetree/" + fileName,
     Body: data,
     ACL: "public-read",
     ContentType: "image/png",
@@ -22,10 +25,11 @@ async function uploadImageToS3(file) {
     if (err) {
       console.log("error in callback");
       console.log(err);
-      return;
+      return responseStatus.Code400({errorMessage: responseStatus.UPLOAD_IMAGE_FAIL})
     }
     console.log("success");
     console.log(data);
+    return responseStatus.Code200({message: responseStatus.UPLOAD_IMAGE_SUCCESSFULLY})
   });
 }
 
