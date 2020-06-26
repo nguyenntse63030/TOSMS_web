@@ -4,7 +4,6 @@ var path = require("path");
 var ejsLocals = require("ejs-locals");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
-var config = require("./config");
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
@@ -25,6 +24,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/api/v1/upfile-to-s3", require("./api/v1/route/upfileToS3"));
+app.use("/api/v1/python", require("./api/v1/route/python"));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -97,5 +97,9 @@ module.exports = {
   },
 
   UPLOAD_IMAGE_FAIL: 'Upload Image To S3 Faild',
-  UPLOAD_IMAGE_SUCCESSFULLY: 'Upload Image To S3 Successfully'
+  UPLOAD_IMAGE_SUCCESSFULLY: 'Upload Image To S3 Successfully',
+  FILES_IS_NOT_FOUND: 'Files is not found',
+  PROCESS_DATA_FROM_PYTHON_SUCCESSFULLY: 'Process data successfully',
+  DATA_IS_NOT_FOUND: 'Data is not found',
+  CONNECTION_TO_DB_FAIL: 'Fail to connect DB'
 }

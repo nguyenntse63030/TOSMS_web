@@ -61,6 +61,14 @@ function getTimestampEndOfMonth(timestamp) {
     return Math.round(now.getTime() - 1)
 }
 
+function isEmptyObject(obj) {
+    for(var key in obj) {
+        if(obj.hasOwnProperty(key))
+            return false;
+    }
+    return true;
+}
+
 module.exports = {
     changeAlias,
     parseNumberToMoney,
@@ -68,5 +76,6 @@ module.exports = {
     formatDateV2,
     formatDateCode,
     getTimestampBeginOfMonth,
-    getTimestampEndOfMonth
+    getTimestampEndOfMonth,
+    isEmptyObject
 }
