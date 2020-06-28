@@ -13,11 +13,13 @@
     "ejs": "~2.6.1",
     "ejs-locals": "^1.0.2",
     "express": "~4.16.1",
+    "express-session": "^1.17.1",
     "firebase-admin": "^8.12.1",
     "http-errors": "~1.6.3",
     "jsonwebtoken": "^8.5.1",
     "morgan": "~1.9.1",
-    "mssql": "^6.2.0"
+    "mssql": "^6.2.0",
+    "passport": "^0.4.1"
   },
   "devDependencies": {
     "eslint": "^7.1.0"

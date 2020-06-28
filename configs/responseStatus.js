@@ -101,5 +101,8 @@ module.exports = {
   FILES_IS_NOT_FOUND: 'Files is not found',
   PROCESS_DATA_FROM_PYTHON_SUCCESSFULLY: 'Process data successfully',
   DATA_IS_NOT_FOUND: 'Data is not found',
-  CONNECTION_TO_DB_FAIL: 'Fail to connect DB'
+  CONNECTION_TO_DB_FAIL: 'Fail to connect DB',
+  CREATE_NOTIFICATION_FAIL: 'Create notirication fail',
+  CREATE_NOTIFICATION_SUCCESSFULLY: 'Create notirication successfully',
+
 }

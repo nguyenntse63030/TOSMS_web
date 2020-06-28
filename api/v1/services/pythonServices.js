@@ -1,10 +1,8 @@
 const common = require('../../common')
 const responseStatus = require('../../../configs/responseStatus');
 const awsServices = require('../services/awsServices')
-const sql = require('../services/sqlSevices');
 const constant = require('../../../configs/constant')
-const mssql = require('mssql')
-const notificaiton = require('../controller/notification');
+const notificationController = require('../controllers/notificationController')
 
 async function processImage(files) {
     if (!files) {
@@ -20,7 +18,8 @@ async function processImage(files) {
 }
 
 async function processData(data) {
-    let sqlData = {
+    data.result = JSON.parse(data.result)
+    let notificationData = {
         name: checkResult(data.result),
         description: '',
         image: data.image,
@@ -28,34 +27,7 @@ async function processData(data) {
         createdTime: new Date(data.timestamp).getTime()
     }
 
-    let DB = await sql.connection()
-    if (DB.message) {
-        throw responseStatus.Code400({errorMessage: responseStatus.CONNECTION_TO_DB_FAIL})
-    }
-    try {
-        const request = DB.request()
-        request.input('name', mssql.NVarChar, sqlData.name || '')
-        request.input('description', mssql.NVarChar, sqlData.description || '')
-        request.input('image', mssql.NVarChar, sqlData.image || '')
-        request.input('imageDetected', mssql.NVarChar, sqlData.imageDetected || '')
-        request.input('createdTime', mssql.BigInt, sqlData.createdTime || Date.now())
-
-        let query = 'INSERT INTO Notification (name, description, image, imageDetected, createdTime) VALUES(@name, @description, @image, @imageDetected, @createdTime);Select SCOPE_IDENTITY() as id'
-        const result = await request.query(query)
-        let output = {
-            result: sqlData.name,
-            notificationId: result.recordset[0].id
-        }
-        return output;
-    }
-    catch (err) {
-        console.log('Error querying database', err);
-        throw responseStatus.Code400(err)
-    }
-    finally {
-        DB.close();
-        console.log('DB closed')
-    }
+    await notificationController.createNotification(notificationData)
 }
 
 function checkResult(result) {

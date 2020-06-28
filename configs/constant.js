@@ -7,6 +7,39 @@ module.exports = {
     treeProblemDisplay: {
         BROKEN_BRANCH: 'Cây bị gãy cành',
         INCLINED_TREE: 'Cây bị nghiêng'
-    }
+    },
 
+    userRoles: {
+        ADMIN: 'admin',
+        MANAGER: 'manager',
+        WORKER: 'worker'
+    },
+
+    userRolesEnums: [
+        'admin',
+        'manager',
+        'worker'
+    ],
+
+    priorityStatus: {
+        CHUA_XU_LY: 'Chưa Xử Lý',
+        DANG_XU_LY: 'Đang Xử Lý',
+        DA_XU_LY: 'Đã Xử Lý'
+    },
+
+    priorityStatuEnums: [
+        'Chưa Xử Lý',
+        'Đang Xử Lý',
+        'Đã Xử Lý'
+    ],
+
+    cameraStatus: {
+        DANG_HOAT_DONG: 'Đang hoạt động',
+        BI_LOI: 'Bị lỗi'
+    },
+
+    cameraStatusEnums: [
+        'Đang hoạt động',
+        'Bị lỗi'
+    ]
 }

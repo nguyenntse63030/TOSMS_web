@@ -1,0 +1,74 @@
+const mongoose = require('mongoose');
+const crypto = require('crypto-js')
+const constants = require('../configs/constant')
+var UserSchema = new mongoose.Schema({
+    username: {
+        type: String,
+        default: ''
+    },
+    pasword: {
+        type: String,
+        default: ''
+    },
+    name: {
+        type: String,
+        default: ''
+    },
+    email: {
+        type: String,
+        default: ''
+    },
+    gender: {
+        type: String,
+        default: ''
+    },
+    birthday: {
+        type: Number,
+        default: 0
+    },
+    address: {
+        type: String,
+        default: ''
+    },
+    role: {
+        type: String,
+        default: constants.userRoles.WORKER,
+        enum: constants.userRolesEnums
+    },
+    avatar: {
+        type: String,
+        default: ''
+    },
+    district: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'District',
+    },
+    isActive: {
+        type: Boolean,
+        default: false
+    },
+    modifiedTime: {
+        type: Number,
+        default: Date.now
+    },
+    createdTime: {
+        type: Number,
+        default: Date.now
+    },
+});
+
+UserSchema.methods.authenticate = function(password) {
+    try {
+        var bytes = crypto.AES.decrypt(this.password, this.phone)
+        var decryptPass = bytes.toString(crypto.enc.Utf8)
+        return password === decryptPass
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+UserSchema.methods.hashPassword = function(password) {
+    return crypto.AES.encrypt(password, this.phone).toString()
+}
+
+mongoose.model('User', UserSchema);
