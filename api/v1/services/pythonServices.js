@@ -24,7 +24,7 @@ async function processData(data) {
         description: '',
         image: data.image,
         imageDetected: data.imageDetected,
-        createdTime: new Date(data.timestamp).getTime()
+        createdTime: new Date(data.timestamp).getTime() || Date.now()
     }
 
     await notificationController.createNotification(notificationData)
