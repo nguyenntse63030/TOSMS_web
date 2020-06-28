@@ -6,7 +6,7 @@ var UserSchema = new mongoose.Schema({
         type: String,
         default: ''
     },
-    pasword: {
+    password: {
         type: String,
         default: ''
     },
@@ -59,7 +59,7 @@ var UserSchema = new mongoose.Schema({
 
 UserSchema.methods.authenticate = function(password) {
     try {
-        var bytes = crypto.AES.decrypt(this.password, this.phone)
+        var bytes = crypto.AES.decrypt(this.password, this.username)
         var decryptPass = bytes.toString(crypto.enc.Utf8)
         return password === decryptPass
     } catch (error) {
@@ -68,7 +68,7 @@ UserSchema.methods.authenticate = function(password) {
 }
 
 UserSchema.methods.hashPassword = function(password) {
-    return crypto.AES.encrypt(password, this.phone).toString()
+    return crypto.AES.encrypt(password, this.username).toString()
 }
 
 mongoose.model('User', UserSchema);

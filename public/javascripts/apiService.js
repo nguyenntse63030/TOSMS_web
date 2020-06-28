@@ -9,6 +9,6 @@ angular.module('TOSMS').factory('apiService', ['$http', function ($http) {
         },
         getDetailTree: (id) => {
             return $http.get(apiVersion + '/tree/detail.json')
-        }
+        },
     }
 }])
