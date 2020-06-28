@@ -28,3 +28,56 @@
     </div>
   </div>
 </footer>
+<script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-messaging.js"></script> 
+<script src="https://www.gstatic.com/firebasejs/7.15.1/firebase-firestore.js"></script> 
+<script>
+  const firebaseConfig = {
+      apiKey: "AIzaSyB7EPFR3o1xXSyye7neNRao6j68dVeVpbY",
+      authDomain: "tosms-web.firebaseapp.com",
+      databaseURL: "https://tosms-web.firebaseio.com",
+      projectId: "tosms-web",
+      storageBucket: "tosms-web.appspot.com",
+      messagingSenderId: "215697346340",
+      appId: "1:215697346340:web:3fd5c13f24fb2475ec2db1"
+  };
+
+  // // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+
+  const firestore = firebase.firestore();
+  firestore.collection("userTest").where("readed", "==", false).onSnapshot(function (querySnapshot) {
+    querySnapshot.docs.map((doc) => {
+      let notification = doc.data();
+      createNotiElement(notification);
+    })
+    $('#count-number').text(querySnapshot.docs.length)
+  })
+
+
+  let createNotiElement = (notification) => {
+    $('#list-noti').append('<div class="menu-item"><a onclick="visitLink(\'' + notification.link + '\')">'
+      + '<img src="' + notification.icon + '"/>' 
+      + '<span class="content-noti">' 
+      + '<p class="title">' + notification.title + '</p>' 
+      + '<p class="content">' + notification.body +'</p>'
+      + '</span>'
+      + '</a><div>')
+  }
+
+  let visitLink = (link) => {
+    window.location.href  = link;
+  }
+
+  // const messaging = firebase.messaging();
+  // var Notiarr = [];
+  // messaging.onMessage((payload) => {
+  //   console.log(Notification.permission.length)
+  // });
+
+  // messaging.getToken().then((token) => {
+  //   console.log(token)
+  // })
+
+  // messaging.
+</script>

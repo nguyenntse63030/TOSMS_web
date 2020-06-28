@@ -4,6 +4,7 @@ const awsServices = require('../services/awsServices')
 const sql = require('../services/sqlSevices');
 const constant = require('../../../configs/constant')
 const mssql = require('mssql')
+const notificaiton = require('../controller/notification');
 
 async function processImage(files) {
     if (!files) {
@@ -39,10 +40,13 @@ async function processData(data) {
         request.input('imageDetected', mssql.NVarChar, sqlData.imageDetected || '')
         request.input('createdTime', mssql.BigInt, sqlData.createdTime || Date.now())
 
-        let query = 'INSERT INTO Notification (name, description, image, imageDetected, createdTime) VALUES(@name, @description, @image, @imageDetected, @createdTime)'
+        let query = 'INSERT INTO Notification (name, description, image, imageDetected, createdTime) VALUES(@name, @description, @image, @imageDetected, @createdTime);Select SCOPE_IDENTITY() as id'
         const result = await request.query(query)
-
-        return result.rowsAffected.length > 0;
+        let output = {
+            result: sqlData.name,
+            notificationId: result.recordset[0].id
+        }
+        return output;
     }
     catch (err) {
         console.log('Error querying database', err);
@@ -81,9 +85,10 @@ async function processDataFromPython(data, files) {
     if (common.isEmptyObject(data.result)) {
         throw responseStatus.Code400({ errorMessage: responseStatus.DATA_IS_NOT_FOUND })
     }
-    let fileURLs = await processImageFromPython(files)
+    let fileURLs = await processImage(files)
     data = Object.assign({}, data, fileURLs);
-    await processData(data)
+    let result = await processData(data)
+    notificaiton.sendNotification(result);
     return responseStatus.Code200({ message: responseStatus.PROCESS_DATA_FROM_PYTHON_SUCCESSFULLY })
 }
 

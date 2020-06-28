@@ -1,4 +1,75 @@
 <!-- Navbar -->
+<style>
+  .container-noti {
+    position: relative;
+    width: 30px;
+    height: 30px;
+    cursor: pointer
+  }
+
+  .icon-noti {
+    position: absolute;
+    top: -2px
+  }
+
+  .icon-size {
+    font-size: 30px !important;
+  }
+
+  .icon-number-noti {
+    position: absolute;
+    left: 15px;
+    color: #ffffff;
+    z-index: 1;
+    border: 1px solid #ffffff;
+    width: 18px;
+    background-color: #e60000;
+    text-align: center;
+    border-radius: 10px 10px;
+  }
+
+  .dropdown-menu {
+    left: -100px;
+    min-width: 12rem;
+    padding: 0;
+    margin: 0
+  }
+
+  .menu-item {
+
+    overflow: hidden;
+    border-bottom: 1px solid black;
+    padding: 5px;
+  }
+
+  .menu-item a{
+    display: flex;
+    color: black;
+  }
+
+  .menu-item a:hover {
+    background-color: unset;
+    box-shadow: unset;
+  }
+
+  .menu-item img {
+    border-radius: 25px;
+    width: 48px;
+    height: 48px;
+  }
+
+  .title {
+    font-size: 12px;
+    font-weight: bold;
+    margin: 0;
+  }
+
+  .content {
+    font-size: 11px;
+    color: black;
+    margin-top: 5px
+  }
+</style>
 <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
   <div class="container-fluid">
     <!-- <div class="navbar-wrapper">
@@ -12,11 +83,21 @@
       <span class="navbar-toggler-icon icon-bar"></span>
     </button>
     <div class="collapse navbar-collapse justify-content-end">
+      <div class="container-noti" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <span class="material-icons icon-noti icon-size">
+          notifications
+        </span>
+        <span id="count-number" class="icon-number-noti">
+        </span>
+
+        <div id="list-noti" class="dropdown-menu dropdown-menu-left">
+        </div>
+      </div>
       <ul class="navbar-nav">
         <li class="nav-item dropdown">
           <a class="nav-link" href="#pablo" id="navbarDropdownProfile" data-toggle="dropdown" aria-haspopup="true"
             aria-expanded="false">
-            <i class="material-icons">person</i>
+            <i class="material-icons icon-size">person</i>
             <p class="d-lg-none d-md-block">
               Account
             </p>
