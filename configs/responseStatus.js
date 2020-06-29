@@ -104,5 +104,5 @@ module.exports = {
   CONNECTION_TO_DB_FAIL: 'Fail to connect DB',
   CREATE_NOTIFICATION_FAIL: 'Create notirication fail',
   CREATE_NOTIFICATION_SUCCESSFULLY: 'Create notirication successfully',
-
+  NOTIFICATION_IS_NOT_FOUND: 'Notification không tồn tại'
 }

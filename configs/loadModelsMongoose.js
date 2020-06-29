@@ -4,7 +4,7 @@ const fs = require('fs')
 var path = require('path')
 
 mongoose.Promise = global.Promise
-mongoose.connect(config.uriMongo, {useNewUrlParser: true})
+mongoose.connect(config.uriMongo, {useNewUrlParser: true, useUnifiedTopology: true})
 
 const MODEL_PATH = path.join(__dirname, '../models')
 

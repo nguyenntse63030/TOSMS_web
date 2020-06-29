@@ -27,7 +27,8 @@ async function processData(data) {
         createdTime: new Date(data.timestamp).getTime() || Date.now()
     }
 
-    await notificationController.createNotification(notificationData)
+    let notification = await notificationController.createNotification(notificationData)
+    return notification
 }
 
 function checkResult(result) {
@@ -60,7 +61,7 @@ async function processDataFromPython(data, files) {
     let fileURLs = await processImage(files)
     data = Object.assign({}, data, fileURLs);
     let result = await processData(data)
-    notificaiton.sendNotification(result);
+    notificationController.sendNotification(result);
     return responseStatus.Code200({ message: responseStatus.PROCESS_DATA_FROM_PYTHON_SUCCESSFULLY })
 }
 

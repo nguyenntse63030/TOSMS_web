@@ -7,10 +7,6 @@ const authorize = require("../middleware/authorize");
 
 router.post("/", multipartMiddleware, async (req, res, next) => {
   try {
-    // req.body.result = {
-    //   broken_branch: 0.8356,
-    //   inclined_tree: 0.8767
-    // }
     let response = await pythonServices.processDataFromPython(req.body, req.files)
     return res.send(response)
   } catch (error) {

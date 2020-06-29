@@ -36,6 +36,7 @@ app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/api/v1/upfile-to-s3", require("./api/v1/route/upfileToS3"));
 app.use("/api/v1/python", require("./api/v1/route/python"));
+app.use("/api/v1/notification", require("./api/v1/route/notification"));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -16,42 +16,12 @@
                         <table class="table" id="notification-table" style="width: 100% !important">
                             <thead class="text-primary">
                                 <tr>
-                                    <th style="width: 10%">Ngày cập nhật</th>
-                                    <th style="width: 15%">Cây ID</th>
+                                    <th style="width: 5%">STT</th>
                                     <th style="width: 30%">Nội dung</th>
-                                    <th style="width: 10%">Độ ưu tiên</th>
                                     <th style="width: 15%">Trạng thái xử lý</th>
+                                    <th style="width: 10%">Ngày cập nhật</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr ng-repeat="notification in notifications">
-                                    <td data-order="{{notification.createdTime}}">
-                                        <a href="/notification/{{notification.treeID}}">
-                                            {{notification.createdTime | date:'dd/MM/yyyy HH:mm:ss'}}
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <a href="/notification/{{notification.treeID}}">
-                                            {{notification.treeID}}
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <a href="/notification/{{notification.treeID}}">
-                                            {{notification.content}}
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <a href="/notification/{{notification.treeID}}">
-                                            {{notification.priority}}
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <a href="/notification/{{notification.treeID}}">
-                                            {{notification.status}}
-                                        </a>
-                                    </td>
-                                </tr>
-                            </tbody>
                         </table>
                     </div>
                 </div>

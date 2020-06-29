@@ -36,10 +36,10 @@ router.get("/notification", function (req, res, next) {
 });
 
 router.get("/notification/:id", function (req, res, next) {
-  let treeID = req.params.id;
+  let notificationId = req.params.id;
   res.render("notification/detail", {
     title: "Notification Detail",
-    treeID: treeID,
+    notificationId: notificationId,
   });
 });
 module.exports = router;
