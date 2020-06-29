@@ -7,9 +7,9 @@
  * 
  */
 function showRegisterForm() {
-    $('.loginBox').fadeOut('fast', function () {
+    $('.loginBox').fadeOut('fast', function() {
         $('.registerBox').fadeIn('fast');
-        $('.login-footer').fadeOut('fast', function () {
+        $('.login-footer').fadeOut('fast', function() {
             $('.register-footer').fadeIn('fast');
         });
         $('.modal-title').html('Register with');
@@ -17,10 +17,11 @@ function showRegisterForm() {
     $('.error').removeClass('alert alert-danger').html('');
 
 }
+
 function showLoginForm() {
-    $('#loginModal .registerBox').fadeOut('fast', function () {
+    $('#loginModal .registerBox').fadeOut('fast', function() {
         $('.loginBox').fadeIn('fast');
-        $('.register-footer').fadeOut('fast', function () {
+        $('.register-footer').fadeOut('fast', function() {
             $('.login-footer').fadeIn('fast');
         });
 
@@ -31,7 +32,7 @@ function showLoginForm() {
 
 function openLoginModal() {
     showLoginForm();
-    setTimeout(function () {
+    setTimeout(function() {
         $('#loginModal').modal({
             backdrop: 'static',
             keyboard: false,
@@ -40,9 +41,10 @@ function openLoginModal() {
     }, 230);
 
 }
+
 function openRegisterModal() {
     showRegisterForm();
-    setTimeout(function () {
+    setTimeout(function() {
         $('#loginModal').modal('show');
     }, 230);
 
@@ -55,18 +57,12 @@ function loginAjax() {
         url: '/api/v1/auth/sign_in',
         type: 'POST',
         data: data,
-        complete: function (res) {
+        complete: function(res) {
             if (res.status !== 200) {
                 return shakeModal(res.responseJSON.errorMessage)
             } else {
                 COMMON.setCookie('user', JSON.stringify(res.responseJSON.user))
-                if (res.responseJSON.user.role === 'Supervisor') {
-                    window.location.href = '/user'
-                } else if (res.responseJSON.user.role === 'Manager') {
-                    window.location.href = '/user'
-                } else {
-                    return shakeModal(res.responseJSON.errorMessage)
-                }
+                window.location.href = '/notification'
             }
         }
     })
@@ -75,11 +71,11 @@ function loginAjax() {
     // shakeModal();
 }
 
-function shakeModal() {
+function shakeModal(text) {
     $('#loginModal .modal-dialog').addClass('shake');
-    $('.error').addClass('alert alert-danger').html("Invalid email/password combination");
+    $('.error').addClass('alert alert-danger').html(text);
     $('input[type="password"]').val('');
-    setTimeout(function () {
+    setTimeout(function() {
         $('#loginModal .modal-dialog').removeClass('shake');
     }, 1000);
 }
@@ -87,9 +83,8 @@ function shakeModal() {
 function getFormData($form) {
     var unindexedArray = $form.serializeArray()
     var indexedArray = {}
-    $.map(unindexedArray, function (n, i) {
+    $.map(unindexedArray, function(n, i) {
         indexedArray[n['name']] = n['value'].trim()
     })
     return indexedArray
 }
-

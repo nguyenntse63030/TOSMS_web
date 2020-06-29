@@ -12,6 +12,7 @@ var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 
 var app = express();
+require('./configs/passport').createPassportConfig(app)
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -37,6 +38,8 @@ app.use("/users", usersRouter);
 app.use("/api/v1/upfile-to-s3", require("./api/v1/route/upfileToS3"));
 app.use("/api/v1/python", require("./api/v1/route/python"));
 app.use("/api/v1/notification", require("./api/v1/route/notification"));
+app.use("/api/v1/auth", require("./api/v1/route/auth"));
+// require('./scripts/createAdmin')
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

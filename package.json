@@ -21,7 +21,8 @@
     "mongoose": "^5.9.20",
     "morgan": "~1.9.1",
     "mssql": "^6.2.0",
-    "passport": "^0.4.1"
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0"
   },
   "devDependencies": {
     "eslint": "^7.1.0"
