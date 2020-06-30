@@ -159,3 +159,20 @@ function formatDate(date) {
     second = "" + now.getSeconds(); if (second.length == 1) { second = "0" + second; }
     return day + "/" + month + "/" + year + " " + hour + ":" + minute + ":" + second;
 }
+
+function validateCreateTree(file, treeType, city, district, ward, street) {
+    let check = true;
+    if (!file) {
+        check = false;
+        return showNotification('Bạn phải chọn ảnh trước khi tạo.', 'warning');
+    }
+    if (!treeType) {
+        check = false;
+        return showNotification('Loại cây không thể bỏ trống.', 'warning');
+    }
+    if (!street) {
+        check = false;
+        return showNotification('Tên đường không thể bỏ trống.', 'warning');
+    }
+    return check;
+}

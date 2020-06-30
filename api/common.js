@@ -1,3 +1,6 @@
+const responseStatus = require("../configs/responseStatus")
+const { response } = require("express")
+
 function changeAlias(str) {
     if (!str) return ''
     str = str.toLowerCase().trim()
@@ -69,6 +72,26 @@ function isEmptyObject(obj) {
     return true;
 }
 
+function validateDataTree (tree) {
+    if (!tree.image) {
+        throw responseStatus.Code400({errorMessage: responseStatus.TREE_IMAGE_IS_CANT_EMPTY});
+    }
+    if (!tree.treeType) {
+        throw responseStatus.Code400({errorMessage:responseStatus.TREE_TYPE_IS_CANT_EMPTY});
+    }
+    if (!tree.street) {
+        throw responseStatus.Code400({errorMessage:responseStatus.TREE_STREET_IS_CANT_EMPTY});
+    }
+    if (!tree.city) {
+        throw responseStatus.Code400({errorMessage:responseStatus.TREE_CITY_IS_CANT_EMPTY});
+    }
+    if (!tree.district) {
+        throw responseStatus.Code400({errorMessage:responseStatus.TREE_DISTRICT_IS_CANT_EMPTY});
+    }
+    if (!tree.ward) {
+        throw responseStatus.Code400({errorMessage:responseStatus.TREE_WARD_IS_CANT_EMPTY});
+    }
+}
 module.exports = {
     changeAlias,
     parseNumberToMoney,
@@ -77,5 +100,6 @@ module.exports = {
     formatDateCode,
     getTimestampBeginOfMonth,
     getTimestampEndOfMonth,
-    isEmptyObject
+    isEmptyObject,
+    validateDataTree
 }

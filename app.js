@@ -1,5 +1,6 @@
 var createError = require("http-errors");
 var express = require("express");
+var bodyParser = require('body-parser');
 var path = require("path");
 var ejsLocals = require("ejs-locals");
 var cookieParser = require("cookie-parser");
@@ -20,6 +21,8 @@ app.set("view engine", "ejs");
 app.engine("ejs", ejsLocals);
 
 app.use(logger("dev"));
+app.use(bodyParser.json({limit: '50mb'}))
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());

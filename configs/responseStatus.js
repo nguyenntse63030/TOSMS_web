@@ -106,5 +106,11 @@ module.exports = {
   CONNECTION_TO_DB_FAIL: 'Fail to connect DB',
   CREATE_NOTIFICATION_FAIL: 'Create notirication fail',
   CREATE_NOTIFICATION_SUCCESSFULLY: 'Create notirication successfully',
-  NOTIFICATION_IS_NOT_FOUND: 'Notification không tồn tại'
+  NOTIFICATION_IS_NOT_FOUND: 'Notification không tồn tại',
+  TREE_IMAGE_IS_CANT_EMPTY: 'Bạn phải chọn ảnh của cây trước khi tạo.',
+  TREE_TYPE_IS_CANT_EMPTY: 'Loại cây không thể bỏ trống.',
+  TREE_STREET_IS_CANT_EMPTY: 'Tên đường không thể bỏ trống.',
+  TREE_CITY_IS_CANT_EMPTY: 'Thành phố không thể bỏ trống.',
+  TREE_DISTRICT_IS_CANT_EMPTY: 'Quận/huyện không thể bỏ trống.',
+  TREE_WARD_IS_CANT_EMPTY: 'Phường/xã không thể bỏ trống',
 }

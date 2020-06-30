@@ -13,9 +13,18 @@ var TreeSchema = new mongoose.Schema({
         type: Boolean,
         default: true
     },
-    location: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Location'
+    cityId: {
+        type: Number
+    },
+    districtId: {
+        type: Number
+    },
+    wardId: {
+        type: Number
+    },
+    street: {
+        type: String,
+        default: ''
     },
     longitude: {
         type: Number,
