@@ -2,6 +2,9 @@ const mongoose = require('mongoose');
 const constants = require('../configs/constant')
 
 var DistrictSchema = new mongoose.Schema({
+    id: {
+        type: Number
+    },
     name: {
         type: String,
         default: ''
@@ -10,10 +13,13 @@ var DistrictSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Ward'
     }],
-    street: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Street'
-    }],
+    type: {
+        type: String,
+        default: ''
+    },
+    cityID: {
+        type: Number
+    },
     modifiedTime: {
         type: Number,
         default: Date.now

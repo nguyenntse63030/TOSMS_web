@@ -1,4 +1,4 @@
-const apiVersion = '/api/v1/'
+const apiVersion = '/api/v1'
 angular.module('TOSMS').factory('apiService', ['$http', function ($http) {
     return {
         getListEmployee: () => {
@@ -11,7 +11,16 @@ angular.module('TOSMS').factory('apiService', ['$http', function ($http) {
             return $http.get(apiVersion + '/tree/detail.json');
         },
         getDetailNotification: (id) => {
-            return $http.get(apiVersion + 'notification/' + id);
+            return $http.get(apiVersion + '/notification/' + id);
+        },
+        getListCities: () => {
+            return $http.get(apiVersion + '/location/city');
+        },
+        getListDistrict: (cityId) => {
+            return $http.get(apiVersion + '/location/city/' + cityId);
+        },
+        getListWard: (districtId) => {
+            return $http.get(apiVersion + '/location/district/' + districtId)
         }
     }
 }])
