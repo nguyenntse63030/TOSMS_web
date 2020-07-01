@@ -41,5 +41,6 @@ module.exports = {
     cameraStatusEnums: [
         'Đang hoạt động',
         'Bị lỗi'
-    ]
+    ],
+    googleMapsURL: "https://www.google.com/maps/dir/?api=1&destination="
 }

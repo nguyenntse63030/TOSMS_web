@@ -176,3 +176,29 @@ function validateCreateTree(file, treeType, city, district, ward, street) {
     }
     return check;
 }
+
+function loadLocation($scope, apiService) {
+    $scope.city = 1
+  
+    apiService.getListCities().then(res => {
+        $scope.cities = res.data.cities
+        $scope.getListDistrict()
+    }).catch(err => {
+        console.log(err)
+    })
+
+    $scope.getListDistrict = () => {
+        apiService.getListDistrict($scope.city).then(res => {
+            $scope.districts = res.data.districts
+            $scope.district = $scope.districts[0].id;
+            $scope.getListWard();
+        })
+    }
+  
+    $scope.getListWard = () => {
+        apiService.getListWard($scope.district).then(res => {
+            $scope.wards = res.data.wards
+            $scope.ward = $scope.wards[0].id;
+        })
+    }
+}

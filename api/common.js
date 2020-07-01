@@ -1,5 +1,6 @@
 const responseStatus = require("../configs/responseStatus")
 const { response } = require("express")
+const constant = require("../configs/constant")
 
 function changeAlias(str) {
     if (!str) return ''
@@ -92,6 +93,12 @@ function validateDataTree (tree) {
         throw responseStatus.Code400({errorMessage:responseStatus.TREE_WARD_IS_CANT_EMPTY});
     }
 }
+
+function createMapsUrl (lat, long) {
+    let destination = lat + ',' + long
+    let url = constant.googleMapsURL + encodeURIComponent(destination)
+    return url
+}
 module.exports = {
     changeAlias,
     parseNumberToMoney,
@@ -101,5 +108,6 @@ module.exports = {
     getTimestampBeginOfMonth,
     getTimestampEndOfMonth,
     isEmptyObject,
-    validateDataTree
+    validateDataTree,
+    createMapsUrl
 }

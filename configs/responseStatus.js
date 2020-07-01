@@ -113,4 +113,5 @@ module.exports = {
   TREE_CITY_IS_CANT_EMPTY: 'Thành phố không thể bỏ trống.',
   TREE_DISTRICT_IS_CANT_EMPTY: 'Quận/huyện không thể bỏ trống.',
   TREE_WARD_IS_CANT_EMPTY: 'Phường/xã không thể bỏ trống',
+  TREE_IS_NOT_FOUND: 'Cây không tồn tại'
 }

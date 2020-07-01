@@ -4,12 +4,17 @@
     .modal-footer {
         display: initial
     }
+
     .img-data-row {
         width: 70px;
         height: 70px;
     }
+
+    a, a:hover, a:focus {
+        color: #ffffff
+    }
 </style>
-<p id="code" class="hide"> <%= code %></p>
+<p id="id" ng-hide="true"><%= id %></p>
 <div class="container-fluid" ng-controller="detailController">
     <div class="row">
         <div class="col-md-8">
@@ -23,15 +28,16 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="bmd-label-floating">Loại cây</label>
-                                    <input type="text" class="form-control" ng-model="tree.type" id="type"
-                                        value="{{tree.type}} " ng-disabled="isNotEditing">
+                                    <input type="text" class="form-control" ng-model="tree.treeType" id="type"
+                                        value="{{tree.treeType}} " ng-disabled="isNotEditing">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="bmd-label-floating">Trạng thái</label>
-                                    <input type="text" class="form-control numberInput" ng-model="tree.status"
-                                        value="{{tree.status}} " ng-disabled="true">
+                                    <input type="text" class="form-control"
+                                        ng-model="tree.status ||'Bình Thường'" value="{{tree.status}} "
+                                        ng-disabled="true">
                                 </div>
                             </div>
                         </div>
@@ -40,7 +46,7 @@
                                 <div class="form-group">
                                     <label class="bmd-label-floating">Ngày cập nhật</label>
                                     <input type="text" class="form-control" name="updateTime" id="updateTime"
-                                    value="{{tree.updateTime | date:'dd/MM/yyyy'}}" ng-disabled="isNotEditing">
+                                        value="{{tree.modifiedTime | date:'dd/MM/yyyy'}}" ng-disabled="isNotEditing">
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -51,7 +57,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <!-- <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="bmd-label-floating">CameraID</label>
@@ -63,7 +69,46 @@
                                 <div class="form-group">
                                     <label class="bmd-label-floating">Địa chỉ</label>
                                     <input type="text" class="form-control" ng-model="tree.location"
-                                        value="{{employee.location}}" ng-disabled="isNotEditing">
+                                        value="{{tree.location}}" ng-disabled="isNotEditing">
+                                </div>
+                            </div>
+                        </div> -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="bmd-label-floating">Thành Phố</label>
+                                    <select class="form-control" ng-disabled="isNotEditing" ng-change="getListDistrict()" ng-model="city"
+                                        id="city">
+                                        <option ng-repeat="city in cities | orderBy:'id'" ng-value="city.id">
+                                            {{city.name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="bmd-label-floating">Quận</label>
+                                    <select class="form-control" ng-disabled="isNotEditing" ng-change="getListWard()" ng-model="district"
+                                        id="district">
+                                        <option ng-repeat="district in districts | orderBy:'id'" ng-value="district.id">
+                                            {{district.name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="bmd-label-floating">Phường</label>
+                                    <select class="form-control" ng-disabled="isNotEditing" ng-model="ward" id="ward">
+                                        <option ng-repeat="ward in wards | orderBy: 'id'" ng-value="ward.id">
+                                            {{ward.name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="bmd-label-floating">Đường</label>
+                                    <input type="text" ng-model="tree.street" value="{{tree.street}}" ng-disabled="isNotEditing" class="form-control" id="street" placeholder="Nhập tên đường">
                                 </div>
                             </div>
                         </div>
@@ -86,8 +131,8 @@
                         <div ng-show="!isNotEditing">
                             <button type="submit" class="btn btn-success pull-right"
                                 ng-click="isNotEditing=true;updateTree()">Lưu</button>
-                            <button type="submit" class="btn btn-danger pull-left"
-                                ng-click="isNotEditing=true">Hủy bỏ</button>
+                            <button type="submit" class="btn btn-danger pull-left" ng-click="isNotEditing=true">Hủy
+                                bỏ</button>
                         </div>
                         <div class="clearfix"></div>
                     </form>
@@ -98,7 +143,8 @@
             <div class="card card-profile">
                 <div class="card-avatar" onclick="showModalChangeAvatar()">
                     <a href="">
-                        <img class="img" src="{{employee.photoURL || 'https://iweb.tatthanh.com.vn/pic/3/blog/logo-cay-xanh.jpg'}}" />
+                        <img class="img"
+                            src="{{tree.image || 'https://iweb.tatthanh.com.vn/pic/3/blog/logo-cay-xanh.jpg'}}" />
                     </a>
                 </div>
                 <!-- <div class="card-body">
@@ -108,14 +154,16 @@
             </div>
             <!-- <button ng-click="getRoom()" type="submit" class="btn btn-primary pull-left" data-toggle="modal"
                 data-target="#addRoomModel">Add Room</button> -->
-
+            <div class="text-center col-md-12">
+                <button class="btn btn-primary"><a href="{{tree.googleMapsUrl}}" target="_blank">View On Maps</a></button>
+            </div>
         </div>
     </div>
     <div class="row">
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header card-header-primary">
-                    <div class="row">
+                    <div class="row">e
                         <div class="col-md-8">
                             <h4 class="card-title" style="line-height: 50px">Lịch Sử Thông Báo</h4>
                         </div>
@@ -140,7 +188,7 @@
                                     </td>
                                     <td>
                                         <a href="/notification/{{notification.code}}">
-                                            <img class="img-data-row" src="{{notification.img}}"/>
+                                            <img class="img-data-row" src="{{notification.img}}" />
                                         </a>
                                     </td>
                                     <td>

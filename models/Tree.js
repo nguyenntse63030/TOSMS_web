@@ -26,6 +26,10 @@ var TreeSchema = new mongoose.Schema({
         type: String,
         default: ''
     },
+    image: {
+        type: String,
+        default: '/images/logo/LogoTree.jpg'
+    },
     longitude: {
         type: Number,
         default: 0
@@ -33,6 +37,10 @@ var TreeSchema = new mongoose.Schema({
     latitude: {
         type: Number,
         default: 0
+    },
+    googleMapsUrl: {
+        type: String,
+        default: ''
     },
     modifiedTime: {
         type: Number,

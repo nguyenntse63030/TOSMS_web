@@ -29,29 +29,7 @@ app.controller('listController', ['$scope', 'apiService', function ($scope, apiS
         ]
     }
     $('#tree-table').DataTable(options);
-    $scope.city = 1
-  
-    apiService.getListCities().then(res => {
-        $scope.cities = res.data.cities
-        $scope.getListDistrict()
-    }).catch(err => {
-        console.log(err)
-    })
-
-    $scope.getListDistrict = () => {
-        apiService.getListDistrict($scope.city).then(res => {
-            $scope.districts = res.data.districts
-            $scope.district = $scope.districts[0].id;
-            $scope.getListWard();
-        })
-    }
-  
-    $scope.getListWard = () => {
-        apiService.getListWard($scope.district).then(res => {
-            $scope.wards = res.data.wards
-            $scope.ward = $scope.wards[0].id;
-        })
-    }
+    loadLocation($scope, apiService)
 }])
 
 function createTree() {
@@ -62,7 +40,7 @@ function createTree() {
     let district = $('#city').val().slice($('#city').val().indexOf(':') + 1);
     let ward = $('#ward').val().slice($('#city').val().indexOf(':') + 1);
     let street = $('#street').val();
-    let longtitude = $('#longtitude').val();
+    let longtitude = $('#longitude').val();
     let latitude = $('#latitude').val();
 
     let check = validateCreateTree(file, treeType, city, district, ward, street);
@@ -74,7 +52,7 @@ function createTree() {
         formData.append("district", district)
         formData.append("ward", ward)
         formData.append("street", street)
-        formData.append("longtitude", longtitude)
+        formData.append("longitude", longtitude)
         formData.append("latitude", latitude)
 
         $.ajax({

@@ -1,14 +1,16 @@
 app.controller('detailController', ['$scope', 'apiService', function ($scope, apiService) {
-    $scope.id = 0;
+    $scope.id = $('#id').text();
     $scope.isNotEditing = true;
     $scope.tree = {};
 
     apiService.getDetailTree($scope.id).then((res) => {
-        $scope.tree = res.data;
+        $scope.tree = res.data.tree;
     }).catch((error) => {
         console.log(error);
         showNotification('Co loi!', 'danger');
     })
+
+    loadLocation($scope, apiService)
 
     $scope.deleteTree = () => {
         try {

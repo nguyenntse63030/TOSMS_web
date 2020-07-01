@@ -7,11 +7,20 @@ const multipartMiddleware = multipart();
 router.post('/', multipartMiddleware, async (req, res, next) => {
     try {
         let response = await treeController.createTree(req.body, req.files);
-        return res.send(response)
+        return res.send(response);
     } catch (error) {
-        return res.send(error)
+        return res.send(error);
     }
   
+})
+
+router.get('/:id', async (req, res, next) => {
+    try {
+        let response = await treeController.getDetailTree(req.params.id);
+        return res.send(response);
+    } catch (error) {
+        return res.send(error);
+    }
 })
 
 module.exports = router
