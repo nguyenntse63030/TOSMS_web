@@ -1,46 +1,42 @@
 module.exports = {
-    treeProblem: {
-        BROKEN_BRANCH: 'broken_branch',
-        INCLINED_TREE: 'inclined_tree'
-    },
+  treeProblem: {
+    BROKEN_BRANCH: "broken_branch",
+    INCLINED_TREE: "inclined_tree",
+  },
 
-    treeProblemDisplay: {
-        BROKEN_BRANCH: 'Cây bị gãy cành',
-        INCLINED_TREE: 'Cây bị nghiêng'
-    },
+  treeProblemDisplay: {
+    BROKEN_BRANCH: "Cây bị gãy cành",
+    INCLINED_TREE: "Cây bị nghiêng",
+  },
 
-    userRoles: {
-        ADMIN: 'admin',
-        MANAGER: 'manager',
-        WORKER: 'worker'
-    },
+  userRoles: {
+    ADMIN: "admin",
+    MANAGER: "manager",
+    WORKER: "worker",
+  },
 
-    userRolesEnums: [
-        'admin',
-        'manager',
-        'worker'
-    ],
+  userRolesEnums: ["admin", "manager", "worker"],
 
-    priorityStatus: {
-        CHUA_XU_LY: 'Chưa Xử Lý',
-        DANG_XU_LY: 'Đang Xử Lý',
-        DA_XU_LY: 'Đã Xử Lý'
-    },
+  priorityStatus: {
+    CHUA_XU_LY: "Chưa Xử Lý",
+    DANG_XU_LY: "Đang Xử Lý",
+    DA_XU_LY: "Đã Xử Lý",
+  },
 
-    priorityStatuEnums: [
-        'Chưa Xử Lý',
-        'Đang Xử Lý',
-        'Đã Xử Lý'
-    ],
+  priorityStatuEnums: ["Chưa Xử Lý", "Đang Xử Lý", "Đã Xử Lý"],
 
-    cameraStatus: {
-        DANG_HOAT_DONG: 'Đang hoạt động',
-        BI_LOI: 'Bị lỗi'
-    },
+  cameraStatus: {
+    DANG_HOAT_DONG: "Đang hoạt động",
+    BI_LOI: "Bị lỗi",
+  },
 
-    cameraStatusEnums: [
-        'Đang hoạt động',
-        'Bị lỗi'
-    ],
-    googleMapsURL: "https://www.google.com/maps/dir/?api=1&destination="
-}
+  cameraStatusEnums: ["Đang hoạt động", "Bị lỗi"],
+  gender: {
+    Male: "Nam",
+    Female: "Nữ",
+  },
+
+  genderEnums: ["Nam", "Nữ"],
+
+  googleMapsURL: "https://www.google.com/maps/dir/?api=1&destination=",
+};

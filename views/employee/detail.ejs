@@ -5,7 +5,7 @@
         display: initial
     }
 </style>
-<p id="code" class="hide"> <%= code %></p>
+<p id="code" ng-hide="true"><%= code %></p>
 <div class="container-fluid" ng-controller="detailController">
     <div class="row">
         <div class="col-md-8">
@@ -16,20 +16,20 @@
                 <div class="card-body">
                     <form>
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="form-group">
                                     <label class="bmd-label-floating">Tên</label>
-                                    <input type="text" class="form-control" ng-model="employee.fullname" id="fullname"
-                                        value="{{employee.fullname}} " ng-disabled="isNotEditing">
+                                    <input type="text" class="form-control" ng-model="employee.name" id="fullname"
+                                        value="{{employee.name}} " ng-disabled="isNotEditing">
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <!-- <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="bmd-label-floating">SĐT</label>
                                     <input type="text" class="form-control numberInput" ng-model="employee.phone"
                                         value="{{employee.phone}} " ng-disabled="true">
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                         <div class="row">
                             <div class="col-md-6">
@@ -38,8 +38,8 @@
                                     <input type="text" class="form-control" value=" " ng-hide="true">
                                     <select style="width: 100%;" class="form-control select2-single"
                                         ng-model="employee.gender" ng-disabled="isNotEditing">
-                                        <option value="Male">Nam</option>
-                                        <option value="Female">Nữ</option>
+                                        <option value="Nam">Nam</option>
+                                        <option value="Nữ">Nữ</option>
                                         <option value="Other">Khác</option>
                                     </select>
                                 </div>
@@ -48,7 +48,7 @@
                                 <div class="form-group">
                                     <label class="bmd-label-floating">Ngày sinh</label>
                                     <input type="text" class="form-control" name="birthdate" id="birthdate"
-                                        value="{{employee.dateOfBirth | date:'dd/MM/yyyy'}}" ng-disabled="isNotEditing">
+                                        value="{{employee.birthday | date:'dd/MM/yyyy'}}" ng-disabled="isNotEditing">
                                 </div>
                             </div>
                         </div>
@@ -66,8 +66,8 @@
                                     <input type="text" class="form-control" value=" " ng-hide="true">
                                     <select style="width: 100%;" class="form-control select2-single"
                                         ng-model="employee.role" id="role" ng-disabled="isNotEditing">
-                                        <option value="1">Giám Sát</option>
-                                        <option value="0">Công Nhân</option>
+                                        <option value="manager">Giám Sát</option>
+                                        <option value="worker">Công Nhân</option>
                                     </select>
                                 </div>
                             </div>
@@ -84,9 +84,11 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="note">Ghi chú</label>
-                                    <textarea type="text" rows="3" class="form-control" ng-model="employee.note"
-                                        ng-disabled="isNotEditing" id="note"></textarea>
+                                    <label for="note">Quận</label>
+                                    <input type="text" class="form-control" ng-model="employee.district.name"
+                                        value="{{employee.district.name}} " ng-disabled="isNotEditing">
+                                    <!-- <textarea type="text" rows="3" class="form-control" ng-model="employee.note"
+                                        ng-disabled="isNotEditing" id="note"></textarea> -->
                                 </div>
                             </div>
                         </div>
@@ -100,8 +102,8 @@
                         <div ng-show="!isNotEditing">
                             <button type="submit" class="btn btn-success pull-right"
                                 ng-click="isNotEditing=true;updateEmployee()">Lưu</button>
-                            <button type="submit" class="btn btn-danger pull-left"
-                                ng-click="isNotEditing=true">Hủy bỏ</button>
+                            <button type="submit" class="btn btn-danger pull-left" ng-click="isNotEditing=true">Hủy
+                                bỏ</button>
                         </div>
                         <div class="clearfix"></div>
                     </form>
@@ -112,7 +114,8 @@
             <div class="card card-profile">
                 <div class="card-avatar" onclick="showModalChangeAvatar()">
                     <a href="">
-                        <img class="img" src="{{employee.photoURL || 'https://iweb.tatthanh.com.vn/pic/3/blog/logo-cay-xanh.jpg'}}" />
+                        <img class="img"
+                            src="{{employee.photoURL || 'https://iweb.tatthanh.com.vn/pic/3/blog/logo-cay-xanh.jpg'}}" />
                     </a>
                 </div>
                 <div class="card-body">

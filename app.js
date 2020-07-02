@@ -1,19 +1,19 @@
 var createError = require("http-errors");
 var express = require("express");
-var bodyParser = require('body-parser');
+var bodyParser = require("body-parser");
 var path = require("path");
 var ejsLocals = require("ejs-locals");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
-var session = require('express-session')
-const config = require('./config')
-require('./configs/loadModelsMongoose')
+var session = require("express-session");
+const config = require("./config");
+require("./configs/loadModelsMongoose");
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 
 var app = express();
-require('./configs/passport').createPassportConfig(app)
+require("./configs/passport").createPassportConfig(app);
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -21,29 +21,32 @@ app.set("view engine", "ejs");
 app.engine("ejs", ejsLocals);
 
 app.use(logger("dev"));
-app.use(bodyParser.json({limit: '50mb'}))
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
-app.use(session({
-  name: 'TOSMS_WEB',
-  secure: true,
-  httpOnly: true,
-  secret: config.secret,
-  resave: false,
-  saveUninitialized: true
-}))
+app.use(
+  session({
+    name: "TOSMS_WEB",
+    secure: true,
+    httpOnly: true,
+    secret: config.secret,
+    resave: false,
+    saveUninitialized: true,
+  })
+);
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/api/v1/upfile-to-s3", require("./api/v1/route/upfileToS3"));
 app.use("/api/v1/python", require("./api/v1/route/python"));
 app.use("/api/v1/notification", require("./api/v1/route/notification"));
-app.use("/api/v1/location", require('./api/v1/route/location'));
+app.use("/api/v1/location", require("./api/v1/route/location"));
 app.use("/api/v1/tree", require("./api/v1/route/tree"));
 app.use("/api/v1/auth", require("./api/v1/route/auth"));
+app.use("/api/v1/user", require("./api/v1/route/user"));
 // require('./scripts/createAdmin')
 
 // catch 404 and forward to error handler

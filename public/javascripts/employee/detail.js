@@ -1,10 +1,10 @@
 app.controller('detailController', ['$scope', 'apiService', function ($scope, apiService) {
-    $scope.id = 0;
+    $scope.id = $('#code').text();
     $scope.isNotEditing = true;
     $scope.employee = {};
 
     apiService.getProfileEmployee($scope.id).then((res) => {
-        $scope.employee = res.data[0];
+        $scope.employee = res.data.user;
     }).catch((error) => {
         console.log(error);
         showNotification('Co loi!', 'danger');

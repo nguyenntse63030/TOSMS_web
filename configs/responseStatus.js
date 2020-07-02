@@ -1,117 +1,167 @@
 module.exports = {
   Code200: (object) => {
-    return Object.assign({
-      status: 200
-    }, object)
+    return Object.assign(
+      {
+        status: 200,
+      },
+      object
+    );
   },
 
   Code201: (object) => {
-    return Object.assign({
-      status: 201,
-      message: 'OK: New resource has been created'
-    }, object)
+    return Object.assign(
+      {
+        status: 201,
+        message: "OK: New resource has been created",
+      },
+      object
+    );
   },
 
   Code204: (object) => {
-    return Object.assign({
-      status: 204,
-      message: 'OK: The resource was successfully deleted'
-    }, object)
+    return Object.assign(
+      {
+        status: 204,
+        message: "OK: The resource was successfully deleted",
+      },
+      object
+    );
   },
 
   Code304: (object) => {
-    return Object.assign({
-      status: 304,
-      errorMessage: 'Not Modified: The client can use cached data'
-    }, object)
+    return Object.assign(
+      {
+        status: 304,
+        errorMessage: "Not Modified: The client can use cached data",
+      },
+      object
+    );
   },
 
   Code400: (object) => {
-    return Object.assign({
-      status: 400,
-      errorMessage: 'Đã xảy ra lỗi. Kiểm tra lại parameters'
-    }, object)
+    return Object.assign(
+      {
+        status: 400,
+        errorMessage: "Đã xảy ra lỗi. Kiểm tra lại parameters",
+      },
+      object
+    );
   },
 
   Code401: (object) => {
-    return Object.assign({
-      status: 401,
-      errorMessage: 'Unauthorized: The request requires an user authentication'
-    }, object)
+    return Object.assign(
+      {
+        status: 401,
+        errorMessage:
+          "Unauthorized: The request requires an user authentication",
+      },
+      object
+    );
   },
 
   Code403: (object) => {
-    return Object.assign({
-      status: 403,
-      errorMessage: 'Forbidden: The server understood the request, but is refusing it or the access is not allowed'
-    }, object)
+    return Object.assign(
+      {
+        status: 403,
+        errorMessage:
+          "Forbidden: The server understood the request, but is refusing it or the access is not allowed",
+      },
+      object
+    );
   },
 
   Code404: (object) => {
-    return Object.assign({
-      status: 404,
-      errorMessage: 'Not found: There is no resource behind the URI.'
-    }, object)
+    return Object.assign(
+      {
+        status: 404,
+        errorMessage: "Not found: There is no resource behind the URI.",
+      },
+      object
+    );
   },
 
   Code406: (object) => {
-    return Object.assign({
-      status: 406,
-      errorMessage: 'Not Acceptable'
-    }, object)
+    return Object.assign(
+      {
+        status: 406,
+        errorMessage: "Not Acceptable",
+      },
+      object
+    );
   },
 
   Code409: (object) => {
-    return Object.assign({
-      status: 409,
-      errorMessage: 'Conflict: Request conflict with current state of the server.'
-    }, object)
+    return Object.assign(
+      {
+        status: 409,
+        errorMessage:
+          "Conflict: Request conflict with current state of the server.",
+      },
+      object
+    );
   },
 
   Code422: (object) => {
-    return Object.assign({
-      status: 422,
-      errorMessage: 'Invalid Entity – Should be used if the server cannot process the entity'
-    }, object)
+    return Object.assign(
+      {
+        status: 422,
+        errorMessage:
+          "Invalid Entity – Should be used if the server cannot process the entity",
+      },
+      object
+    );
   },
 
   Code500: (object) => {
-    return Object.assign({
-      status: 500,
-      errorMessage: 'Internal Server Error: API developers should avoid this error'
-    }, object)
+    return Object.assign(
+      {
+        status: 500,
+        errorMessage:
+          "Internal Server Error: API developers should avoid this error",
+      },
+      object
+    );
   },
 
   Code502: (object) => {
-    return Object.assign({
-      status: 502,
-      errorMessage: 'Bad Gateway: This error response means that the server, while working as a gateway to get a response needed to handle the request, got an invalid response'
-    }, object)
+    return Object.assign(
+      {
+        status: 502,
+        errorMessage:
+          "Bad Gateway: This error response means that the server, while working as a gateway to get a response needed to handle the request, got an invalid response",
+      },
+      object
+    );
   },
 
   Code504: (object) => {
-    return Object.assign({
-      status: 504,
-      errorMessage: 'Gateway Timeout: This error response is given when the server is acting as a gateway and cannot get a response in time'
-    }, object)
+    return Object.assign(
+      {
+        status: 504,
+        errorMessage:
+          "Gateway Timeout: This error response is given when the server is acting as a gateway and cannot get a response in time",
+      },
+      object
+    );
   },
 
-  IVALID_PHONE_OR_PASSWORD: 'Username hoặc Password không đúng',
-  INVALID_REQUEST: 'Yêu cầu không hợp lệ',
-  UPLOAD_IMAGE_FAIL: 'Upload Image To S3 Faild',
-  UPLOAD_IMAGE_SUCCESSFULLY: 'Upload Image To S3 Successfully',
-  FILES_IS_NOT_FOUND: 'Files is not found',
-  PROCESS_DATA_FROM_PYTHON_SUCCESSFULLY: 'Process data successfully',
-  DATA_IS_NOT_FOUND: 'Data is not found',
-  CONNECTION_TO_DB_FAIL: 'Fail to connect DB',
-  CREATE_NOTIFICATION_FAIL: 'Create notirication fail',
-  CREATE_NOTIFICATION_SUCCESSFULLY: 'Create notirication successfully',
-  NOTIFICATION_IS_NOT_FOUND: 'Notification không tồn tại',
-  TREE_IMAGE_IS_CANT_EMPTY: 'Bạn phải chọn ảnh của cây trước khi tạo.',
-  TREE_TYPE_IS_CANT_EMPTY: 'Loại cây không thể bỏ trống.',
-  TREE_STREET_IS_CANT_EMPTY: 'Tên đường không thể bỏ trống.',
-  TREE_CITY_IS_CANT_EMPTY: 'Thành phố không thể bỏ trống.',
-  TREE_DISTRICT_IS_CANT_EMPTY: 'Quận/huyện không thể bỏ trống.',
-  TREE_WARD_IS_CANT_EMPTY: 'Phường/xã không thể bỏ trống',
-  TREE_IS_NOT_FOUND: 'Cây không tồn tại'
-}
+  IVALID_PHONE_OR_PASSWORD: "Username hoặc Password không đúng",
+  INVALID_REQUEST: "Yêu cầu không hợp lệ",
+  UPLOAD_IMAGE_FAIL: "Upload Image To S3 Faild",
+  UPLOAD_IMAGE_SUCCESSFULLY: "Upload Image To S3 Successfully",
+  FILES_IS_NOT_FOUND: "Files is not found",
+  PROCESS_DATA_FROM_PYTHON_SUCCESSFULLY: "Process data successfully",
+  DATA_IS_NOT_FOUND: "Data is not found",
+  CONNECTION_TO_DB_FAIL: "Fail to connect DB",
+  CREATE_NOTIFICATION_FAIL: "Create notirication fail",
+  CREATE_NOTIFICATION_SUCCESSFULLY: "Create notirication successfully",
+  NOTIFICATION_IS_NOT_FOUND: "Notification không tồn tại",
+  TREE_IMAGE_IS_CANT_EMPTY: "Bạn phải chọn ảnh của cây trước khi tạo.",
+  TREE_TYPE_IS_CANT_EMPTY: "Loại cây không thể bỏ trống.",
+  TREE_STREET_IS_CANT_EMPTY: "Tên đường không thể bỏ trống.",
+  TREE_CITY_IS_CANT_EMPTY: "Thành phố không thể bỏ trống.",
+  TREE_DISTRICT_IS_CANT_EMPTY: "Quận/huyện không thể bỏ trống.",
+  TREE_WARD_IS_CANT_EMPTY: "Phường/xã không thể bỏ trống",
+  TREE_IS_NOT_FOUND: "Cây không tồn tại",
+  USER_IS_NOT_FOUND: "Người dùng không tồn tại",
+};
