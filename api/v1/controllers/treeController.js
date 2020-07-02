@@ -30,7 +30,7 @@ let createTree = async (data, file) => {
 }
 
 let updateTree = async (id, data) => {
-    let tree = await Tree.findOne({ _id: id, isActive: true });
+    let tree = await Tree.findOne({ _id: id, isActive: true }).populate('camera');
     if (!tree) {
         throw responseStatus.Code400({errorMessage: responseStatus.TREE_IS_NOT_FOUND});
     }
@@ -50,6 +50,20 @@ let updateTree = async (id, data) => {
         throw responseStatus.Code400({errorMessage: responseStatus.UPDATE_TREE_FAIL});
     }
     return responseStatus.Code200({message: responseStatus.UPDATE_TREE_SUCCESS, tree: _tree});
+}
+
+let uploadImage = async (id, file) => {
+    let tree = await Tree.findOne({ _id: id, isActive: true }).populate('camera');
+    if (!tree) {
+        throw responseStatus.Code400({errorMessage: responseStatus.TREE_IS_NOT_FOUND});
+    }
+    let pathImg = await awsServices.uploadImageToS3('treeImage', file.image);
+    tree.image = pathImg || tree.image;
+    let _tree = await tree.save();
+    if (_tree !== tree) {
+        throw responseStatus.Code400({errorMessage: responseStatus.TREE_UPLOAD_IMAGE_FAIL});
+    }
+    return responseStatus.Code200({message: responseStatus.TREE_UPLOAD_IMAGE_SUCCESS, tree: _tree});
 }
 
 let deleteTree = async (id) => {
@@ -122,5 +136,6 @@ module.exports = {
     getDetailTree,
     getListTree,
     getListNotiOfTree,
-    deleteTree
+    deleteTree,
+    uploadImage
 }

@@ -23,6 +23,15 @@ router.put('/:id', async (req, res, next) => {
     }
 })
 
+router.put('/:id/image', multipartMiddleware, async (req, res, next) => {
+    try {
+        let response = await treeController.uploadImage(req.params.id, req.files);
+        return res.send(response);
+    } catch (error) {
+        return res.send(error);
+    }
+})
+
 router.delete('/:id', async (req, res, next) => {
     try {
         let response = await treeController.deleteTree(req.params.id);

@@ -164,6 +164,8 @@ module.exports = {
   TREE_WARD_IS_CANT_EMPTY: 'Phường/xã không thể bỏ trống',
   TREE_IS_NOT_FOUND: 'Cây không tồn tại',
   TREE_CODE_CANT_EMPTY: 'Code của cây không thể bỏ trống',
+  TREE_UPLOAD_IMAGE_FAIL: 'Upload ảnh cây thất bại',
+  TREE_UPLOAD_IMAGE_SUCCESS: 'Upload ảnh cây thành công',
   UPDATE_TREE_FAIL: 'Cập nhật thông tin cây thất bại',
   DELETE_TREE_FAIL: 'Xóa cây thất bại',
   DELETE_TREE_SUCCESS: 'Xóa cây thành công',

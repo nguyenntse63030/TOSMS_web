@@ -1,3 +1,17 @@
+app.directive('fileModel', ['$parse', function ($parse) {
+    return {
+        restrict: 'A',
+        link: function  (scope, element, attrs) {
+            let model = $parse(attrs.fileModel);
+            let modelSetter = model.assign;
+            element.bind('change', function () {
+                scope.$apply(function() {
+                    modelSetter(scope, element[0].files[0]);
+                })
+            })
+        }
+    }
+}])
 app.controller('detailController', ['$scope', 'apiService', function ($scope, apiService) {
     $scope.id = $('#id').text();
     $scope.isNotEditing = true;
@@ -29,7 +43,7 @@ app.controller('detailController', ['$scope', 'apiService', function ($scope, ap
                 showNotification(res.data.message, 'success');
                 setTimeout(function () {
                     window.location.href = '/tree'
-                  }, 1000)
+                }, 1000)
             }
         }).catch(error => {
             showNotification(error, 'danger');
@@ -41,6 +55,22 @@ app.controller('detailController', ['$scope', 'apiService', function ($scope, ap
         $scope.tree.district = $scope.district
         $scope.tree.ward = $scope.ward
         apiService.updateTree($scope.id, $scope.tree).then(res => {
+            if (res.data.errorMessage) {
+                showNotification(res.data.errorMessage, 'danger');
+            } else {
+                $scope.tree = res.data.tree
+                showNotification(res.data.message, 'success');
+            }
+        }).catch(error => {
+            showNotification(error, 'danger');
+        })
+    }
+
+    $scope.uploadImageTree = () => {
+        let formData = new FormData();
+        let file = $scope.treeImage;
+        formData.append('image', file)
+        apiService.uploadImageTree($scope.id, formData).then(res => {
             if (res.data.errorMessage) {
                 showNotification(res.data.errorMessage, 'danger');
             } else {
