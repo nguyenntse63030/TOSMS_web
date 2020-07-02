@@ -50,6 +50,10 @@ router.get("/tree/:id", function(req, res, next) {
     res.render("tree/detail", { title: "Chi Tiết Cây", id: req.params.id});
 });
 
+router.get("/camera", function (req, res, next) {
+    res.render("camera/list", {title: "Camera"})
+});
+
 router.get("/camera/create", function(req, res, next) {
     res.render("camera/create", { title: "Tạo Thông Tin Camera" });
 });

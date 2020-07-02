@@ -113,5 +113,12 @@ module.exports = {
   TREE_CITY_IS_CANT_EMPTY: 'Thành phố không thể bỏ trống.',
   TREE_DISTRICT_IS_CANT_EMPTY: 'Quận/huyện không thể bỏ trống.',
   TREE_WARD_IS_CANT_EMPTY: 'Phường/xã không thể bỏ trống',
-  TREE_IS_NOT_FOUND: 'Cây không tồn tại'
+  TREE_IS_NOT_FOUND: 'Cây không tồn tại',
+  TREE_CODE_CANT_EMPTY: 'Code của cây không thể bỏ trống',
+  CAMERA_CODE_IS_CANT_EMPTY: 'Camera code không thể bỏ trống',
+  CAMERA_IP__IS_CANT_EMPTY: 'Camera IP không thể bỏ trống',
+  CAMERA_IMAGE__IS_CANT_EMPTY: 'Bạn phải chọn ảnh của camera trước khi tạo.',
+  CAMERA_CREATE_FAIL: 'Có lỗi trong quá trình tạo, vui lòng thử lại.',
+  CAMERA_CREATE_SUCCESS: 'Tạo camera thành công.',
+  TREE_ONLY_HAVE_ONE_CAMERA: 'Cây đã có một camera bạn vui lòng xóa, thay đổi camera từ cây hoặc vui lòng chọn cây khác.'
 }

@@ -6,7 +6,8 @@ module.exports = {
 
     treeProblemDisplay: {
         BROKEN_BRANCH: 'Cây bị gãy cành',
-        INCLINED_TREE: 'Cây bị nghiêng'
+        INCLINED_TREE: 'Cây bị nghiêng',
+        NO_PROBLEM: 'Cây bình thường'
     },
 
     userRoles: {
@@ -42,5 +43,6 @@ module.exports = {
         'Đang hoạt động',
         'Bị lỗi'
     ],
+    imageDefault: '/images/logo/LogoTree.jpg',
     googleMapsURL: "https://www.google.com/maps/dir/?api=1&destination="
 }

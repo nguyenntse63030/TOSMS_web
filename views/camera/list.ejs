@@ -1,0 +1,192 @@
+<% layout('../layouts/layout.ejs') -%>
+<style>
+    .table-row-link {
+        color: #ab47bc;
+    }
+
+    .table-row-link:hover {
+        color: white
+    }
+
+    .img-data-row {
+        width: 70px;
+        height: 70px;
+    }
+
+    #image-to-change {
+        width: 100%;
+        height: 300px;
+        object-fit: scale-down;
+        margin-bottom: 10px;
+    }
+</style>
+<div class="container-fluid" ng-controller="listController">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <button type="button" id="openModelCreateCam" ng-click="getListTree()" class="btn btn-primary" data-toggle="modal"
+                data-target="#modalCreateCamera">
+                Tạo Camera
+            </button>
+            <div class="card">
+                <div class="card-header card-header-primary" style="z-index: 1 !important">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h4 class="card-title" style="line-height: 50px">Camera</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table" id="camera-table" style="width: 100% !important">
+                            <thead class="text-primary">
+                                <tr>
+                                    <th style="width: 5%">STT</th>
+                                    <th style="width: 10%">Code</th>
+                                    <th style="width: 10%">IP Address</th>
+                                    <th style="width: 20%"> Trạng Thái</th>
+                                    <th style="width: 10%"> Ngày Tạo</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="modalCreateCamera" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-center" id="exampleModalLongTitle">Tạo Camera</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-container">
+                        <form id="create-camera">
+                            <div>
+                                <img id="image-to-change" src="/images/logo/treebackground.jpg"
+                                    onclick="chooseFile()" />
+                                <input id="file" type="file" accept="image/*" style="display:none"
+                                    onchange="onChangeImage(event)" />
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="code">Camera Code</label>
+                                        <input type="text" class="form-control" id="code"
+                                            placeholder="Nhập camera code">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="cameraType">Hãng Camera</label>
+                                        <input type="text" class="form-control" id="cameraType"
+                                            placeholder="Nhập tên hãng">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="tree">Cây</label>
+                                        <select class="form-control select-2" id="treeId">
+                                            <option ng-repeat="tree in trees" ng-value="tree._id">
+                                                {{tree.code}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="ip">IP Camera</label>
+                                        <input type="text" class="form-control" id="ip" placeholder="Nhập địa chỉ IP">
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="city">Thành Phố</label>
+                                        <select class="form-control select-2" ng-change="getListDistrict()" ng-model="city"
+                                            id="city">
+                                            <option ng-repeat="city in cities | orderBy:'name'" ng-value="city.id">
+                                                {{city.name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="district">Quận</label>
+                                        <select class="form-control select-2" ng-change="getListWard()" ng-model="district"
+                                            id="district">
+                                            <option ng-repeat="district in districts | orderBy:'name'"
+                                                ng-value="district.id">
+                                                {{district.name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="ward">Phường</label>
+                                        <select class="form-control select-2" ng-model="ward" id="ward">
+                                            <option ng-repeat="ward in wards | orderBy: 'name'" ng-value="ward.id">
+                                                {{ward.name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="street">Đường</label>
+                                <input type="text" class="form-control" id="street" placeholder="Nhập tên đường">
+                            </div> -->
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Thoát</button>
+                    <button type="button" class="btn btn-primary" id="createCameraBtn">Tạo</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/javascripts/camera/list.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script>
+<script>
+    clickSideBar('camera-page')
+</script>
+<script>
+
+    function onChangeAvatar() {
+        if (!$('#file').val()) {
+            showNotification('Bạn chưa chọn ảnh nào', 'error')
+            return
+        }
+        $('#loading').show()
+
+        setTimeout(function () {
+            $('#loading').hide()
+            $('#modal-change-avatar').modal('hide')
+            showNotification('Time out', 'error')
+        }, 30000)
+    }
+
+    function chooseFile() {
+        $('#file').click()
+    }
+
+    var imgtag = document.getElementById('image-to-change')
+    var newAvatar
+
+    function onChangeImage(event) {
+        var selectedFile = event.target.files[0]
+        var getImagePath = URL.createObjectURL(event.target.files[0])
+        imgtag.src = getImagePath
+        newAvatar = selectedFile
+    }
+</script>

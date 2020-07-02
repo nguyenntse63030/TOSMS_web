@@ -7,8 +7,14 @@ angular.module('TOSMS').factory('apiService', ['$http', function ($http) {
         getProfileEmployee: (id) => {
             return $http.get(apiVersion + '/employee/detailEmp.json');
         },
+        getListTree: () => {
+            return $http.get(apiVersion + '/tree');
+        },
         getDetailTree: (id) => {
             return $http.get(apiVersion + '/tree/' + id);
+        },
+        updateTree: (id, data) => {
+            return $http.put(apiVersion + '/tree/' + id, data)
         },
         getDetailNotification: (id) => {
             return $http.get(apiVersion + '/notification/' + id);
