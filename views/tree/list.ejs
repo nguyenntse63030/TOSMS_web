@@ -39,8 +39,7 @@
                         <table class="table" id="tree-table" style="width: 100% !important">
                             <thead class="text-primary">
                                 <tr>
-                                    <th style="width: 5%">Id Cây</th>
-                                    <th style="width: 10%"> Hình Ảnh</th>
+                                    <th style="width: 5%">STT</th>
                                     <th style="width: 12%"> Vị Trí</th>
                                     <th style="width: 20%"> Trạng Thái</th>
                                     <th style="width: 10%"> Ngày Tạo</th>
@@ -52,8 +51,6 @@
             </div>
         </div>
     </div>
-
-
     <!-- Modal -->
     <div class="modal fade" id="modalCreateTree" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
         aria-hidden="true">
@@ -93,7 +90,7 @@
                                     <label for="city">Thành Phố</label>
                                     <select class="form-control" ng-change="getListDistrict()" ng-model="city"
                                         id="city">
-                                        <option ng-repeat="city in cities | orderBy:'id'" ng-value="city.id">
+                                        <option ng-repeat="city in cities" value="{{city._id}}">
                                             {{city.name}}</option>
                                     </select>
                                 </div>
@@ -101,21 +98,27 @@
                                     <label for="district">Quận</label>
                                     <select class="form-control" ng-change="getListWard()" ng-model="district"
                                         id="district">
-                                        <option ng-repeat="district in districts | orderBy:'id'" ng-value="district.id">
+                                        <option ng-repeat="district in districts" value="{{district._id}}">
                                             {{district.name}}</option>
                                     </select>
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="ward">Phường</label>
                                     <select class="form-control" ng-model="ward" id="ward">
-                                        <option ng-repeat="ward in wards | orderBy: 'id'" ng-value="ward.id">
+                                        <option ng-repeat="ward in wards" value="{{ward._id}}">
                                             {{ward.name}}</option>
                                     </select>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label for="street">Đường</label>
-                                <input type="text" class="form-control" id="street" placeholder="Nhập tên đường">
+                            <div class="row">
+                                <div class="form-group col-md-8">
+                                    <label for="street">Đường</label>
+                                    <input type="text" class="form-control" id="street" placeholder="Nhập tên đường">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="code"></label>
+                                    <input type="text" class="form-control" id="code" placeholder="Nhập code">
+                                </div>
                             </div>
                         </form>
                     </div>

@@ -1,26 +1,38 @@
 const mongoose = require('mongoose');
+const constants = require('../configs/constant');
 
 var TreeSchema = new mongoose.Schema({
     treeType: {
         type: String,
         default: ''
     },
+    code: {
+        type: String,
+        required: true,
+    },
     note: {
         type: String,
-        default: ''
+        default: constants.treeProblemDisplay.NO_PROBLEM
     },
     isActive: {
         type: Boolean,
         default: true
     },
-    cityId: {
-        type: Number
+    city: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'City'
     },
-    districtId: {
-        type: Number
+    district: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'District'
     },
-    wardId: {
-        type: Number
+    ward: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Ward'
+    },
+    camera: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Camera'
     },
     street: {
         type: String,
@@ -28,7 +40,7 @@ var TreeSchema = new mongoose.Schema({
     },
     image: {
         type: String,
-        default: '/images/logo/LogoTree.jpg'
+        default: constants.imageDefault
     },
     longitude: {
         type: Number,

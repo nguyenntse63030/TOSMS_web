@@ -23,4 +23,12 @@ router.get('/:id', async (req, res, next) => {
     }
 })
 
+router.get('/', async (req, res, next) => {
+    try {
+        let response = await treeController.getListTree(req.query);
+        return res.send(response);
+    } catch (error) {
+        return res.send(error)
+    }
+})
 module.exports = router
