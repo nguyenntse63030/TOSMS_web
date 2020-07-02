@@ -78,11 +78,16 @@ function createCamera() {
             contentType: false,
             processData: false,
             success: function (response) {
-                $('#camera-table').DataTable().destroy();
-                initDatatale();
-                document.getElementById('create-camera').reset();
-                $('.modal-header .close').click();
-                !response.message ? showNotification(response.errorMessage, 'warning') : showNotification(response.message, 'success');
+                if (!response.message) {
+                    return showNotification(response.errorMessage, 'warning');
+                }
+                else {
+                    showNotification(response.message, 'success');
+                    $('#camera-table').DataTable().destroy();
+                    initDatatale();
+                    document.getElementById('create-camera').reset();
+                    $('.modal-header .close').click();
+                }
             }
         })
     }

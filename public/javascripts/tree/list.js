@@ -8,6 +8,9 @@ app.controller('listController', ['$scope', 'apiService', function ($scope, apiS
             thousands: ',',
             url: '//cdn.datatables.net/plug-ins/1.10.19/i18n/Vietnamese.json'
         },
+        search: {
+            caseInsensitive: true
+        },
         ajax: {
             url: '/api/v1/tree',
             dataSrc: (response) => {
@@ -30,6 +33,7 @@ app.controller('listController', ['$scope', 'apiService', function ($scope, apiS
     }
     $('#tree-table').DataTable(options);
     loadLocation($scope, apiService)
+    $scope.getListCities()
 }])
 
 function createTree() {

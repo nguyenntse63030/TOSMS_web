@@ -23,6 +23,7 @@ async function processData(data) {
         name: checkResult(data.result),
         description: '',
         image: data.image,
+        cameraId: data.camera_id,
         imageDetected: data.imageDetected,
         createdTime: new Date(data.timestamp).getTime() || Date.now()
     }

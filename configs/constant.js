@@ -38,4 +38,8 @@ module.exports = {
   cameraStatusEnums: ["Đang hoạt động", "Bị lỗi"],
   imageDefault: "/images/logo/LogoTree.jpg",
   googleMapsURL: "https://www.google.com/maps/dir/?api=1&destination=",
+  type_func: {
+    CREATE: 'create',
+    UPDATE: 'update'
+  }
 };

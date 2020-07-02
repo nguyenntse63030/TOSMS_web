@@ -5,16 +5,160 @@
         display: initial
     }
 
+    .card-camera .card-profile {
+        margin-top: 80px;
+    }
+
+    .card-profile .card-avatar {
+        border-radius: 0;
+    }
+
+    .label-control.bmd-label-static {
+        left: 15px
+    }
+
     .img-data-row {
         width: 70px;
         height: 70px;
     }
 
-    a, a:hover, a:focus {
+    a,
+    a:hover,
+    a:focus {
         color: #ffffff
     }
+
+    table a {
+        color: #ab47bc;
+    }
+
+    .datepicker {
+        border-radius: 0;
+        padding: 0;
+    }
+
+    .datepicker-days table thead,
+    .datepicker-days table tbody,
+    .datepicker-days table tfoot {
+        padding: 10px;
+        display: list-item;
+    }
+
+    .datepicker-days table thead,
+    .datepicker-months table thead,
+    .datepicker-years table thead,
+    .datepicker-decades table thead,
+    .datepicker-centuries table thead {
+        background: #3546b3;
+        color: #ffffff;
+        border-radius: 0;
+    }
+
+    .datepicker-days table thead tr:nth-child(2n+0) td,
+    .datepicker-days table thead tr:nth-child(2n+0) th {
+        border-radius: 3px;
+    }
+
+    .datepicker-days table thead tr:nth-child(3n+0) {
+        text-transform: uppercase;
+        font-weight: 300 !important;
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    .table-condensed>tbody>tr>td,
+    .table-condensed>tbody>tr>th,
+    .table-condensed>tfoot>tr>td,
+    .table-condensed>tfoot>tr>th,
+    .table-condensed>thead>tr>td,
+    .table-condensed>thead>tr>th {
+        padding: 11px 13px;
+    }
+
+    .datepicker-months table thead td,
+    .datepicker-months table thead th,
+    .datepicker-years table thead td,
+    .datepicker-years table thead th,
+    .datepicker-decades table thead td,
+    .datepicker-decades table thead th,
+    .datepicker-centuries table thead td,
+    .datepicker-centuries table thead th {
+        border-radius: 0;
+    }
+
+    .datepicker td,
+    .datepicker th {
+        border-radius: 50%;
+        padding: 0 12px;
+    }
+
+    .datepicker-days table thead,
+    .datepicker-months table thead,
+    .datepicker-years table thead,
+    .datepicker-decades table thead,
+    .datepicker-centuries table thead {
+        background: #3546b3;
+        color: #ffffff;
+        border-radius: 0;
+    }
+
+    .datepicker table tr td.active,
+    .datepicker table tr td.active:hover,
+    .datepicker table tr td.active.disabled,
+    .datepicker table tr td.active.disabled:hover {
+        background-image: none;
+    }
+
+    .datepicker .prev,
+    .datepicker .next {
+        color: rgba(255, 255, 255, 0.5);
+        transition: 0.3s;
+        width: 37px;
+        height: 37px;
+    }
+
+    .datepicker .prev:hover,
+    .datepicker .next:hover {
+        background: transparent;
+        color: rgba(255, 255, 255, 0.99);
+        font-size: 21px;
+    }
+
+    .datepicker .datepicker-switch {
+        font-size: 24px;
+        font-weight: 400;
+        transition: 0.3s;
+    }
+
+    .datepicker .datepicker-switch:hover {
+        color: rgba(255, 255, 255, 0.7);
+        background: transparent;
+    }
+
+    .datepicker table tr td span {
+        border-radius: 2px;
+        margin: 3%;
+        width: 27%;
+    }
+
+    .datepicker table tr td span.active,
+    .datepicker table tr td span.active:hover,
+    .datepicker table tr td span.active.disabled,
+    .datepicker table tr td span.active.disabled:hover {
+        background-color: #3546b3;
+        background-image: none;
+    }
+
+    .dropdown-menu {
+        border: 1px solid rgba(0, 0, 0, .1);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+    }
+
+    .datepicker-dropdown.datepicker-orient-top:before {
+        border-top: 7px solid rgba(0, 0, 0, .1);
+    }
 </style>
-<p id="id" ng-hide="true"><%= id %></p>
+
 <div class="container-fluid" ng-controller="detailController">
     <div class="row">
         <div class="col-md-8">
@@ -35,9 +179,8 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="bmd-label-floating">Trạng thái</label>
-                                    <input type="text" class="form-control"
-                                        ng-model="tree.note" value="{{tree.status}} "
-                                        ng-disabled="true">
+                                    <input type="text" class="form-control" ng-model="tree.note"
+                                        value="{{tree.status}} " ng-disabled="true">
                                 </div>
                             </div>
                         </div>
@@ -46,14 +189,28 @@
                                 <div class="form-group">
                                     <label class="bmd-label-floating">Ngày cập nhật</label>
                                     <input type="text" class="form-control" name="updateTime" id="updateTime"
-                                        value="{{tree.modifiedTime | date:'dd/MM/yyyy'}}" ng-disabled="isNotEditing">
+                                        value="{{tree.modifiedTime | date:'dd/MM/yyyy HH:mm:ss'}}" ng-disabled="true">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="bmd-label-floating">Ngày tạo</label>
                                     <input type="text" class="form-control" name="createdTime" id="createdTime"
-                                        value="{{tree.createdTime | date:'dd/MM/yyyy'}}" ng-disabled="isNotEditing">
+                                        value="{{tree.createdTime | date:'dd/MM/yyyy HH:mm:ss'}}" ng-disabled="true">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="latitude">Vĩ Độ</label>
+                                    <input type="text" class="form-control" ng-model="tree.latitude" ng-disabled="isNotEditing" id="latitude" placeholder="Nhập vĩ độ">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="longtitude">Kinh Độ</label>
+                                    <input type="text" class="form-control" ng-model="tree.longitude" ng-disabled="isNotEditing" id="longitude" placeholder="Nhập kinh độ">
                                 </div>
                             </div>
                         </div>
@@ -77,9 +234,9 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="bmd-label-floating">Thành Phố</label>
-                                    <select class="form-control" ng-disabled="isNotEditing" ng-change="getListDistrict()" ng-model="city"
-                                        id="city">
-                                        <option ng-repeat="city in cities | orderBy:'id'" ng-value="city._id">
+                                    <select class="form-control" ng-disabled="isNotEditing"
+                                        ng-change="getListDistrict()" ng-model="city" id="city">
+                                        <option ng-repeat="city in cities | orderBy:'createdTime'" ng-value="city._id">
                                             {{city.name}}</option>
                                     </select>
                                 </div>
@@ -87,9 +244,10 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="bmd-label-floating">Quận</label>
-                                    <select class="form-control" ng-disabled="isNotEditing" ng-change="getListWard()" ng-model="district"
-                                        id="district">
-                                        <option ng-repeat="district in districts | orderBy:'id'" ng-value="district._id">
+                                    <select class="form-control" ng-disabled="isNotEditing" ng-change="getListWard()"
+                                        ng-model="district" id="district">
+                                        <option ng-repeat="district in districts | orderBy:'createdTime'"
+                                            ng-value="district._id">
                                             {{district.name}}</option>
                                     </select>
                                 </div>
@@ -99,8 +257,9 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="bmd-label-floating">Phường</label>
-                                    <select class="form-control" ng-disabled="isNotEditing" ng-model="ward" id="ward">
-                                        <option ng-repeat="ward in wards | orderBy: 'id'" ng-value="ward._id">
+                                    <select class="form-control" ng-disabled="isNotEditing" ng-model="ward"
+                                        id="ward">
+                                        <option ng-repeat="ward in wards | orderBy: 'createdTime'" ng-value="ward._id">
                                             {{ward.name}}</option>
                                     </select>
                                 </div>
@@ -108,7 +267,9 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="bmd-label-floating">Đường</label>
-                                    <input type="text" ng-model="tree.street" value="{{tree.street}}" ng-disabled="isNotEditing" class="form-control" id="street" placeholder="Nhập tên đường">
+                                    <input type="text" ng-model="tree.street" value="{{tree.street}}"
+                                        ng-disabled="isNotEditing" class="form-control" id="street"
+                                        placeholder="Nhập tên đường">
                                 </div>
                             </div>
                         </div>
@@ -116,7 +277,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="note">Vấn đề nguy hiểm</label>
-                                    <textarea type="text" rows="3" class="form-control" ng-model="tree.problems"
+                                    <textarea type="text" rows="3" class="form-control" ng-model="tree.description"
                                         ng-disabled="isNotEditing" id="note"></textarea>
                                 </div>
                             </div>
@@ -138,77 +299,73 @@
                     </form>
                 </div>
             </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card card-profile">
-                <div class="card-avatar" onclick="showModalChangeAvatar()">
-                    <a href="">
-                        <img class="img"
-                            src="{{tree.image || 'https://iweb.tatthanh.com.vn/pic/3/blog/logo-cay-xanh.jpg'}}" />
-                    </a>
+            <div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label class="label-control">Ngày Bắt Đầu</label>
+                        <input type="text" onchange="dateChange()" id="startDate" class="form-control startDate" />
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="label-control">Ngày Kết Thúc</label>
+                        <input type="text" onchange="dateChange()" id="endDate" class="form-control endDate" />
+                    </div>
                 </div>
-                <!-- <div class="card-body">
-                    <h6 class="card-category text-gray">Cây</h6>
-                    <h4 class="card-title">{{employee.fullname}}</h4>
-                </div> -->
-            </div>
-            <!-- <button ng-click="getRoom()" type="submit" class="btn btn-primary pull-left" data-toggle="modal"
-                data-target="#addRoomModel">Add Room</button> -->
-            <div class="text-center col-md-12">
-                <button class="btn btn-primary"><a href="{{tree.googleMapsUrl}}" target="_blank">View On Maps</a></button>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header card-header-primary">
-                    <div class="row">
-                        <div class="col-md-8">
-                            <h4 class="card-title" style="line-height: 50px">Lịch Sử Thông Báo</h4>
+                <div class="card">
+                    <div class="card-header card-header-primary">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h4 class="card-title" style="line-height: 50px">Lịch Sử Thông Báo</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table" id="notification-table">
+                                <thead class=" text-primary">
+                                    <th style="width: 5%">STT</th>
+                                    <th style="width: 10%">Hình Ảnh</th>
+                                    <th style="width: 15%">Nội Dung</th>
+                                    <th style="width: 10%">Trạng Thái</th>
+                                    <th style="width: 10%">Thời Gian</th>
+                                </thead>
+                            </table>
                         </div>
                     </div>
                 </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table" id="notification-table">
-                            <thead class=" text-primary">
-                                <th style="width: 5%">STT</th>
-                                <th style="width: 10%">Hình Ảnh</th>
-                                <th style="width: 15%">Nội Dung</th>
-                                <th style="width: 10%">Trạng Thái</th>
-                                <th style="width: 10%">Thời Gian</th>
-                            </thead>
-                            <tbody>
-                                <tr ng-repeat="notification in notifications">
-                                    <td>
-                                        <a href="/notification/{{notification.code}}">
-                                            {{notification.code}}
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <a href="/notification/{{notification.code}}">
-                                            <img class="img-data-row" src="{{notification.img}}" />
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <a href="/notification/{{notification.code}}">
-                                            {{notification.content}}
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <a href="/notification/{{notification.code}}">
-                                            {{notification.status}}
-                                        </a>
-                                    </td>
-                                    <td data-order="{{notification.createdTime}}">
-                                        <a href="/notification/{{notification.code}}">
-                                            {{notification.createdTime == 0 ? 'N/A' : notification.createdTime | date:'dd/MM/yyyy HH:mm:ss'}}
-                                        </a>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+            </div>
+        </div>
+        <p id="id" ng-hide="true"><%= id %></p>
+        <div class="col-md-4 mt-5">
+            <div class="card-tree">
+                <div class="card card-profile">
+                    <div class="card-avatar" onclick="showModalChangeAvatar()">
+                        <a href="">
+                            <img class="img"
+                                src="{{tree.image || 'https://iweb.tatthanh.com.vn/pic/3/blog/logo-cay-xanh.jpg'}}" />
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <h6 class="card-category text-gray">Tree Code</h6>
+                        <h4 class="card-title">{{tree.code}}</h4>
+                    </div>
+                </div>
+                <!-- <button ng-click="getRoom()" type="submit" class="btn btn-primary pull-left" data-toggle="modal"
+                data-target="#addRoomModel">Add Room</button> -->
+                <div class="text-center col-md-12">
+                    <button class="btn btn-primary"><a href="{{tree.googleMapsUrl}}" target="_blank">Xem trên bản đồ</a></button>
+                </div>
+            </div>
+            <div class="card-camera">
+                <div class="card card-profile">
+                    <div class="card-avatar" onclick="showModalChangeAvatar()">
+                        <a href="">
+                            <img class="img"
+                                src="{{tree.camera.image || 'https://iweb.tatthanh.com.vn/pic/3/blog/logo-cay-xanh.jpg'}}" />
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <h6 class="card-category text-gray">Camera Code</h6>
+                        <h4 class="card-title">{{tree.camera.code}}</h4>
                     </div>
                 </div>
             </div>
@@ -271,25 +428,46 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script>
 <script src="/javascripts/tree/detail.js"></script>
+<script type="text/javascript">
+    let startDate = new Date();
+    startDate.setDate(startDate.getDate() - 7);
+    startDate.setHours(0)
+    startDate.setMinutes(0)
+    $('.startDate').datetimepicker({
+        icons: {
+            time: "fa fa-clock-o",
+            date: "fa fa-calendar",
+            up: "fa fa-chevron-up",
+            down: "fa fa-chevron-down",
+            previous: 'fa fa-chevron-left',
+            next: 'fa fa-chevron-right',
+            today: 'fa fa-screenshot',
+            clear: 'fa fa-trash',
+            close: 'fa fa-remove'
+        },
+        date: startDate,
+        maxDate: (new Date().setDate((new Date().getDate()) - 1))
+    }).on("dp.change", function () {
+        dateChange()
+    });
+    $('.endDate').datetimepicker({
+        icons: {
+            time: "fa fa-clock-o",
+            date: "fa fa-calendar",
+            up: "fa fa-chevron-up",
+            down: "fa fa-chevron-down",
+            previous: 'fa fa-chevron-left',
+            next: 'fa fa-chevron-right',
+            today: 'fa fa-screenshot',
+            clear: 'fa fa-trash',
+            close: 'fa fa-remove'
+        },
+        date: new Date(),
+        minDate: $('#startDate').val()
+    }).on("dp.change", function () {
+        dateChange()
+    });
+</script>
 <script>
     clickSideBar('tree-page')
-    $(document).ready(function () {
-        $('#birthdate').datepicker({
-            dateFormat: 'dd/mm/yy',
-            autoclose: true,
-            changeMonth: true,
-            changeYear: true,
-            yearRange: '-100:' + new Date().getFullYear()
-        })
-        $('#selected-apartment').select2({
-            placeholder: 'Select a apartment'
-        });
-        $('#selected-room').select2({
-            placeholder: 'Select a room'
-        });
-        $('.select2-single').select2()
-        setTimeout(() => {
-            numberFormat()
-        }, 200);
-    });
 </script>

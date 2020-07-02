@@ -1,5 +1,7 @@
 const mongoose = require('mongoose')
 const Notification = mongoose.model('Notification')
+const Camera = mongoose.model('Camera')
+const Tree = mongoose.model('Tree')
 const responseStatus = require('../../../configs/responseStatus')
 const common = require('../../common')
 const jwt = require('jsonwebtoken')
@@ -15,6 +17,11 @@ const firestore = admin.firestore();
 firestore.settings({ timestampsInSnapshots: true })
 
 async function createNotification(data) {
+    let camera = await Camera.findById({_id: data.cameraId}).populate('tree');
+    if (!camera) {
+        throw responseStatus.Code400({errorMessage: 'Camera không tồn tại'});
+    }
+    data.tree = camera.tree._id;
     let notification = await Notification.create(data)
     if (!notification) {
         throw responseStatus.Code400({ errorMessage: responseStatus.CREATE_NOTIFICATION_FAIL })
@@ -66,6 +73,7 @@ let setNotificationReaded = async () => {
         let result = await docUpdate.update({ readed: true })
     });
 }
+
 module.exports = {
     createNotification,
     getListNotification,

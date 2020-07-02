@@ -1,6 +1,7 @@
 const responseStatus = require("../configs/responseStatus")
 const { response } = require("express")
 const constant = require("../configs/constant")
+const { type_func } = require("../configs/constant")
 
 function changeAlias(str) {
     if (!str) return ''
@@ -66,38 +67,38 @@ function getTimestampEndOfMonth(timestamp) {
 }
 
 function isEmptyObject(obj) {
-    for(var key in obj) {
-        if(obj.hasOwnProperty(key))
+    for (var key in obj) {
+        if (obj.hasOwnProperty(key))
             return false;
     }
     return true;
 }
 
-function validateDataTree (tree) {
+function validateDataTree(tree) {
     if (!tree.image) {
-        throw responseStatus.Code400({errorMessage: responseStatus.TREE_IMAGE_IS_CANT_EMPTY});
-    }
-    if (!tree.treeType) {
-        throw responseStatus.Code400({errorMessage:responseStatus.TREE_TYPE_IS_CANT_EMPTY});
-    }
-    if (!tree.street) {
-        throw responseStatus.Code400({errorMessage:responseStatus.TREE_STREET_IS_CANT_EMPTY});
-    }
-    if (!tree.city) {
-        throw responseStatus.Code400({errorMessage:responseStatus.TREE_CITY_IS_CANT_EMPTY});
-    }
-    if (!tree.district) {
-        throw responseStatus.Code400({errorMessage:responseStatus.TREE_DISTRICT_IS_CANT_EMPTY});
-    }
-    if (!tree.ward) {
-        throw responseStatus.Code400({errorMessage:responseStatus.TREE_WARD_IS_CANT_EMPTY});
+        throw responseStatus.Code400({ errorMessage: responseStatus.TREE_IMAGE_IS_CANT_EMPTY });
     }
     if (!tree.code) {
-        throw responseStatus.Code400({errorMessage: responseStatus.TREE_CODE_CANT_EMPTY})
+        throw responseStatus.Code400({ errorMessage: responseStatus.TREE_CODE_CANT_EMPTY })
+    }
+    if (!tree.treeType) {
+        throw responseStatus.Code400({ errorMessage: responseStatus.TREE_TYPE_IS_CANT_EMPTY });
+    }
+    if (!tree.street) {
+        throw responseStatus.Code400({ errorMessage: responseStatus.TREE_STREET_IS_CANT_EMPTY });
+    }
+    if (!tree.city) {
+        throw responseStatus.Code400({ errorMessage: responseStatus.TREE_CITY_IS_CANT_EMPTY });
+    }
+    if (!tree.district) {
+        throw responseStatus.Code400({ errorMessage: responseStatus.TREE_DISTRICT_IS_CANT_EMPTY });
+    }
+    if (!tree.ward) {
+        throw responseStatus.Code400({ errorMessage: responseStatus.TREE_WARD_IS_CANT_EMPTY });
     }
 }
 
-function createMapsUrl (lat, long) {
+function createMapsUrl(lat, long) {
     let destination = lat + ',' + long
     let url = constant.googleMapsURL + encodeURIComponent(destination)
     return url

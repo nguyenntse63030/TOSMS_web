@@ -14,6 +14,10 @@ var TreeSchema = new mongoose.Schema({
         type: String,
         default: constants.treeProblemDisplay.NO_PROBLEM
     },
+    description: {
+        type: String,
+        default: ''
+    },
     isActive: {
         type: Boolean,
         default: true

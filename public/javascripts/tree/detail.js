@@ -3,75 +3,112 @@ app.controller('detailController', ['$scope', 'apiService', function ($scope, ap
     $scope.isNotEditing = true;
     $scope.tree = {};
 
+    loadLocation($scope, apiService)
+
     apiService.getDetailTree($scope.id).then((res) => {
         $scope.tree = res.data.tree;
+        $scope.city = $scope.tree.city
+        $scope.district = $scope.tree.district
+        $scope.ward = $scope.tree.ward
+
+        apiService.getListCities().then(res => { $scope.cities = res.data.cities })
+        apiService.getListDistrict($scope.city).then(res => { $scope.districts = res.data.districts })
+        apiService.getListWard($scope.district).then(res => { $scope.wards = res.data.wards })
+
+        initNotificationDatatable()
     }).catch((error) => {
         console.log(error);
         showNotification('Co loi!', 'danger');
     })
 
-    loadLocation($scope, apiService)
-
     $scope.deleteTree = () => {
-        try {
-            throw 'xoa that bai';
-        } catch (error) {
+        apiService.deleteTree($scope.id).then(res => {
+            if (res.data.errorMessage) {
+                showNotification(res.data.errorMessage, 'danger');
+            } else {
+                showNotification(res.data.message, 'success');
+                setTimeout(function () {
+                    window.location.href = '/tree'
+                  }, 1000)
+            }
+        }).catch(error => {
             showNotification(error, 'danger');
-        }
+        })
     }
 
     $scope.updateTree = () => {
-        try {
-            throw 'chinh sua that bai';
-        } catch (error) {
+        $scope.tree.city = $scope.city
+        $scope.tree.district = $scope.district
+        $scope.tree.ward = $scope.ward
+        apiService.updateTree($scope.id, $scope.tree).then(res => {
+            if (res.data.errorMessage) {
+                showNotification(res.data.errorMessage, 'danger');
+            } else {
+                $scope.tree = res.data.tree
+                showNotification(res.data.message, 'success');
+            }
+        }).catch(error => {
             showNotification(error, 'danger');
-        }
-    }
-
-    $scope.notifications = [
-        {
-            createdTime: 1590831567000,
-            code: '1',
-            img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQbQa3ZRo97YeHzyY7kBJPtS2nQx0u5dcMjD8rm2yLphWgWE3ci&usqp=CAU',
-            content: 'Cây bình thường',
-            priority: 'Không quan trọng',
-            status: 'Không cần xử lý',
-        },
-        {
-            createdTime: 1590831800000,
-            code: '2',
-            img: 'https://i.stack.imgur.com/lLkEO.jpg',
-            content: 'Nứt, Nghiêng, Gãy',
-            priority: 'Nguy hiểm',
-            status: 'Chưa xử lý',
-        },
-    ]
-    setTimeout(() => {
-        initNotificationDatatable()
-    }, 1000);
-    function initNotificationDatatable() {
-        notificationTable = $('#notification-table').DataTable({
-            retrieve: true,
-            aLengthMenu: [
-                [10, 20, 50, -1],
-                [10, 20, 50, 'Tất cả']
-            ],
-            iDisplayLength: 10,
-            language: {
-                decimal: '.',
-                thousands: ',',
-                url: '//cdn.datatables.net/plug-ins/1.10.19/i18n/Vietnamese.json'
-            },
-            search: {
-                caseInsensitive: true
-            },
-            // aaSorting: [2, 'desc'],
-            order: [0, 'desc'],
-            columnDefs: [{
-                // targets: [0],
-                // sortable: false
-            }],
-            aaSorting: []
         })
     }
 }])
+
+let dateChange = () => {
+    $('#notification-table').DataTable().destroy();
+    initNotificationDatatable();
+}
+
+function initNotificationDatatable() {
+    let options = {
+        searchDelay: 500,
+        processing: true,
+        serverSide: true,
+        language: {
+            decimal: '.',
+            thousands: ',',
+            url: '//cdn.datatables.net/plug-ins/1.10.19/i18n/Vietnamese.json'
+        },
+        search: {
+            caseInsensitive: true
+        },
+        ajax: {
+            url: '/api/v1/tree/' + $('#id').text() + '/notification',
+            data: {
+                startDate: (new Date($('#startDate').val())).getTime(),
+                endDate: (new Date($('#endDate').val())).getTime()
+            },
+            dataSrc: (response) => {
+                return response.data.map((notification, i) => {
+                    return {
+                        id: ++i,
+                        image: generateATag(notification, "image"),
+                        name: generateATag(notification, "name"),
+                        status: generateATag(notification, "status"),
+                        createdTime: generateATag(notification, "createdTime"),
+                    }
+                })
+            }
+        },
+        columns: [
+            { data: "id" },
+            { data: "image" },
+            { data: "name" },
+            { data: "status" },
+            { data: "createdTime" },
+        ],
+    }
+    $('#notification-table').DataTable(options)
+}
+
+function generateATag(notification, property) {
+    let data = notification[property]
+    if (property === 'createdTime') {
+        data = parseInt(data)
+        data = formatDate(data)
+    } else if (property === 'image') {
+        data = '<img alt="imageTree" width="70" height="70" src="' + data + '"/>';
+    }
+
+    let result = '<a class="table-row-link" href="/notification/' + notification._id + '">' + data || '' + '</a>'
+    return result
+}

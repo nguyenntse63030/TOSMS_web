@@ -28,17 +28,30 @@ let getListCamera = async (query) => {
 
 let createCamera = async (data, file) => {
     let camera = data;
-    await validateDataCamera(camera, file);
+    let tree = await Tree.findById({ _id: camera.tree }).populate('camera');
+
+    await validateDataCamera(camera, tree, file);
+    let regex = new RegExp(camera.code, 'i');
+    let checkExist = await Camera.findOne({code: regex});
+    
+    if (checkExist) {
+        throw responseStatus.Code400({errorMessage: responseStatus.CAMERA_CODE_IS_CANT_DUPLICATE})
+    }
+
     let pathImg = await awsServices.uploadImageToS3('cameraImg', file.image);
     camera.image = pathImg;
+
     let result = await Camera.create(camera);
     if (!result) {
         throw responseStatus.Code400({ errorMessage: responseStatus.CAMERA_CREATE_FAIL });
     }
+
+    tree.camera = result._id
+    tree.save();
     return responseStatus.Code200({ message: responseStatus.CAMERA_CREATE_SUCCESS });
 }
 
-let validateDataCamera = async (camera, file) => {
+let validateDataCamera = (camera, tree, file) => {
     if (!camera.code) {
         throw responseStatus.Code400({ errorMessage: responseStatus.CAMERA_CODE_IS_CANT_EMPTY });
     }
@@ -52,7 +65,6 @@ let validateDataCamera = async (camera, file) => {
     }
 
     if (camera.tree) {
-        let tree = await Tree.findById({ _id: camera.tree }).populate('camera');
         if (!tree) {
             throw responseStatus.Code400({errorMessage: responseStatus.TREE_IS_NOT_FOUND});
         }

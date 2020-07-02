@@ -178,13 +178,15 @@ function validateCreateTree(file, treeType, street) {
 }
 
 function loadLocation($scope, apiService) {
-    apiService.getListCities().then(res => {
-        $scope.cities = res.data.cities
-        $scope.city =  $scope.cities[0]._id
-        $scope.getListDistrict()
-    }).catch(err => {
-        console.log(err)
-    })
+    $scope.getListCities = () => {
+        apiService.getListCities().then(res => {
+            $scope.cities = res.data.cities
+            $scope.city = $scope.cities[0]._id
+            $scope.getListDistrict()
+        }).catch(err => {
+            console.log(err)
+        })
+    }
 
     $scope.getListDistrict = () => {
         apiService.getListDistrict($scope.city).then(res => {
@@ -193,7 +195,7 @@ function loadLocation($scope, apiService) {
             $scope.getListWard();
         })
     }
-  
+
     $scope.getListWard = () => {
         apiService.getListWard($scope.district).then(res => {
             $scope.wards = res.data.wards

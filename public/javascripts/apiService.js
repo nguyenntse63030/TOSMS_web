@@ -15,6 +15,9 @@ angular.module("TOSMS").factory("apiService", [
       updateTree: (id, data) => {
         return $http.put(apiVersion + "/tree/" + id, data);
       },
+      deleteTree: (id) => {
+        return $http.delete(apiVersion + "/tree/" + id);
+      },
       getDetailTree: (id) => {
         return $http.get(apiVersion + "/tree/" + id);
       },
