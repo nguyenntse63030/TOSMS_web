@@ -45,6 +45,7 @@ app.use("/api/v1/python", require("./api/v1/route/python"));
 app.use("/api/v1/notification", require("./api/v1/route/notification"));
 app.use("/api/v1/location", require("./api/v1/route/location"));
 app.use("/api/v1/tree", require("./api/v1/route/tree"));
+app.use("/api/v1/camera", require("./api/v1/route/camera"));
 app.use("/api/v1/auth", require("./api/v1/route/auth"));
 app.use("/api/v1/user", require("./api/v1/route/user"));
 // require('./scripts/createAdmin')

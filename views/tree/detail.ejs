@@ -36,7 +36,7 @@
                                 <div class="form-group">
                                     <label class="bmd-label-floating">Trạng thái</label>
                                     <input type="text" class="form-control"
-                                        ng-model="tree.status ||'Bình Thường'" value="{{tree.status}} "
+                                        ng-model="tree.note" value="{{tree.status}} "
                                         ng-disabled="true">
                                 </div>
                             </div>
@@ -79,7 +79,7 @@
                                     <label class="bmd-label-floating">Thành Phố</label>
                                     <select class="form-control" ng-disabled="isNotEditing" ng-change="getListDistrict()" ng-model="city"
                                         id="city">
-                                        <option ng-repeat="city in cities | orderBy:'id'" ng-value="city.id">
+                                        <option ng-repeat="city in cities | orderBy:'id'" ng-value="city._id">
                                             {{city.name}}</option>
                                     </select>
                                 </div>
@@ -89,7 +89,7 @@
                                     <label class="bmd-label-floating">Quận</label>
                                     <select class="form-control" ng-disabled="isNotEditing" ng-change="getListWard()" ng-model="district"
                                         id="district">
-                                        <option ng-repeat="district in districts | orderBy:'id'" ng-value="district.id">
+                                        <option ng-repeat="district in districts | orderBy:'id'" ng-value="district._id">
                                             {{district.name}}</option>
                                     </select>
                                 </div>
@@ -100,7 +100,7 @@
                                 <div class="form-group">
                                     <label class="bmd-label-floating">Phường</label>
                                     <select class="form-control" ng-disabled="isNotEditing" ng-model="ward" id="ward">
-                                        <option ng-repeat="ward in wards | orderBy: 'id'" ng-value="ward.id">
+                                        <option ng-repeat="ward in wards | orderBy: 'id'" ng-value="ward._id">
                                             {{ward.name}}</option>
                                     </select>
                                 </div>
@@ -163,7 +163,7 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header card-header-primary">
-                    <div class="row">e
+                    <div class="row">
                         <div class="col-md-8">
                             <h4 class="card-title" style="line-height: 50px">Lịch Sử Thông Báo</h4>
                         </div>

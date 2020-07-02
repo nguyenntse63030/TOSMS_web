@@ -1,20 +1,21 @@
 
 app.controller('listController', ['$scope', 'apiService', function ($scope, apiService) {
     let options = {
+        processing: true,
+        serverSide: true,
         language: {
             decimal: '.',
             thousands: ',',
             url: '//cdn.datatables.net/plug-ins/1.10.19/i18n/Vietnamese.json'
         },
         ajax: {
-            url: '/javascripts/tree/list.json',
+            url: '/api/v1/tree',
             dataSrc: (response) => {
-               return response.map((tree) => {
+               return response.data.map((tree, i) => {
                     return {
-                        id: generateATag(tree, 'id'),
-                        img: generateATag(tree, 'img'),
+                        id: ++i,
                         location: generateATag(tree, 'location'),
-                        status: generateATag(tree, 'status'),
+                        note: generateATag(tree, 'note'),
                         createdTime: generateATag(tree, 'createdTime'),
                     }
                })
@@ -22,9 +23,8 @@ app.controller('listController', ['$scope', 'apiService', function ($scope, apiS
         },
         columns: [
             { data: 'id' },
-            { data: 'img' },
             { data: 'location' },
-            { data: 'status' },
+            { data: 'note' },
             { data: 'createdTime' },
         ]
     }
@@ -36,14 +36,15 @@ function createTree() {
     let formData = new FormData();
     let file = $('#file')[0].files[0];
     let treeType = $('#treeType').val();
-    let city = $('#city').val().slice($('#city').val().indexOf(':') + 1);
-    let district = $('#city').val().slice($('#city').val().indexOf(':') + 1);
-    let ward = $('#ward').val().slice($('#city').val().indexOf(':') + 1);
+    let city = $('#city').val();
+    let district = $('#district').val();
+    let ward = $('#ward').val();
     let street = $('#street').val();
+    let code = $('#code').val();
     let longtitude = $('#longitude').val();
     let latitude = $('#latitude').val();
 
-    let check = validateCreateTree(file, treeType, city, district, ward, street);
+    let check = validateCreateTree(file, treeType, street);
 
     if (check) {
         formData.append("image", file)
@@ -52,6 +53,7 @@ function createTree() {
         formData.append("district", district)
         formData.append("ward", ward)
         formData.append("street", street)
+        formData.append("code", code)
         formData.append("longitude", longtitude)
         formData.append("latitude", latitude)
 
@@ -77,10 +79,10 @@ function generateATag(tree, property) {
     if (property === 'createdTime') {
         data = parseInt(data)
         data = formatDate(data)
-    } else if (property === 'img') {
-        return '<a class="table-row-link" href="/tree/' + tree.id + '"><img class="img-data-row" alt="treeImg" src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQbQa3ZRo97YeHzyY7kBJPtS2nQx0u5dcMjD8rm2yLphWgWE3ci&usqp=CAU"/></a>'
-    } 
+    } else if (property === 'location') {
+        data = tree.street + ' - ' + tree.ward.name + ' - ' + tree.district.name + ' - ' + tree.city.name
+    }
 
-    let result = '<a class="table-row-link" href="/tree/' + tree.id + '">' + data + '</a>'
+    let result = '<a class="table-row-link" href="/tree/' + tree._id + '">' + data || '' + '</a>'
     return result
 }

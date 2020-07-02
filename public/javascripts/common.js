@@ -160,7 +160,7 @@ function formatDate(date) {
     return day + "/" + month + "/" + year + " " + hour + ":" + minute + ":" + second;
 }
 
-function validateCreateTree(file, treeType, city, district, ward, street) {
+function validateCreateTree(file, treeType, street) {
     let check = true;
     if (!file) {
         check = false;
@@ -178,10 +178,9 @@ function validateCreateTree(file, treeType, city, district, ward, street) {
 }
 
 function loadLocation($scope, apiService) {
-    $scope.city = 1
-  
     apiService.getListCities().then(res => {
         $scope.cities = res.data.cities
+        $scope.city =  $scope.cities[0]._id
         $scope.getListDistrict()
     }).catch(err => {
         console.log(err)
@@ -190,7 +189,7 @@ function loadLocation($scope, apiService) {
     $scope.getListDistrict = () => {
         apiService.getListDistrict($scope.city).then(res => {
             $scope.districts = res.data.districts
-            $scope.district = $scope.districts[0].id;
+            $scope.district = $scope.districts[0]._id;
             $scope.getListWard();
         })
     }
@@ -198,7 +197,7 @@ function loadLocation($scope, apiService) {
     $scope.getListWard = () => {
         apiService.getListWard($scope.district).then(res => {
             $scope.wards = res.data.wards
-            $scope.ward = $scope.wards[0].id;
+            $scope.ward = $scope.wards[0]._id;
         })
     }
 }

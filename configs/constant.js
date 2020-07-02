@@ -7,6 +7,7 @@ module.exports = {
   treeProblemDisplay: {
     BROKEN_BRANCH: "Cây bị gãy cành",
     INCLINED_TREE: "Cây bị nghiêng",
+    NO_PROBLEM: "Cây bình thường",
   },
 
   userRoles: {
@@ -29,14 +30,12 @@ module.exports = {
     DANG_HOAT_DONG: "Đang hoạt động",
     BI_LOI: "Bị lỗi",
   },
-
-  cameraStatusEnums: ["Đang hoạt động", "Bị lỗi"],
   gender: {
     Male: "Nam",
     Female: "Nữ",
   },
-
   genderEnums: ["Nam", "Nữ"],
-
+  cameraStatusEnums: ["Đang hoạt động", "Bị lỗi"],
+  imageDefault: "/images/logo/LogoTree.jpg",
   googleMapsURL: "https://www.google.com/maps/dir/?api=1&destination=",
 };

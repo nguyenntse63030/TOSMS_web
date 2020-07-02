@@ -4,13 +4,12 @@ const District = mongoose.model('District');
 const responseStatus = require('../../../configs/responseStatus');
 
 let getListCity = async () => {
-    let cities = await City.find({},{district: 0});
+    let cities = await City.find({},{district: 0}).sort({name: 1});
     return responseStatus.Code200({cities});
 }
 
 let getCityById = async (id) => {
-    id = parseInt(id)
-    let city = await City.findOne({id: id}).populate('district', {ward: 0});
+    let city = await City.findOne({_id: id}).sort({name: 1}).populate('district', {ward: 0});
     if (!city) {
         throw responseStatus.Code500();
     }
@@ -18,8 +17,7 @@ let getCityById = async (id) => {
 }
 
 let getDistrictById = async (id) => {
-    id = parseInt(id);
-    let district = await District.findOne({id: id}).populate('ward')
+    let district = await District.findOne({_id: id}).sort({name: 1}).populate('ward')
     if (!district) {
         throw responseStatus.Code500();
     }

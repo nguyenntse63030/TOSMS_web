@@ -6,6 +6,10 @@ var CameraSchema = new mongoose.Schema({
         type: Boolean,
         default: true
     },
+    cameraType: {
+        type: String,
+        default: ''
+    },
     status: {
         type: String,
         default: constants.cameraStatus.DANG_HOAT_DONG,
@@ -14,6 +18,18 @@ var CameraSchema = new mongoose.Schema({
     tree: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Tree'
+    },
+    ipAddress: {
+        type: String,
+        default: ''
+    },
+    code: {
+        type: String,
+        required: true
+    },
+    image: {
+        type: String,
+        default: constants.imageDefault
     },
     modifiedTime: {
         type: Number,

@@ -92,6 +92,9 @@ function validateDataTree (tree) {
     if (!tree.ward) {
         throw responseStatus.Code400({errorMessage:responseStatus.TREE_WARD_IS_CANT_EMPTY});
     }
+    if (!tree.code) {
+        throw responseStatus.Code400({errorMessage: responseStatus.TREE_CODE_CANT_EMPTY})
+    }
 }
 
 function createMapsUrl (lat, long) {
