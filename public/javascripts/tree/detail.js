@@ -24,7 +24,9 @@ app.controller('detailController', ['$scope', 'apiService', function ($scope, ap
         $scope.city = $scope.tree.city
         $scope.district = $scope.tree.district
         $scope.ward = $scope.tree.ward
-
+        if (!$scope.tree.camera) {
+            showNotification('Bạn chưa thiết lập camera giám sát cho cây.', 'warning');
+        }
         apiService.getListCities().then(res => { $scope.cities = res.data.cities })
         apiService.getListDistrict($scope.city).then(res => { $scope.districts = res.data.districts })
         apiService.getListWard($scope.district).then(res => { $scope.wards = res.data.wards })

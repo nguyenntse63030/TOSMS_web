@@ -164,6 +164,7 @@ module.exports = {
   TREE_WARD_IS_CANT_EMPTY: 'Phường/xã không thể bỏ trống',
   TREE_IS_NOT_FOUND: 'Cây không tồn tại',
   TREE_CODE_CANT_EMPTY: 'Code của cây không thể bỏ trống',
+  TREE_CODE_IS_DUPLICATE: 'Mã code của cây đã tồn tại vui lòng chọn mã khác',
   TREE_UPLOAD_IMAGE_FAIL: 'Upload ảnh cây thất bại',
   TREE_UPLOAD_IMAGE_SUCCESS: 'Upload ảnh cây thành công',
   UPDATE_TREE_FAIL: 'Cập nhật thông tin cây thất bại',
@@ -177,5 +178,6 @@ module.exports = {
   CAMERA_CREATE_FAIL: 'Có lỗi trong quá trình tạo, vui lòng thử lại.',
   CAMERA_CREATE_SUCCESS: 'Tạo camera thành công.',
   USER_IS_NOT_FOUND: "Người dùng không tồn tại",
-  TREE_ONLY_HAVE_ONE_CAMERA: 'Cây đã có một camera bạn vui lòng xóa, thay đổi camera từ cây hoặc vui lòng chọn cây khác.'
+  TREE_ONLY_HAVE_ONE_CAMERA: 'Cây đã có một camera bạn vui lòng xóa, thay đổi camera từ cây hoặc vui lòng chọn cây khác.',
+  LOCATION_WRONG: 'Thông tin vị trí không đúng vui lòng thử lại.'
 }

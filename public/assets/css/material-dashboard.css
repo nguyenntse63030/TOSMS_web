@@ -11404,7 +11404,7 @@ textarea {
 }
 
 .alert.alert-warning {
-  background-color: #de1b0c;
+  background-color: #f8bf38;
   color: #ffffff;
 }
 
@@ -11413,7 +11413,7 @@ textarea {
 }
 
 .alert.alert-danger {
-  background-color: #f55145;
+  background-color: #de1b0c;
   color: #ffffff;
 }
 

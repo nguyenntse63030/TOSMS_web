@@ -38,6 +38,18 @@ var TreeSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Camera'
     },
+    cityName: {
+        type: String,
+        default: ''
+    },
+    districtName: {
+        type: String,
+        default: ''
+    },
+    wardName: {
+        type: String,
+        default: ''
+    },
     street: {
         type: String,
         default: ''
