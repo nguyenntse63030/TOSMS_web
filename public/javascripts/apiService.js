@@ -20,14 +20,26 @@ angular.module("TOSMS").factory("apiService", [
           url: apiVersion + "/tree/" + id + "/image",
           method: "PUT",
           data: data,
-          headers: {'Content-Type': undefined}
-        })
+          headers: { "Content-Type": undefined },
+        });
       },
       deleteTree: (id) => {
         return $http.delete(apiVersion + "/tree/" + id);
       },
       getDetailTree: (id) => {
         return $http.get(apiVersion + "/tree/" + id);
+      },
+      getListCamera: () => {
+        return $http.get(apiVersion + "/camera");
+      },
+      updateCamera: (id, data) => {
+        return $http.put(apiVersion + "/camera/" + id, data);
+      },
+      deleteCamera: (id) => {
+        return $http.delete(apiVersion + "/camera/" + id);
+      },
+      getDetailCamera: (id) => {
+        return $http.get(apiVersion + "/camera/" + id);
       },
       getDetailNotification: (id) => {
         return $http.get(apiVersion + "/notification/" + id);

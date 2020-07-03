@@ -57,6 +57,9 @@ router.get("/camera", function (req, res, next) {
 router.get("/camera/create", function (req, res, next) {
   res.render("camera/create", { title: "Tạo Thông Tin Camera" });
 });
+router.get("/camera/:id", function (req, res, next) {
+  res.render("camera/detail", { title: "Chi Tiết Camera", id: req.params.id });
+});
 
 router.get("/notification", function (req, res, next) {
   res.render("notification/list", { title: "Notification" });

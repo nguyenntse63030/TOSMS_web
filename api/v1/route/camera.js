@@ -1,34 +1,51 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const cameraController = require('../controllers/cameraController');
+const cameraController = require("../controllers/cameraController");
 const multipart = require("connect-multiparty");
 const multipartMiddleware = multipart();
 
-router.get('/', async (req, res, next) => {
-    try {
-        let response = await cameraController.getListCamera(req.query);
-        return res.send(response);
-    }
-    catch (error) {
-        return res.send(error)
-    }
-})
+router.get("/", async (req, res, next) => {
+  try {
+    let response = await cameraController.getListCamera(req.query);
+    return res.send(response);
+  } catch (error) {
+    return res.send(error);
+  }
+});
 
-router.get('/:id', async (req, res, next) => {
+router.get("/:id", async (req, res, next) => {
+  try {
+    let response = await cameraController.getDetailCamera(req.params.id);
+    return res.send(response);
+  } catch (error) {
+    return res.send(error);
+  }
+});
 
-})
-
-router.post('/', multipartMiddleware, async (req, res, next) => {
-    try {
-        let response = await cameraController.createCamera(req.body, req.files);
-        return res.send(response);
-    } catch (error) {
-        return res.send(error)
-    }
-})
-
-router.put('/', (req, res, next) => {
-
-})
+router.post("/", multipartMiddleware, async (req, res, next) => {
+  try {
+    let response = await cameraController.createCamera(req.body, req.files);
+    return res.send(response);
+  } catch (error) {
+    return res.send(error);
+  }
+});
+router.delete("/:id", async (req, res, next) => {
+  try {
+    let response = await cameraController.deleteCamera(req.params.id);
+    return res.send(response);
+  } catch (error) {
+    return res.send(error);
+  }
+});
+router.put("/:id", async (req, res, next) => {
+  try {
+    let response = await cameraController.updateCamera(req.params.id, req.body);
+    return res.send(response);
+  } catch (error) {
+    return res.send(error);
+  }
+});
+router.put("/", (req, res, next) => {});
 
 module.exports = router;
