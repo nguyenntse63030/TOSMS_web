@@ -71,6 +71,12 @@ function loginAjax() {
     // shakeModal();
 }
 
+document.addEventListener('keydown', (e) => {
+    if (e.keyCode === 13) {
+        loginAjax()
+    } 
+})
+
 function shakeModal(text) {
     $('#loginModal .modal-dialog').addClass('shake');
     $('.error').addClass('alert alert-danger').html(text);
