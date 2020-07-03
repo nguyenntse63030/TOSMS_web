@@ -1,0 +1,176 @@
+<% layout('../layouts/layout.ejs') -%>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" rel="stylesheet" />
+<style>
+    .modal-footer {
+        display: initial
+    }
+
+    .img-data-row {
+        width: 70px;
+        height: 70px;
+    }
+
+    a,
+    a:hover,
+    a:focus {
+        color: #ffffff
+    }
+</style>
+<p id="id" ng-hide="true"><%= id %></p>
+<div class="container-fluid" ng-controller="detailController">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header card-header-primary">
+                    <h4 class="card-title">Thông Tin Camera</h4>
+                </div>
+                <div class="card-body">
+                    <form>
+                        <div class="row">
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="bmd-label-floating">Hãng Camera</label>
+                                    <input type="text" class="form-control" ng-model="camera.cameraType" id="cameraType"
+                                        value="{{camera.cameraType}} " ng-disabled="isNotEditing">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="bmd-label-floating">Trạng Thái</label>
+                                    <input type="text" class="form-control" ng-model="camera.status" id="code"
+                                        value="{{camera.status}} " ng-disabled="isNotEditing">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="bmd-label-floating">IP Address</label>
+                                    <input type="text" class="form-control" ng-model="camera.ipAddress" id="ip"
+                                        value="{{camera.ipAddress}} " ng-disabled="isNotEditing">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="bmd-label-floating">Ngày tạo</label>
+                                    <input type="text" class="form-control" name="createdTime" id="createdTime"
+                                        value="{{camera.createdTime | date:'dd/MM/yyyy'}}" ng-disabled="isNotEditing">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="bmd-label-floating">Cây</label>
+                                    <input type="text" class="form-control" ng-model="camera.tree"
+                                        value="{{camera.tree}} " ng-disabled="isNotEditing">
+                                </div>
+                            </div>
+                            <!-- <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="bmd-label-floating">Ngày tạo</label>
+                                    <input type="text" class="form-control" name="createdTime" id="createdTime"
+                                        value="{{camera.createdTime | date:'dd/MM/yyyy'}}" ng-disabled="isNotEditing">
+                                </div>
+                            </div> -->
+                        </div>
+                        <!-- <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="bmd-label-floating">CameraID</label>
+                                    <input type="text" class="form-control" ng-model="tree.cameraID"
+                                        value="{{tree.cameraID}} " ng-disabled="isNotEditing">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="bmd-label-floating">Địa chỉ</label>
+                                    <input type="text" class="form-control" ng-model="tree.location"
+                                        value="{{tree.location}}" ng-disabled="isNotEditing">
+                                </div>
+                            </div>
+                        </div> -->
+
+
+
+                        <div ng-show="isNotEditing" ng-hide="bill.status === 'PAID'">
+                            <button type="submit" class="btn btn-danger pull-left" data-toggle="modal"
+                                data-target="#deleteEmployeeModal">Xóa</button>
+                            <button type="submit" class="btn btn-primary pull-right"
+                                ng-click="isNotEditing=false;">Chỉnh sửa</button>
+                        </div>
+
+                        <div ng-show="!isNotEditing">
+                            <button type="submit" class="btn btn-success pull-right"
+                                ng-click="isNotEditing=true;updateCamera()">Lưu</button>
+                            <button type="submit" class="btn btn-danger pull-left" ng-click="isNotEditing=true">Hủy
+                                bỏ</button>
+                        </div>
+                        <div class="clearfix"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card card-profile">
+                <div class="card-avatar" onclick="showModalChangeAvatar()">
+                    <a href="">
+                        <img class="img"
+                            src="{{camera.image || 'https://iweb.tatthanh.com.vn/pic/3/blog/logo-cay-xanh.jpg'}}" />
+                    </a>
+                </div>
+                <div class="card-body">
+                    <h6 class="card-category text-gray">Camera Code</h6>
+                    <h4 class="card-title">{{camera.code}}</h4>
+                </div>
+            </div>>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade model-center" id="deleteEmployeeModal" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="deleteRoomModelLabel" data-color="purple">Xác nhận xóa camera</h3>
+                    <button type="button" class="close btn-close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h3 class="model-content text-center">Bạn chắc chắn muốn xóa camera này?</h3>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-primary pull-right" ng-click="deleteCamera()">Xóa</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script>
+<script src="/javascripts/camera/detail.js"></script>
+<script>
+    clickSideBar('camera-page')
+    $(document).ready(function () {
+        $('#birthdate').datepicker({
+            dateFormat: 'dd/mm/yy',
+            autoclose: true,
+            changeMonth: true,
+            changeYear: true,
+            yearRange: '-100:' + new Date().getFullYear()
+        })
+        $('#selected-apartment').select2({
+            placeholder: 'Select a apartment'
+        });
+        $('#selected-room').select2({
+            placeholder: 'Select a room'
+        });
+        $('.select2-single').select2()
+        setTimeout(() => {
+            numberFormat()
+        }, 200);
+    });
+</script>

@@ -179,5 +179,10 @@ module.exports = {
   CAMERA_CREATE_SUCCESS: 'Tạo camera thành công.',
   USER_IS_NOT_FOUND: "Người dùng không tồn tại",
   TREE_ONLY_HAVE_ONE_CAMERA: 'Cây đã có một camera bạn vui lòng xóa, thay đổi camera từ cây hoặc vui lòng chọn cây khác.',
-  LOCATION_WRONG: 'Thông tin vị trí không đúng vui lòng thử lại.'
+  LOCATION_WRONG: 'Thông tin vị trí không đúng vui lòng thử lại.',
+  CAMERA_IS_NOT_FOUND: "Camera không tồn tại",
+  UPDATE_CAMERA_FAIL: "Cập nhật thông tin camera thất bại",
+  UPDATE_CAMERA_SUCCESS: "Cập nhật thông tin camera thành công",
+  DELETE_CAMERA_FAIL: "Xóa camera thất bại",
+  DELETE_CAMERA_SUCCESS: "Xóa camera thành công",
 }
