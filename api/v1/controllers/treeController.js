@@ -21,10 +21,10 @@ let createTree = async (data, file) => {
         throw responseStatus.Code400({ errorMessage: responseStatus.LOCATION_WRONG });
     }
     let regex = new RegExp(tree.code, 'i');
-    let checkExist = await Tree.findOne({code: regex});
-    
+    let checkExist = await Tree.findOne({ code: regex });
+
     if (checkExist) {
-        throw responseStatus.Code400({errorMessage: responseStatus.TREE_CODE_IS_DUPLICATE})
+        throw responseStatus.Code400({ errorMessage: responseStatus.TREE_CODE_IS_DUPLICATE })
     }
     tree.image = file.image;
     common.validateDataTree(tree);
@@ -94,6 +94,7 @@ let deleteTree = async (id) => {
     if (!tree) {
         throw responseStatus.Code400({ errorMessage: responseStatus.TREE_IS_NOT_FOUND });
     }
+
     tree.isActive = false
     let _tree = await tree.save();
     if (_tree !== tree) {
@@ -103,7 +104,8 @@ let deleteTree = async (id) => {
 }
 
 let getDetailTree = async (id) => {
-    let tree = await Tree.findOne({ _id: id, isActive: true }).populate('camera');
+    let poputlateOpt = { path: 'camera', match: { isActive: true } }
+    let tree = await Tree.findOne({ _id: id, isActive: true }).populate(poputlateOpt);
     if (!tree) {
         throw responseStatus.Code400({ errorMessage: responseStatus.TREE_IS_NOT_FOUND });
     }

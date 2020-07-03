@@ -10,6 +10,9 @@ app.controller("detailController", [
       .getDetailCamera($scope.id)
       .then((res) => {
         $scope.camera = res.data.camera;
+        if (!$scope.camera.tree) {
+          showNotification('Bạn chưa chọn cây để theo dõi cho camera hoặc cây đã bị xóa.', 'warning')
+        }
       })
       .catch((error) => {
         console.log(error);

@@ -55,7 +55,7 @@
                                 <div class="form-group">
                                     <label class="bmd-label-floating">Ngày tạo</label>
                                     <input type="text" class="form-control" name="createdTime" id="createdTime"
-                                        value="{{camera.createdTime | date:'dd/MM/yyyy'}}" ng-disabled="isNotEditing">
+                                        value="{{camera.createdTime | date:'dd/MM/yyyy HH:mm:ss'}}" ng-disabled="isNotEditing">
                                 </div>
                             </div>
                         </div>
@@ -63,8 +63,8 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="bmd-label-floating">Cây</label>
-                                    <input type="text" class="form-control" ng-model="camera.tree"
-                                        value="{{camera.tree}} " ng-disabled="isNotEditing">
+                                    <input type="text" class="form-control" ng-model="camera.tree.code"
+                                        value="{{camera.tree.code}} " ng-disabled="isNotEditing">
                                 </div>
                             </div>
                             <!-- <div class="col-md-6">

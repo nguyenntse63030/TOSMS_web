@@ -11,29 +11,30 @@ let getListCamera = async (query) => {
     let start = parseInt(query.start);
     let length = parseInt(query.length);
     let regex = new RegExp(query.search.value, "i");
-    let cameras = await Camera.find({
+    let cameras = await Camera.find({ $and: [{
       $or: [{ code: regex }, { status: regex }],
-    })
+    }, {isActive: true}]})
       .skip(start)
       .limit(length)
       .sort({ createdTime: -1 });
-    let recordsTotal = await Camera.countDocuments();
-    let recordsFiltered = await Camera.countDocuments({
-      $or: [{ name: regex }, { status: regex }],
-    });
+    let recordsTotal = await Camera.countDocuments({isActive: true});
+    let recordsFiltered = await Camera.countDocuments({ $and: [{
+      $or: [{ code: regex }, { status: regex }],
+    }, {isActive: true}]});
     result = {
       recordsTotal: recordsTotal,
       recordsFiltered: recordsFiltered,
       data: cameras,
     };
   } else {
-    let cameras = await Camera.find().sort({ createdTime: -1 });
+    let cameras = await Camera.find({isActive: true}).sort({ createdTime: -1 });
     result.data = cameras;
   }
   return responseStatus.Code200(result);
 };
 let getDetailCamera = async (id) => {
-  let camera = await Camera.findOne({ _id: id, isActive: true });
+  let poputlateOpt = { path: 'tree', match: { isActive: true } }
+  let camera = await Camera.findOne({ _id: id, isActive: true }).populate(poputlateOpt);
   if (!camera) {
     throw responseStatus.Code400({
       errorMessage: responseStatus.CAMERA_IS_NOT_FOUND,
