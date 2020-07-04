@@ -66,7 +66,7 @@
                                     <input type="text" class="form-control" value=" " ng-hide="true">
                                     <select style="width: 100%;" class="form-control select2-single"
                                         ng-model="employee.role" id="role" ng-disabled="isNotEditing">
-                                        <option value="manager">Giám Sát</option>
+                                        <option value="MANAGER">Giám Sát</option>
                                         <option value="worker">Công Nhân</option>
                                     </select>
                                 </div>
@@ -112,15 +112,15 @@
         </div>
         <div class="col-md-4">
             <div class="card card-profile">
-                <div class="card-avatar" onclick="showModalChangeAvatar()">
+                <div class="card-avatar" data-toggle="modal" data-target="#modalUploadImgUser">
                     <a href="">
                         <img class="img"
-                            src="{{employee.photoURL || 'https://iweb.tatthanh.com.vn/pic/3/blog/logo-cay-xanh.jpg'}}" />
+                            src="{{employee.avata || 'https://iweb.tatthanh.com.vn/pic/3/blog/logo-cay-xanh.jpg'}}" />
                     </a>
                 </div>
                 <div class="card-body">
                     <h6 class="card-category text-gray">Nhân Viên</h6>
-                    <h4 class="card-title">{{employee.fullname}}</h4>
+                    <h4 class="card-title">{{employee.name}}</h4>
                 </div>
             </div>
             <!-- <button ng-click="getRoom()" type="submit" class="btn btn-primary pull-left" data-toggle="modal"
@@ -128,56 +128,37 @@
 
         </div>
     </div>
-    <!-- <div class="row">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header card-header-primary">
-                    <div class="row">
-                        <div class="col-md-8">
-                            <h4 class="card-title" style="line-height: 50px">Room List</h4>
-                        </div>
+
+
+    <!-- Change Avata -->
+    <div class="modal fade" id="modalUploadImgUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-center" id="exampleModalLongTitle">Đổi Ảnh Đại Diện</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <img id="image-to-change"
+                            src="{{employee.avata || 'https://iweb.tatthanh.com.vn/pic/3/blog/logo-cay-xanh.jpg'}}"
+                            onclick="chooseFile()" />
+                        <input id="file" type="file" file-model="employeeAvata" accept="avata/*" style="display:none"
+                            onchange="onChangeImage(event)" />
                     </div>
                 </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table" id="rooms-table">
-                            <thead class=" text-primary">
-                                <th style="width: 10%">Number</th>
-                                <th style="width: 30%">Apartment</th>
-                                <th style="width: 15%">Sign Date</th>
-                                <th style="width: 15%">Expired Date</th>
-                            </thead>
-                            <tbody>
-                                <tr ng-repeat="room in roomsForCustomer">
-                                    <td>
-                                        <a href="/room/{{room.code}}">
-                                            {{room.roomNumber}}
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <a href="/room/{{room.code}}">
-                                            {{room.apartment.name}}
-                                        </a>
-                                    </td>
-                                    <td data-order="{{room.signDate}}">
-                                        <a href="/room/{{room.code}}">
-                                            {{room.signDate == 0 ? 'N/A' : room.signDate | date:'dd/MM/yyyy HH:mm:ss'}}
-                                        </a>
-                                    </td>
-                                    <td data-order="{{room.expiredDate}}">
-                                        <a href="/room/{{room.code}}">
-                                            {{room.expiredDate == 0 ? 'N/A' : room.expiredDate | date:'dd/MM/yyyy HH:mm:ss'}}
-                                        </a>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Thoát</button>
+                    <button type="button" class="btn btn-primary float-right" ng-click="uploadAvataEmployee()"
+                        id="uploadAvataEmployee">Thay Đổi</button>
                 </div>
             </div>
         </div>
-    </div> -->
-
+    </div>
+    <!-- Change Avata -->
     <!-- Modal -->
     <div class="modal fade model-center" id="deleteEmployeeModal" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -199,7 +180,7 @@
         </div>
     </div>
 
-    <div class="modal fade model-center" id="addRoomModel" role="dialog" aria-labelledby="addRoomModelLabel"
+    <!-- <div class="modal fade model-center" id="addRoomModel" role="dialog" aria-labelledby="addRoomModelLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -229,35 +210,11 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script>
-
-
-
-
 <script src="/javascripts/employee/detail.js"></script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 <script>
@@ -281,4 +238,17 @@
             numberFormat()
         }, 200);
     });
+    function chooseFile() {
+        $('#file').click()
+    }
+
+    var imgtag = document.getElementById('image-to-change')
+    var newAvatar
+
+    function onChangeImage(event) {
+        var selectedFile = event.target.files[0]
+        var getImagePath = URL.createObjectURL(event.target.files[0])
+        imgtag.src = getImagePath
+        newAvatar = selectedFile
+    }
 </script>

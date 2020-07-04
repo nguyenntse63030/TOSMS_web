@@ -5,9 +5,10 @@ app.controller("createController", [
   function ($scope, apiService) {
     $scope.employee = {
       name: "",
-      phone: "",
+      // phone: "",
       gender: "",
       // email: '',
+      birthdate: "",
       role: "",
       address: "",
       username: "",

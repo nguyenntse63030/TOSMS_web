@@ -9,6 +9,20 @@ angular.module("TOSMS").factory("apiService", [
       getProfileEmployee: (id) => {
         return $http.get(apiVersion + "/user/" + id);
       },
+      uploadAvataEmployee: (id, data) => {
+        return $http({
+          url: apiVersion + "/user/" + id + "/image",
+          method: "PUT",
+          data: data,
+          headers: { "Content-Type": undefined },
+        });
+      },
+      updateEmployee: (id, data) => {
+        return $http.put(apiVersion + "/user/" + id, data);
+      },
+      deleteEmployee: (id) => {
+        return $http.delete(apiVersion + "/user/" + id);
+      },
       getListTree: () => {
         return $http.get(apiVersion + "/tree");
       },
