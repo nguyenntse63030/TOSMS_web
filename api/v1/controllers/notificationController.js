@@ -72,6 +72,7 @@ let setNotificationReaded = async () => {
         let docUpdate = firestore.collection('manager').doc(doc.id)
         let result = await docUpdate.update({ readed: true })
     });
+    return {result: true}
 }
 
 module.exports = {

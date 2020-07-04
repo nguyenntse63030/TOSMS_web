@@ -28,34 +28,75 @@
     border-radius: 10px 10px;
   }
 
-  .dropdown-menu {
-    left: -100px;
-    min-width: 12rem;
+  #container-list-noti.dropdown-menu {
+    left: -400px;
+    top: 0px;
+    min-width: 25rem;
     padding: 0;
-    margin: 0
+    margin: 0;
+    height: 500px;
+    position: relative;
   }
 
-  .menu-item {
+  #container-list-noti .body-list-noti {
+    overflow-y: scroll;
+    height: 440px;
+  }
 
-    overflow: hidden;
-    border-bottom: 1px solid black;
+#container-list-noti .header-list-noti {
+  height: 30px;
+  border-bottom: 1px solid #dddfe2;
+  font-weight: bold ;
+}
+
+  #container-list-noti .see-more {
+    height: 30px;
+    border-top: 1px solid #dddfe2;
+    color: #385898;
     padding: 5px;
   }
 
-  .menu-item a{
-    display: flex;
-    color: black;
+  #container-list-noti .see-more a{
+    color: #385898;
+    margin-top: 5px;
   }
-
-  .menu-item a:hover {
+  #container-list-noti .see-more a:hover{
+    color: #385898;
     background-color: unset;
     box-shadow: unset;
+    cursor: pointer;
+    text-decoration: underline solid #385898;;
+ 
+  }
+  .menu-item {
+    overflow: hidden;
+    border-bottom: 1px solid #dddfe2;
+    padding: 10px 5px;
+  }
+
+  .menu-item .card {
+    width: 60px;
+    height: 40px;
+    overflow: hidden;
+    border-radius: 0;
+    margin: 0;
+  }
+
+  .menu-item .card.text-noti-content {
+    width: 100%;
+    overflow: hidden;
+    height: 50px;
+    color: gray
+  }
+
+  .menu-item .card.card-body {
+    padding: 0;
   }
 
   .menu-item img {
-    border-radius: 25px;
-    width: 48px;
-    height: 48px;
+    width: 100%;
+    object-fit: cover;
+    height: 100%;
   }
 
   .title {
@@ -67,7 +108,55 @@
   .content {
     font-size: 11px;
     color: black;
-    margin-top: 5px
+  }
+
+  .card.text-noti-content .card-body {
+    padding: 0.2rem 20px;
+  }
+
+  .card.text-noti-content .card-title {
+    color: #385898;
+  }
+
+  #list-noti .row {
+    margin: 0;
+  }
+
+  #list-noti::-webkit-scrollbar {
+    width: 8px;
+    background-color: #ffffff;
+  }
+
+  #list-noti::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+  }
+
+  #list-noti::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(156, 151, 151, 0.3);
+    background-color: #ffffff;
+  }
+
+  #loading-noti {
+    display: none;
+    z-index: 1000;
+    bottom: 0;
+    left: 0;
+    height: 10px;
+    width: 100%;
+    background: rgba(255, 255, 255, .8) url('/images/Preloader_21.gif') 50% 50% no-repeat;
+  }
+
+  /* When the body has the loading class, we turn
+   the scrollbar off with overflow:hidden */
+  #container-list-noti #loading-noti.loading {
+    overflow: hidden;
+  }
+
+  /* Anytime the body has the loading class, our
+   modal element will be visible */
+  #container-list-noti #loading-noti.loading {
+    display: block;
   }
 </style>
 <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
@@ -89,8 +178,12 @@
         </span>
         <span id="count-number" class="icon-number-noti">
         </span>
-
-        <div id="list-noti" class="dropdown-menu dropdown-menu-left">
+        <div id="container-list-noti" class="dropdown-menu dropdown-menu-right">
+          <div class="header-list-noti text-center"><h5>Thông Báo</h5></div>
+          <div class="body-list-noti"id="list-noti">
+          </div>
+          <div id="loading-noti"></div>
+          <div class="see-more text-center"><a href="/notification/">Xem Thêm</a></div>
         </div>
       </div>
       <ul class="navbar-nav">
