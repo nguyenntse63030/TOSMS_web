@@ -23,11 +23,34 @@ var check = 0; //biến hỗ trợ kiểm tra nếu > 0 thì mới gọi ajax đ
 var limit = 25;//biến giới hạn số noti được query mỗi lần
 var skip; //object làm flag cho mỗi lần query mỗi lần query firestore sẽ dùng để biết query từ vị trí nào
 let count = 0; //biến đếm số lượng noti chưa được đọc
-let the_first = false; //lần đầu load page mục đích để hàm load noti realtime ko thực hiện add lại các element vì hàm này lần đầu vào vấn chạy
+let the_first = true; //lần đầu load page mục đích để hàm load noti realtime ko thực hiện add lại các element vì hàm này lần đầu vào vấn chạy
 let scrollY = 1335; //biến cờ scroll mục đích nếu cuộn dọc lớn hơn thì thực hiện query tiếp
 
+// hàm load dữ liệu từ firestore với realtime khi có thay đổi
+function loadNotificationFromFirestore() {
+  firestore.collection('manager').orderBy("createdTime", "desc").onSnapshot(function (querySnapshot) {
+    querySnapshot.docChanges().forEach(function (change) {
+      if (!the_first) {
+        if (change.type === 'added') {
+          let notification = change.doc.data();
+          createNotiElement(notification, true)
+          count += 1;
+          showCountNumber(count)
+        }
+      }
+      if (change.type === 'modified') {
+        count = 0;
+        showCountNumber(count)
+      }
+    })
+    check = count
+    the_first = false;
+  })
+} //kết thúc hàm
+
+loadNotificationFromFirestore()
+
 let loadNotifications = (sk) => {
-  the_first = true;
   let queryConfig;
   // nếu có sk thì mới thực hiện query starAfter vì lần đầu query không có object để thực hiện sẻ bị lỗi
   if (sk) {
@@ -54,35 +77,14 @@ let loadNotifications = (sk) => {
       check = count
       skip = querySnapshot.docs[querySnapshot.docs.length - 1];
 
-      hideLoading()
+      hideLoading();
+    } else{
+      showCountNumber(0);
+      hideLoading();
     }
 
   })
 }
-
-// hàm load dữ liệu từ firestore với realtime khi có thay đổi
-function loadNotificationFromFirestore() {
-  firestore.collection('manager').orderBy("createdTime", "desc").onSnapshot(function (querySnapshot) {
-    querySnapshot.docChanges().forEach(function (change) {
-      if (!the_first) {
-        if (change.type === 'added') {
-          let notification = change.doc.data();
-          createNotiElement(notification, true)
-          count += 1;
-          showCountNumber(count)
-        }
-      }
-      if (change.type === 'modified') {
-        count = 0;
-        showCountNumber(count)
-      }
-    })
-    check = count
-    the_first = false;
-  })
-} //kết thúc hàm
-
-loadNotificationFromFirestore()
 
 //hàm hiển thị khi count > 0 có nghĩa là có noti chưa được đọc hoặc 
 //ẩn khi count = 0 có nghĩa không có noti nào chưa đọc
