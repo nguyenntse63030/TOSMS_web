@@ -1,5 +1,26 @@
 <% layout('../layouts/layout.ejs') -%>
 <link href="/stylesheets/notification/list.css" rel="stylesheet" />
+<style>
+    .table-row-link {
+        color: #000000;
+    }
+
+    .table-row-link:hover {
+        color: white
+    }
+
+    .img-data-row {
+        width: 70px;
+        height: 70px;
+    }
+
+    #image-to-change {
+        width: 100%;
+        height: 300px;
+        object-fit: scale-down;
+        margin-bottom: 10px;
+    }
+</style>
 <div class="container-fluid" ng-controller="listController">
     <div class="row">
         <div class="col-md-12">

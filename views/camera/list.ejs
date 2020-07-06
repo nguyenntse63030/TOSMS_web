@@ -1,7 +1,7 @@
 <% layout('../layouts/layout.ejs') -%>
 <style>
     .table-row-link {
-        color: #ab47bc;
+        color: #000000;
     }
 
     .table-row-link:hover {
@@ -22,7 +22,7 @@
 </style>
 <div class="container-fluid" ng-controller="listController">
     <div class="row">
-        <div class="col-md-12"  >
+        <div class="col-md-12">
             <button type="button" id="openModelCreateCam" ng-click="getListTree()" class="btn btn-primary"
                 data-toggle="modal" data-target="#modalCreateCamera">
                 Tạo Camera
@@ -70,8 +70,7 @@
                     <div class="form-container">
                         <form id="create-camera">
                             <div>
-                                <img id="image-to-change" src="/images/logo/treebackground.jpg"
-                                    onclick="chooseFile()" />
+                                <img id="image-to-change" src="/images/logo/camera.png" onclick="chooseFile()" />
                                 <input id="file" type="file" accept="image/*" style="display:none"
                                     onchange="onChangeImage(event)" />
                             </div>

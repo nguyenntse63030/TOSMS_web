@@ -1,7 +1,7 @@
 <% layout('../layouts/layout.ejs') -%>
 <style>
     .table-row-link {
-        color: #ab47bc;
+        color: #000000;
     }
 
     .table-row-link:hover {
@@ -23,7 +23,8 @@
 <div class="container-fluid" ng-controller="listController">
     <div class="row">
         <div class="col-md-12">
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCreateEmployee">
+            <button type="button" id="openModelCreateEmployee" class="btn btn-primary" data-toggle="modal"
+                data-target="#modalCreateEmployee">
                 Thêm Người Dùng
             </button>
             <div class="card">
@@ -39,13 +40,13 @@
                         <table class="table" id="employees-table" style="width: 100% !important">
                             <thead class="text-primary">
                                 <tr>
-                                    <th style="width: 5%;">Ảnh</th>
+                                    <!-- <th style="width: 5%;">Ảnh</th> -->
                                     <th style="width: 5%">Id</th>
                                     <th style="width: 15%">Tên Nhân Viên</th>
                                     <th style="width: 10%">Chức Vụ</th>
                                     <th style="width: 20%">Địa Chỉ</th>
-                                    <th style="width: 10%">Trạng Thái</th>
-                                    <th style="width: 10%">Ngày Tạo</th>
+                                    <!-- <th style="width: 10%">Trạng Thái</th> -->
+                                    <th style="width: 20%">Ngày Tạo</th>
                                 </tr>
                             </thead>
                             <!-- <tbody> -->
@@ -103,9 +104,8 @@
                     <div class="form-container">
                         <form id="create-employee">
                             <div>
-                                <img id="image-to-change" src="/images/logo/treebackground.jpg"
-                                    onclick="chooseFile()" />
-                                <input id="file" type="file" accept="avata/*" style="display:none"
+                                <img id="image-to-change" src="/images/logo/user1.png" onclick="chooseFile()" />
+                                <input id="file" type="file" accept="avatar/*" style="display:none"
                                     onchange="onChangeImage(event)" />
                             </div>
                             <div class="row">
@@ -120,6 +120,14 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
+                                        <label class="bmd-label-floating">Email</label>
+                                        <input type="text" class="form-control" ng-model="employee.email" id="email" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group" style="margin-top: 29px;">
                                         <label class="bmd-label-floating">Ngày Sinh</label>
                                         <input type="text" class="form-control" name="birthdate" id="birthdate"
                                             value=" " />
@@ -130,7 +138,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="bmd-label-floating">Giới Tính</label>
-                                        <select style="width: 100%;" class="form-control select2-single"
+                                        <select style="width: 100%;" id="gender" class="form-control select2-single"
                                             ng-model="employee.gender">
                                             <option value="Nam">Nam</option>
                                             <option value="Nữ">Nữ</option>
@@ -143,7 +151,7 @@
                                     <div class="form-group">
                                         <label class="bmd-label-floating">Chức Vụ</label>
                                         <select style="width: 100%;" class="form-control select2-single"
-                                            ng-model="employee.role">
+                                            ng-model="employee.role" id="role">
                                             <option value="manage">Giám Sát</option>
                                             <option value="worker">Công Nhân</option>
                                         </select>
@@ -153,9 +161,10 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <div class="form-group" style="margin-top: 29px;">
+                                    <div class="form-group">
                                         <label class="bmd-label-floating">Địa Chỉ</label>
-                                        <input type="text" class="form-control" ng-model="employee.address" />
+                                        <input type="text" class="form-control" id="address"
+                                            ng-model="employee.address" />
                                     </div>
                                 </div>
                             </div>
@@ -168,60 +177,23 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="form-group" style="margin-top: 29px;">
+                            <div class="form-group" style="margin-top: 15px;">
                                 <label class="bmd-label-floating">Tên Tài Khoản</label>
-                                <input type="text" class="form-control" ng-model="employee.username" />
+                                <input type="text" id="username" class="form-control" ng-model="employee.username" />
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="form-group" style="margin-top: 29px;">
+                            <div class="form-group" style="margin-top: 15px;">
                                 <label class="bmd-label-floating">Mật Khẩu</label>
-                                <input type="text" class="form-control" ng-model="employee.password" />
+                                <input type="password" id="password" class="form-control"
+                                    ng-model="employee.password" />
                             </div>
                         </div>
                     </div>
-                    <!-- <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="city">Thành Phố</label>
-                                        <select class="form-control select-2" ng-change="getListDistrict()" ng-model="city"
-                                            id="city">
-                                            <option ng-repeat="city in cities | orderBy:'name'" ng-value="city.id">
-                                                {{city.name}}</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="district">Quận</label>
-                                        <select class="form-control select-2" ng-change="getListWard()" ng-model="district"
-                                            id="district">
-                                            <option ng-repeat="district in districts | orderBy:'name'"
-                                                ng-value="district.id">
-                                                {{district.name}}</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="ward">Phường</label>
-                                        <select class="form-control select-2" ng-model="ward" id="ward">
-                                            <option ng-repeat="ward in wards | orderBy: 'name'" ng-value="ward.id">
-                                                {{ward.name}}</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="street">Đường</label>
-                                <input type="text" class="form-control" id="street" placeholder="Nhập tên đường">
-                            </div> -->
                     </form>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Thoát</button>
+                    <button type="button" class="btn btn-primary float-right" id="createEmployeeBtn">Tạo</button>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Thoát</button>
-                <button type="button" class="btn btn-primary" id="createEmployeeBtn">Tạo</button>
             </div>
         </div>
     </div>

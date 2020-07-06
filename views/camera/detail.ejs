@@ -10,6 +10,13 @@
         height: 70px;
     }
 
+    #image-to-change {
+        width: 100%;
+        height: 300px;
+        object-fit: scale-down;
+        margin-bottom: 10px;
+    }
+
     a,
     a:hover,
     a:focus {
@@ -115,7 +122,7 @@
         </div>
         <div class="col-md-4">
             <div class="card card-profile">
-                <div class="card-avatar" onclick="showModalChangeAvatar()">
+                <div class="card-avatar" data-toggle="modal" data-target="#modalUploadImgCamera">
                     <a href="">
                         <img class="img"
                             src="{{camera.image || 'https://iweb.tatthanh.com.vn/pic/3/blog/logo-cay-xanh.jpg'}}" />
@@ -133,6 +140,35 @@
         </div>
     </div>
 
+    <!-- Change Image -->
+    <div class="modal fade" id="modalUploadImgCamera" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-center" id="exampleModalLongTitle">Đổi Ảnh Camera</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <img id="image-to-change"
+                            src="{{camera.image || 'https://iweb.tatthanh.com.vn/pic/3/blog/logo-cay-xanh.jpg'}}"
+                            onclick="chooseFile()" />
+                        <input id="file" type="file" file-model="cameraImage" accept="image/*" style="display:none"
+                            onchange="onChangeImage(event)" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Thoát</button>
+                    <button type="button" class="btn btn-primary float-right" ng-click="uploadImageCamera()"
+                        id="uploadImageCamera">Thay Đổi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Change Image -->
     <!-- Modal -->
     <div class="modal fade model-center" id="deleteEmployeeModal" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -179,4 +215,31 @@
             numberFormat()
         }, 200);
     });
+    function onChangeAvatar() {
+        if (!$('#file').val()) {
+            showNotification('Bạn chưa chọn ảnh nào', 'error')
+            return
+        }
+        $('#loading').show()
+
+        setTimeout(function () {
+            $('#loading').hide()
+            $('#modal-change-avatar').modal('hide')
+            showNotification('Time out', 'error')
+        }, 30000)
+    }
+
+    function chooseFile() {
+        $('#file').click()
+    }
+
+    var imgtag = document.getElementById('image-to-change')
+    var newAvatar
+
+    function onChangeImage(event) {
+        var selectedFile = event.target.files[0]
+        var getImagePath = URL.createObjectURL(event.target.files[0])
+        imgtag.src = getImagePath
+        newAvatar = selectedFile
+    }
 </script>

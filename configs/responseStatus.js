@@ -198,4 +198,6 @@ module.exports = {
   DELETE_USER_SUCCESS: "Xóa người dùng thành công",
   UPDATE_USER_FAIL: "Cập nhật thông tin người dùng thất bại",
   UPDATE_USER_SUCCESS: "Cập nhật thông tin người dùng thành công",
+  CAMERA_UPLOAD_IMAGE_FAIL: "Upload ảnh camera thất bại",
+  CAMERA_UPLOAD_IMAGE_SUCCESS: "Upload ảnh camera thành công",
 };
