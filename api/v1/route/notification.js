@@ -8,7 +8,8 @@ router.get('/', async (req, res, next) => {
         let response = await notificationController.getListNotification(req.query);
         return res.send(response);
     } catch (error) {
-        return res.send(error);
+        console.log(error);
+        return res.status(error.status || 500).send(error);
     }
 })
 
@@ -18,7 +19,8 @@ router.get('/:id', async (req, res, next) => {
         let response = await notificationController.getNotification(id);
         return res.send(response);
     } catch (error) {
-        return res.send(error);
+        console.log(error);
+        return res.status(error.status || 500).send(error);
     }
 })
 
@@ -27,7 +29,8 @@ router.put('/', (req, res, next) => {
         let response = notificationController.setNotificationReaded();
         return res.send(response)
     } catch (error) {
-        return res.send(error);
+        console.log(error);
+        return res.status(error.status || 500).send(error);
     }
 })
 

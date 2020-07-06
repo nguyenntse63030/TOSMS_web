@@ -9,7 +9,8 @@ router.get("/", async (req, res, next) => {
     let response = await cameraController.getListCamera(req.query);
     return res.send(response);
   } catch (error) {
-    return res.send(error);
+    console.log(error);
+    return res.status(error.status || 500).send(error);
   }
 });
 
@@ -18,7 +19,8 @@ router.get("/:id", async (req, res, next) => {
     let response = await cameraController.getDetailCamera(req.params.id);
     return res.send(response);
   } catch (error) {
-    return res.send(error);
+    console.log(error);
+    return res.status(error.status || 500).send(error);
   }
 });
 
@@ -27,7 +29,8 @@ router.post("/", multipartMiddleware, async (req, res, next) => {
     let response = await cameraController.createCamera(req.body, req.files);
     return res.send(response);
   } catch (error) {
-    return res.send(error);
+    console.log(error);
+    return res.status(error.status || 500).send(error);
   }
 });
 router.delete("/:id", async (req, res, next) => {
@@ -35,7 +38,8 @@ router.delete("/:id", async (req, res, next) => {
     let response = await cameraController.deleteCamera(req.params.id);
     return res.send(response);
   } catch (error) {
-    return res.send(error);
+    console.log(error);
+    return res.status(error.status || 500).send(error);
   }
 });
 router.put("/:id", async (req, res, next) => {
@@ -43,9 +47,9 @@ router.put("/:id", async (req, res, next) => {
     let response = await cameraController.updateCamera(req.params.id, req.body);
     return res.send(response);
   } catch (error) {
-    return res.send(error);
+    console.log(error);
+    return res.status(error.status || 500).send(error);
   }
 });
-router.put("/", (req, res, next) => {});
 
 module.exports = router;
