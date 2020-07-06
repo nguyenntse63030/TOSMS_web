@@ -146,10 +146,31 @@ let validateDataCamera = (camera, tree, file) => {
     }
   }
 };
+let uploadImage = async (id, file) => {
+  let camera = await Camera.findOne({ _id: id, isActive: true });
+  if (!camera) {
+    throw responseStatus.Code400({
+      errorMessage: responseStatus.CAMERA_IS_NOT_FOUND,
+    });
+  }
+  let pathImg = await awsServices.uploadImageToS3("cameraImg", file.image);
+  camera.image = pathImg || camera.image;
+  let _camera = await camera.save();
+  if (_camera !== camera) {
+    throw responseStatus.Code400({
+      errorMessage: responseStatus.CAMERA_UPLOAD_IMAGE_FAIL,
+    });
+  }
+  return responseStatus.Code200({
+    message: responseStatus.CAMERA_UPLOAD_IMAGE_SUCCESS,
+    camera: _camera,
+  });
+};
 module.exports = {
   getListCamera,
   createCamera,
   getDetailCamera,
   deleteCamera,
   updateCamera,
+  uploadImage
 };

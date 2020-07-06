@@ -55,6 +55,15 @@ angular.module("TOSMS").factory("apiService", [
       getDetailCamera: (id) => {
         return $http.get(apiVersion + "/camera/" + id);
       },
+      uploadImageCamera: (id, data) => {
+        return $http({
+          url: apiVersion + "/camera/" + id + "/image",
+          method: "PUT",
+          data: data,
+          headers: { "Content-Type": undefined },
+        });
+      },
+
       getDetailNotification: (id) => {
         return $http.get(apiVersion + "/notification/" + id);
       },
