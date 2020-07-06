@@ -1,3 +1,8 @@
 body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
+
+.center-button {
+  display: flex;
+  justify-content: center;
+}

@@ -14,6 +14,16 @@ router.get("/", async (req, res, next) => {
   }
 });
 
+router.get("/stream/:id", async (req, res, next) => {
+  try {
+    let response = await cameraController.getCameraStream(req.params.id)
+    return res.send(response);
+  } catch (error) {
+    console.log(error);
+    return res.status(error.status || 500).send(error);
+  }
+});
+
 router.get("/:id", async (req, res, next) => {
   try {
     let response = await cameraController.getDetailCamera(req.params.id);

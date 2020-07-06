@@ -21,6 +21,7 @@
     "mongoose": "^5.9.20",
     "morgan": "~1.9.1",
     "mssql": "^6.2.0",
+    "node-rtsp-stream": "0.0.9",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0"
   },

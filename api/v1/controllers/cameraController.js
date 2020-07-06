@@ -2,8 +2,9 @@ const mongoose = require("mongoose");
 const Camera = mongoose.model("Camera");
 const Tree = mongoose.model("Tree");
 const awsServices = require("../services/awsServices");
-const { response } = require("express");
 const responseStatus = require("../../../configs/responseStatus");
+const RTSPStream = require('node-rtsp-stream');
+let WebSocketServer = require("ws").Server;
 
 let getListCamera = async (query) => {
   let result = {};
@@ -11,27 +12,32 @@ let getListCamera = async (query) => {
     let start = parseInt(query.start);
     let length = parseInt(query.length);
     let regex = new RegExp(query.search.value, "i");
-    let cameras = await Camera.find({ $and: [{
-      $or: [{ code: regex }, { status: regex }],
-    }, {isActive: true}]})
+    let cameras = await Camera.find({
+      $and: [{
+        $or: [{ code: regex }, { status: regex }],
+      }, { isActive: true }]
+    })
       .skip(start)
       .limit(length)
       .sort({ createdTime: -1 });
-    let recordsTotal = await Camera.countDocuments({isActive: true});
-    let recordsFiltered = await Camera.countDocuments({ $and: [{
-      $or: [{ code: regex }, { status: regex }],
-    }, {isActive: true}]});
+    let recordsTotal = await Camera.countDocuments({ isActive: true });
+    let recordsFiltered = await Camera.countDocuments({
+      $and: [{
+        $or: [{ code: regex }, { status: regex }],
+      }, { isActive: true }]
+    });
     result = {
       recordsTotal: recordsTotal,
       recordsFiltered: recordsFiltered,
       data: cameras,
     };
   } else {
-    let cameras = await Camera.find({isActive: true}).sort({ createdTime: -1 });
+    let cameras = await Camera.find({ isActive: true }).sort({ createdTime: -1 });
     result.data = cameras;
   }
   return responseStatus.Code200(result);
 };
+
 let getDetailCamera = async (id) => {
   let poputlateOpt = { path: 'tree', match: { isActive: true } }
   let camera = await Camera.findOne({ _id: id, isActive: true }).populate(poputlateOpt);
@@ -73,6 +79,7 @@ let createCamera = async (data, file) => {
     message: responseStatus.CAMERA_CREATE_SUCCESS,
   });
 };
+
 let deleteCamera = async (id) => {
   let camera = await Camera.findOne({ _id: id, isActive: true });
   if (!camera) {
@@ -91,6 +98,7 @@ let deleteCamera = async (id) => {
     message: responseStatus.DELETE_CAMERA_SUCCESS,
   });
 };
+
 let updateCamera = async (id, data) => {
   let camera = await Camera.findOne({ _id: id, isActive: true });
   if (!camera) {
@@ -146,10 +154,28 @@ let validateDataCamera = (camera, tree, file) => {
     }
   }
 };
+
+async function getCameraStream(cameraID) {
+  let camera = await Camera.findById(cameraID)
+  if (!camera) {
+    throw responseStatus.Code400({ errorMessage: responseStatus.CAMERA_IS_NOT_FOUND })
+  }
+  
+  new RTSPStream({
+    name: camera.code,
+    streamUrl: 'rtsp://' + camera.ipAddress.trim(),
+    wsPort: 9999,
+    ffmpegOptions: { // options ffmpeg flags
+      '-stats': '', // an option with no neccessary value uses a blank string
+      '-r': 30 // options with required values specify the value after the key
+    }
+  })
+}
 module.exports = {
   getListCamera,
   createCamera,
   getDetailCamera,
   deleteCamera,
   updateCamera,
+  getCameraStream
 };

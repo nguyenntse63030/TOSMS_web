@@ -55,7 +55,8 @@
                                 <div class="form-group">
                                     <label class="bmd-label-floating">Ngày tạo</label>
                                     <input type="text" class="form-control" name="createdTime" id="createdTime"
-                                        value="{{camera.createdTime | date:'dd/MM/yyyy HH:mm:ss'}}" ng-disabled="isNotEditing">
+                                        value="{{camera.createdTime | date:'dd/MM/yyyy HH:mm:ss'}}"
+                                        ng-disabled="isNotEditing">
                                 </div>
                             </div>
                         </div>
@@ -124,7 +125,11 @@
                     <h6 class="card-category text-gray">Camera Code</h6>
                     <h4 class="card-title">{{camera.code}}</h4>
                 </div>
-            </div>>
+            </div>
+            <div class="pull-left col-md-12 center-button">
+                <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#viewCameraModal" ng-click="getCameraStream()">Xem
+                    Camera</button>
+            </div>
         </div>
     </div>
 
@@ -148,6 +153,7 @@
             </div>
         </div>
     </div>
+    <% include ../modal/view-camera.ejs -%>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script>
