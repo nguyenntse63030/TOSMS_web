@@ -1,3 +1,21 @@
+app.directive("fileModel", [
+  "$parse",
+  function ($parse) {
+    return {
+      restrict: "A",
+      link: function (scope, element, attrs) {
+        let model = $parse(attrs.fileModel);
+        let modelSetter = model.assign;
+        element.bind("change", function () {
+          scope.$apply(function () {
+            modelSetter(scope, element[0].files[0]);
+          });
+        });
+      },
+    };
+  },
+]);
+
 app.controller("detailController", [
   "$scope",
   "apiService",
@@ -20,7 +38,7 @@ app.controller("detailController", [
       apiService
         .updateEmployee($scope.id, $scope.employee)
         .then((res) => {
-          if (res.data.errorMessage) {
+          if (res.data.status !== 200) {
             showNotification(res.data.errorMessage, "danger");
           } else {
             $scope.employee = res.data.user;

@@ -2,11 +2,9 @@ const mongoose = require("mongoose");
 const User = mongoose.model("User");
 const responseStatus = require("../../../configs/responseStatus");
 const common = require("../../common");
-const jwt = require("jsonwebtoken");
-const AWS = require("aws-sdk");
 const config = require("../../../config");
 const constant = require("../../../configs/constant");
-const mssql = require("mssql");
+const awsServices = require("../services/awsServices");
 
 async function getListUser(query) {
   let start = parseInt(query.start);
@@ -40,9 +38,7 @@ async function getUser(id) {
 }
 let createUser = async (data, file) => {
   let user = data;
-  // let user = await User.findById({ _id: camera.tree }).populate("camera");
-
-  await validateDataUser(user, file);
+  // await validateDataUser(user, file);
   let regex = new RegExp(user.username, "i");
   let checkExist = await User.findOne({ username: regex });
 
@@ -52,8 +48,8 @@ let createUser = async (data, file) => {
     });
   }
 
-  let pathImg = await awsServices.uploadImageToS3("userImg", file.image);
-  user.avata = pathImg;
+  let pathImg = await awsServices.uploadImageToS3("employeeAvata", file.avatar);
+  user.avatar = pathImg;
 
   let result = await User.create(user);
   if (!result) {
@@ -61,13 +57,41 @@ let createUser = async (data, file) => {
       errorMessage: responseStatus.USER_CREATE_FAIL,
     });
   }
-
-  // tree.camera = result._id;
-  // tree.save();
   return responseStatus.Code200({
     message: responseStatus.USER_CREATE_SUCCESS,
   });
 };
+// let validateDataUser = (user, file) => {
+//   // if (!user.role) {
+//   //   throw responseStatus.Code400({
+//   //     errorMessage: responseStatus.USER_ROLE_IS_CANT_EMPTY,
+//   //   });
+//   // }
+
+//   if (!file) {
+//     throw responseStatus.Code400({
+//       errorMessage: responseStatus.USER_IMAGE_IS_CANT_EMPTY,
+//     });
+//   }
+//   if (!user.fullname) {
+//     throw responseStatus.Code400({
+//       errorMessage: responseStatus.USER_FULLNAME_IS_CANT_EMPTY,
+//     });
+//   }
+
+//   if (!user.username) {
+//     throw responseStatus.Code400({
+//       errorMessage: responseStatus.USER_USERNAME_IS_CANT_EMPTY,
+//     });
+//   }
+
+//   if (!user.password) {
+//     throw responseStatus.Code400({
+//       errorMessage: responseStatus.USER_PASSWORD_IS_CANT_EMPTY,
+//     });
+//   }
+// };
+
 let deleteUser = async (id) => {
   let user = await User.findOne({ _id: id, isActive: true });
   if (!user) {
@@ -86,7 +110,6 @@ let deleteUser = async (id) => {
     message: responseStatus.DELETE_USER_SUCCESS,
   });
 };
-
 let updateUser = async (id, data) => {
   let user = await User.findOne({ _id: id, isActive: true });
   if (!user) {
@@ -120,7 +143,7 @@ let uploadImage = async (id, file) => {
     });
   }
   let pathImg = await awsServices.uploadImageToS3("employeeAvata", file.image);
-  user.avata = pathImg || user.avata;
+  user.avatar = pathImg || user.avatar;
   let _user = await user.save();
   if (_user !== user) {
     throw responseStatus.Code400({

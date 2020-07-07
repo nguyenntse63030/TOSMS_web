@@ -152,8 +152,8 @@
                                         <label class="bmd-label-floating">Chức Vụ</label>
                                         <select style="width: 100%;" class="form-control select2-single"
                                             ng-model="employee.role" id="role">
-                                            <option value="manage">Giám Sát</option>
-                                            <option value="worker">Công Nhân</option>
+                                            <option value="{{role.MANAGER}}">Giám Sát</option>
+                                            <option value="{{role.worker}}">Công Nhân</option>
                                         </select>
                                     </div>
 
