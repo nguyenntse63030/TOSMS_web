@@ -54,12 +54,11 @@ function initDatatale() {
 //     $('.select-2').select2();
 // });
 
-function createCamera() {
+function createCamera(treeId) {
     let formData = new FormData();
     let file = $('#file')[0].files[0];
     let cameraType = $('#cameraType').val();
     let ip = $('#ip').val();
-    let treeId = $('#treeId').val();
     let code = $('#code').val();
 
     let check = validateCamera(file, code, ip)
@@ -69,7 +68,9 @@ function createCamera() {
         formData.append("code", code)
         formData.append("cameraType", cameraType)
         formData.append("ipAddress", ip)
-        formData.append("tree", treeId)
+        if (treeId) {
+            formData.append("tree", treeId)
+        }
 
         $.ajax({
             url: '/api/v1/camera',
@@ -93,26 +94,42 @@ function createCamera() {
     }
 }
 
+function confirmNotTree() {
+    let treeId = $('#treeId').val();
+    if (!treeId) {
+        $('#modalCreateCamera').modal('hide');
+        $('#modalConfirmNotTree').modal('show');
+    } else {
+        createCamera(treeId)
+    }
+}
+
 function validateCamera(file, code, ip) {
     let check = true;
     if (!file) {
         check = false;
+        $('#modalConfirmNotTree').modal('hide');
+        $('#modalCreateCamera').modal('show');
         return showNotification('Bạn phải chọn ảnh trước khi tạo.', 'warning');
     }
 
     if (!code) {
         check = false;
+        $('#modalConfirmNotTree').modal('hide');
+        $('#modalCreateCamera').modal('show');
         return showNotification('Camera code không thể bỏ trống.', 'warning');
     }
 
     if (!ip) {
         check = false;
+        $('#modalConfirmNotTree').modal('hide');
+        $('#modalCreateCamera').modal('show');
         return showNotification('Camera IP không được bỏ trống.', 'warning');
     }
     return check;
 }
 
-$('#createCameraBtn').on('click', function () { createCamera() })
+$('#createCameraBtn').on('click', function () { confirmNotTree() })
 
 function generateATag(camera, property) {
     let data = camera[property]
