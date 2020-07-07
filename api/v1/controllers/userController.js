@@ -6,18 +6,22 @@ const config = require("../../../config");
 const constant = require("../../../configs/constant");
 const awsServices = require("../services/awsServices");
 
-async function getListUser(query) {
+async function getListUser(req, query) {
   let start = parseInt(query.start);
   let length = parseInt(query.length);
   let regex = new RegExp(query.search.value, "i");
-  let users = await User.find({ $or: [{ name: regex }, { status: regex }] })
+  let queryOpt = {};
+  if (req.user.role === constant.userRoles.ADMIN) {
+    queryOpt = {$and: [{ $or: [{ name: regex }, { status: regex }] }, {role: {$ne: 'admin'}}, {isActive: true}]};
+  } else {
+    queryOpt = {$and: [{ $or: [{ name: regex }, { status: regex }] }, {role: {$nin: ['admin', 'manager']}},  {isActive: true}]};
+  }
+  let users = await User.find(queryOpt)
     .skip(start)
     .limit(length)
     .sort({ createdTime: -1 });
-  let recordsTotal = await User.countDocuments();
-  let recordsFiltered = await User.countDocuments({
-    $or: [{ name: regex }, { status: regex }],
-  });
+  let recordsTotal = await User.countDocuments({isActive: true});
+  let recordsFiltered = await User.countDocuments(queryOpt);
   let result = {
     recordsTotal: recordsTotal,
     recordsFiltered: recordsFiltered,
