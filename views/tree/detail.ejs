@@ -36,7 +36,7 @@
     }
 
     table a {
-        color: #ab47bc;
+        color: #6f6f6f;
     }
 
     .datepicker {
@@ -178,14 +178,14 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="bmd-label-floating">Loại cây</label>
+                                    <label class="bmd-label-floating" style="font-weight: bold;">Loại cây</label>
                                     <input type="text" class="form-control" ng-model="tree.treeType" id="type"
                                         value="{{tree.treeType}} " ng-disabled="isNotEditing">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="bmd-label-floating">Trạng thái</label>
+                                    <label class="bmd-label-floating" style="font-weight: bold;">Trạng thái</label>
                                     <input type="text" class="form-control" ng-model="tree.note"
                                         value="{{tree.status}} " ng-disabled="true">
                                 </div>
@@ -194,14 +194,14 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="bmd-label-floating">Ngày cập nhật</label>
+                                    <label class="bmd-label-floating" style="font-weight: bold;">Ngày cập nhật</label>
                                     <input type="text" class="form-control" name="updateTime" id="updateTime"
                                         value="{{tree.modifiedTime | date:'dd/MM/yyyy HH:mm:ss'}}" ng-disabled="true">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="bmd-label-floating">Ngày tạo</label>
+                                    <label class="bmd-label-floating" style="font-weight: bold;">Ngày tạo</label>
                                     <input type="text" class="form-control" name="createdTime" id="createdTime"
                                         value="{{tree.createdTime | date:'dd/MM/yyyy HH:mm:ss'}}" ng-disabled="true">
                                 </div>
@@ -210,14 +210,14 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="latitude">Vĩ Độ</label>
+                                    <label for="latitude" style="font-weight: bold;">Vĩ Độ</label>
                                     <input type="text" class="form-control" ng-model="tree.latitude"
                                         ng-disabled="isNotEditing" id="latitude" placeholder="Nhập vĩ độ">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="longtitude">Kinh Độ</label>
+                                    <label for="longtitude" style=" color: black; font-weight: bold;">Kinh Độ</label>
                                     <input type="text" class="form-control" ng-model="tree.longitude"
                                         ng-disabled="isNotEditing" id="longitude" placeholder="Nhập kinh độ">
                                 </div>
@@ -242,7 +242,8 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="bmd-label-floating">Thành Phố</label>
+                                    <label class="bmd-label-floating" style=" color: black; font-weight: bold;">Thành
+                                        Phố</label>
                                     <select class="form-control" ng-disabled="isNotEditing"
                                         ng-change="getListDistrict()" ng-model="city" id="city">
                                         <option ng-repeat="city in cities | orderBy:'createdTime'" ng-value="city._id">
@@ -252,7 +253,8 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="bmd-label-floating">Quận</label>
+                                    <label class="bmd-label-floating"
+                                        style=" color: black; font-weight: bold;">Quận</label>
                                     <select class="form-control" ng-disabled="isNotEditing" ng-change="getListWard()"
                                         ng-model="district" id="district">
                                         <option ng-repeat="district in districts | orderBy:'createdTime'"
@@ -265,7 +267,8 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="bmd-label-floating">Phường</label>
+                                    <label class="bmd-label-floating"
+                                        style="color: black; font-weight: bold;">Phường</label>
                                     <select class="form-control" ng-disabled="isNotEditing" ng-model="ward" id="ward">
                                         <option ng-repeat="ward in wards | orderBy: 'createdTime'" ng-value="ward._id">
                                             {{ward.name}}</option>
@@ -274,7 +277,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="bmd-label-floating">Đường</label>
+                                    <label class="bmd-label-floating" style=" font-weight: bold;">Đường</label>
                                     <input type="text" ng-model="tree.street" value="{{tree.street}}"
                                         ng-disabled="isNotEditing" class="form-control" id="street"
                                         placeholder="Nhập tên đường">
@@ -284,7 +287,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="note">Vấn đề nguy hiểm</label>
+                                    <label for="note" style="font-weight: bold;">Vấn đề nguy hiểm</label>
                                     <textarea type="text" rows="3" class="form-control" ng-model="tree.description"
                                         ng-disabled="isNotEditing" id="note"></textarea>
                                 </div>

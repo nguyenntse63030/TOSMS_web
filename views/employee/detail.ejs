@@ -36,7 +36,8 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label class="bmd-label-floating">Tên</label>
+                                    <label class="bmd-label-floating"
+                                        style=" color: black; font-weight: bold;">Tên</label>
                                     <input type="text" class="form-control" ng-model="employee.name" id="fullname"
                                         value="{{employee.name}} " ng-disabled="isNotEditing">
                                 </div>
@@ -52,7 +53,8 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="bmd-label-floating">Giới tính</label>
+                                    <label class="bmd-label-floating" style=" color: black; font-weight: bold;">Giới
+                                        tính</label>
                                     <input type="text" class="form-control" value=" " ng-hide="true">
                                     <select style="width: 100%;" class="form-control select2-single"
                                         ng-model="employee.gender" ng-disabled="isNotEditing">
@@ -64,7 +66,8 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="bmd-label-floating">Ngày sinh</label>
+                                    <label class="bmd-label-floating" style=" color: black; font-weight: bold;">Ngày
+                                        sinh</label>
                                     <input type="text" class="form-control" name="birthdate" id="birthdate"
                                         value="{{employee.birthday | date:'dd/MM/yyyy'}}" ng-disabled="isNotEditing">
                                 </div>
@@ -73,17 +76,21 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="bmd-label-floating">Email</label>
+                                    <label class="bmd-label-floating"
+                                        style=" color: black; font-weight: bold;">Email</label>
                                     <input type="text" class="form-control" ng-model="employee.email"
                                         value="{{employee.email}} " ng-disabled="isNotEditing">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="bmd-label-floating">Chức vụ</label>
-                                    <input type="text" class="form-control" value="{{employee.role}}" ng-disabled="true" ng-if="role !== 'admin'">
-                                    <select ng-if="role === 'admin'" style="width: 100%;" class="form-control select2-single"
-                                        ng-model="employee.role" id="role" ng-disabled="isNotEditing">
+                                    <label class="bmd-label-floating" style=" color: black; font-weight: bold;">Chức
+                                        vụ</label>
+                                    <input type="text" class="form-control" value="{{employee.role}}" ng-disabled="true"
+                                        ng-if="role !== 'admin'">
+                                    <select ng-if="role === 'admin'" style="width: 100%;"
+                                        class="form-control select2-single" ng-model="employee.role" id="role"
+                                        ng-disabled="isNotEditing">
                                         <option value="manager">Giám Sát</option>
                                         <option value="worker">Công Nhân</option>
                                     </select>
@@ -93,7 +100,8 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label class="bmd-label-floating">Địa chỉ</label>
+                                    <label class="bmd-label-floating" style=" color: black; font-weight: bold;">Địa
+                                        chỉ</label>
                                     <input type="text" class="form-control" ng-model="employee.address"
                                         value="{{employee.address}} " ng-disabled="isNotEditing">
                                 </div>
@@ -102,9 +110,10 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="note">Quận</label>
+                                    <label for="note" style=" color: black; font-weight: bold;">Quận</label>
                                     <input type="text" class="form-control" ng-model="employee.district.name"
-                                        value="{{employee.district.name}} " ng-disabled="isNotEditing || role !== 'admin'">
+                                        value="{{employee.district.name}} "
+                                        ng-disabled="isNotEditing || role !== 'admin'">
                                     <!-- <textarea type="text" rows="3" class="form-control" ng-model="employee.note"
                                         ng-disabled="isNotEditing" id="note"></textarea> -->
                                 </div>
@@ -136,7 +145,7 @@
                             src="{{employee.avatar || 'https://iweb.tatthanh.com.vn/pic/3/blog/logo-cay-xanh.jpg'}}" />
                     </a>
                 </div>
-                <div class="card-body">                    
+                <div class="card-body">
                     <h6 class="card-category text-gray">{{employee.role}}</h6>
                     <h4 class="card-title">{{employee.name}}</h4>
                 </div>
@@ -236,7 +245,7 @@
 
 
 <script>
-    
+
     clickSideBar('employee-page')
     $(document).ready(function () {
         $('#birthdate').datepicker({
