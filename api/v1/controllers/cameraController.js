@@ -162,17 +162,20 @@ async function getCameraStream(cameraID) {
   if (!camera) {
     throw responseStatus.Code400({ errorMessage: responseStatus.CAMERA_IS_NOT_FOUND })
   }
-
-  new RTSPStream({
+  
+  let player = new RTSPStream({
     name: camera.code,
     streamUrl: 'rtsp://' + camera.ipAddress.trim(),
-    wsPort: 9999,
+    // wsPort: 9999,
     ffmpegOptions: { // options ffmpeg flags
       '-stats': '', // an option with no neccessary value uses a blank string
       '-r': 30 // options with required values specify the value after the key
     }
   })
+  console.log(player)
+  return responseStatus.Code200({port: player.wsPort})
 }
+
 let uploadImage = async (id, file) => {
   let camera = await Camera.findOne({ _id: id, isActive: true });
   if (!camera) {

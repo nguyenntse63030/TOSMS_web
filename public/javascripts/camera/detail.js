@@ -23,6 +23,7 @@ app.controller("detailController", [
     $scope.id = $("#id").text();
     $scope.isNotEditing = true;
     $scope.camera = {};
+    let checkCameraStream = false
 
     apiService
       .getDetailCamera($scope.id)
@@ -75,12 +76,11 @@ app.controller("detailController", [
       if (!checkCameraStream) {
         apiService.getCameraStream($scope.camera._id).then((res) => {
           checkCameraStream = true
-          player = new JSMpeg.Player('ws://localhost:9999', {
+          player = new JSMpeg.Player('ws://localhost:' + res.data.port, {
             canvas: document.getElementById('video') // Canvas should be a canvas DOM element
           })
-            .catch((error) => {
-              showNotification(error, "danger");
-            })
+        }).catch((error) => {
+          showNotification(error, "danger");
         })
       }
     }
