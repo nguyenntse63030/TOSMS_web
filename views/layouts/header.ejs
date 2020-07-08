@@ -1,6 +1,5 @@
 <!-- Navbar -->
 <style>
-
   .profile-link {
     cursor: pointer;
   }
@@ -199,7 +198,7 @@
       </div>
       <ul class="navbar-nav">
         <li class="nav-item dropdown">
-          <a class="nav-link" href="#pablo" id="navbarDropdownProfile" data-toggle="dropdown" aria-haspopup="true"
+          <a class="nav-lin" href="#pablo" id="navbarDropdownProfile" data-toggle="dropdown" aria-haspopup="true"
             aria-expanded="false">
             <i class="material-icons icon-size">person</i>
             <p class="d-lg-none d-md-block">
@@ -207,8 +206,8 @@
             </p>
           </a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownProfile">
-            <a class="dropdown-item profile-link">Profile</a>
-            <div class="dropdown-divider"></div>
+            <a class="dropdown-item profile-link role_worker" style="display: none">Profile</a>
+            <div class="dropdown-divider role_worker" style="display: none"></div>
             <a class="dropdown-item" href="" onclick="signout()">Log out</a>
           </div>
         </li>
@@ -219,10 +218,25 @@
 <!-- End Navbar -->
 
 <script>
-    $('.profile-link').click(function () {
-      let user = JSON.parse(COMMON.getCookie('user'))
-      location.href = '/employee/' + user._id
-    })
+  $('.profile-link').click(function () {
+
+    var id = COMMON.setCookie('current-tab', id)
+    let user = JSON.parse(COMMON.getCookie('user'))
+    location.href = '/employee/' + user._id
+
+  })
+  $(document).ready(function () {
+    var id = COMMON.getCookie('current-tab');
+    if (id) {
+      $('#' + id).addClass('active').siblings().removeClass('active');
+    }
+    else $('#dashboard-page').addClass('active');
+
+    let user = JSON.parse(COMMON.getCookie('user'))
+    if (user && user.role !== COMMON.userRoles.ADMIN) {
+      $('.role_worker').css('display', 'block');
+    }
+  });
   signout = () => {
     $.ajax({
       url: '/api/v1/auth/sign_out',
