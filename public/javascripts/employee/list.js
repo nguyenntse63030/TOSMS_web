@@ -3,6 +3,8 @@ app.controller("listController", [
   "$scope",
   "apiService",
   function ($scope, apiService) {
+    $scope.role = COMMON.userRoles;
+    $scope.user = (JSON.parse(COMMON.getCookie('user')));
     $scope.listEmployees = [];
     // $scope.listEmployees = await apiService.getListEmployee();
     let options = {
@@ -21,43 +23,110 @@ app.controller("listController", [
         dataSrc: (response) => {
           return response.data.map((employee, i) => {
             return {
-              avatar: generateATag(employee, "avatar"),
+              // avatar: generateATag(employee, "avatar"),
               id: ++i,
               fullname: generateATag(employee, "name"),
               role: generateATag(employee, "role"),
               address: generateATag(employee, "address"),
-              status: generateATag(employee, "status"),
+              // status: generateATag(employee, "status"),
               createdTime: generateATag(employee, "createdTime"),
             };
           });
         },
       },
       columns: [
-        { data: "avatar" },
+        // { data: "avatar" },
         { data: "id" },
         { data: "fullname" },
         { data: "role" },
         { data: "address" },
-        { data: "status" },
+        // { data: "status" },
         { data: "createdTime" },
       ],
     };
     $("#employees-table").DataTable(options);
   },
 ]);
+function createUser() {
+  let formData = new FormData();
+  let file = $("#file")[0].files[0];
+  let fullname = $("#fullname").val();
+  let email = $("#email").val();
+  let birthdate = $("#birthdate").val();
+  let gender = $("#gender").val();
+  let role = $("#role").val();
+  let address = $("#address").val();
+  let username = $("#username").val();
+  let password = $("#password").val();
+
+  let check = validateUser(file, fullname, username, password);
+
+  if (check) {
+    formData.append("avatar", file);
+    formData.append("name", fullname);
+    formData.append("email", email);
+    formData.append("address", address);
+    formData.append("birthdate", birthdate);
+    formData.append("gender", gender);
+    formData.append("role", role);
+    formData.append("username", username);
+    formData.append("password", password);
+
+    $.ajax({
+      url: "/api/v1/user",
+      method: "POST",
+      data: formData,
+      contentType: false,
+      processData: false,
+      success: function (response) {
+        if (!response.message) {
+          return showNotification(response.errorMessage, "warning");
+        } else {
+          showNotification(response.message, "success");
+          $("#employees-table").DataTable().destroy();
+          initDatatale();
+          document.getElementById("create-employee").reset();
+          $(".modal-header .close").click();
+        }
+      },
+    });
+  }
+}
+
+function validateUser(file, fullname, username, password) {
+  let check = true;
+  if (!file) {
+    check = false;
+    return showNotification("Bạn phải chọn ảnh trước khi tạo.", "warning");
+  }
+
+  if (!fullname) {
+    check = false;
+    return showNotification("Tên người dùng không thể bỏ trống.", "warning");
+  }
+  if (!username) {
+    check = false;
+    return showNotification("Tên tài khoản không được bỏ trống.", "warning");
+  }
+  if (!password) {
+    check = false;
+    return showNotification("Mật khẩu không được bỏ trống.", "warning");
+  }
+  return check;
+}
+
+$("#createEmployeeBtn").on("click", function () {
+  createUser();
+});
 
 function generateATag(employee, property) {
   let data = employee[property];
   if (property === "createdTime") {
     data = parseInt(data);
     data = formatDate(data);
-  } else if (property === "status") {
-    data = data === true ? "Kích hoạt" : "Vô hiệu";
-  } else if (property === "avatar") {
-    data =
-      '<img class="img-data-row" alt="avatar" src="https://cdn.iconscout.com/icon/free/png-256/avatar-370-456322.png"/>';
-  } else if (property === "role") {
-    data = data === "org" ? "Giám sát" : "Công nhân";
+  }
+  if (property === "role") {
+    data === "worker" ? (data = "Công Nhân") : (data = "Quản Lý");
   }
   let result =
     '<a class="table-row-link" href="/employee/' +

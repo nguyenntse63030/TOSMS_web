@@ -1,3 +1,21 @@
+app.directive("fileModel", [
+  "$parse",
+  function ($parse) {
+    return {
+      restrict: "A",
+      link: function (scope, element, attrs) {
+        let model = $parse(attrs.fileModel);
+        let modelSetter = model.assign;
+        element.bind("change", function () {
+          scope.$apply(function () {
+            modelSetter(scope, element[0].files[0]);
+          });
+        });
+      },
+    };
+  },
+]);
+
 app.controller("detailController", [
   "$scope",
   "apiService",
@@ -5,7 +23,7 @@ app.controller("detailController", [
     $scope.id = $("#code").text();
     $scope.isNotEditing = true;
     $scope.employee = {};
-
+    $scope.role = (JSON.parse(COMMON.getCookie('user'))).role;
     apiService
       .getProfileEmployee($scope.id)
       .then((res) => {
@@ -17,10 +35,11 @@ app.controller("detailController", [
       });
 
     $scope.updateEmployee = () => {
+      $scope.employee.birthday = getTimestampFromDatePicker($('#birthdate'))
       apiService
         .updateEmployee($scope.id, $scope.employee)
         .then((res) => {
-          if (res.data.errorMessage) {
+          if (res.data.status !== 200) {
             showNotification(res.data.errorMessage, "danger");
           } else {
             $scope.employee = res.data.user;

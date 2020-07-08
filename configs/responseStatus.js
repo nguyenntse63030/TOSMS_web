@@ -200,4 +200,9 @@ module.exports = {
   UPDATE_USER_SUCCESS: "Cập nhật thông tin người dùng thành công",
   CAMERA_UPLOAD_IMAGE_FAIL: "Upload ảnh camera thất bại",
   CAMERA_UPLOAD_IMAGE_SUCCESS: "Upload ảnh camera thành công",
+  USER_FULLNAME_IS_CANT_EMPTY: "Tên người dùng không thể bỏ trống",
+  USER_ROLE_IS_CANT_EMPTY: "Chức vụ không thể bỏ trống",
+  USER_IMAGE_IS_CANT_EMPTY: "Bạn phải chọn ảnh của người dùng trước khi tạo.",
+  USER_USERNAME_IS_CANT_EMPTY: "Tên tài khoản không thể bỏ trống",
+  USER_PASSWORD_IS_CANT_EMPTY: "Mật khẩu không thể bỏ trống",
 };

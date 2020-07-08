@@ -81,10 +81,10 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="bmd-label-floating">Chức vụ</label>
-                                    <input type="text" class="form-control" value=" " ng-hide="true">
-                                    <select style="width: 100%;" class="form-control select2-single"
+                                    <input type="text" class="form-control" value="{{employee.role}}" ng-disabled="true" ng-if="role !== 'admin'">
+                                    <select ng-if="role === 'admin'" style="width: 100%;" class="form-control select2-single"
                                         ng-model="employee.role" id="role" ng-disabled="isNotEditing">
-                                        <option value="MANAGER">Giám Sát</option>
+                                        <option value="manager">Giám Sát</option>
                                         <option value="worker">Công Nhân</option>
                                     </select>
                                 </div>
@@ -104,7 +104,7 @@
                                 <div class="form-group">
                                     <label for="note">Quận</label>
                                     <input type="text" class="form-control" ng-model="employee.district.name"
-                                        value="{{employee.district.name}} " ng-disabled="isNotEditing">
+                                        value="{{employee.district.name}} " ng-disabled="isNotEditing || role !== 'admin'">
                                     <!-- <textarea type="text" rows="3" class="form-control" ng-model="employee.note"
                                         ng-disabled="isNotEditing" id="note"></textarea> -->
                                 </div>
@@ -136,8 +136,8 @@
                             src="{{employee.avatar || 'https://iweb.tatthanh.com.vn/pic/3/blog/logo-cay-xanh.jpg'}}" />
                     </a>
                 </div>
-                <div class="card-body">
-                    <h6 class="card-category text-gray">Nhân Viên</h6>
+                <div class="card-body">                    
+                    <h6 class="card-category text-gray">{{employee.role}}</h6>
                     <h4 class="card-title">{{employee.name}}</h4>
                 </div>
             </div>
@@ -164,7 +164,7 @@
                         <img id="image-to-change"
                             src="{{employee.avatar || 'https://iweb.tatthanh.com.vn/pic/3/blog/logo-cay-xanh.jpg'}}"
                             onclick="chooseFile()" />
-                        <input id="file" type="file" file-model="employeeAvata" accept="avata/*" style="display:none"
+                        <input id="file" type="file" file-model="employeeAvata" accept="avatar/*" style="display:none"
                             onchange="onChangeImage(event)" />
                     </div>
                 </div>
@@ -236,6 +236,7 @@
 
 
 <script>
+    
     clickSideBar('employee-page')
     $(document).ready(function () {
         $('#birthdate').datepicker({

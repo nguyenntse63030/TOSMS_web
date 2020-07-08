@@ -51,7 +51,7 @@ let getDetailCamera = async (id) => {
 
 let createCamera = async (data, file) => {
   let camera = data;
-  let tree = await Tree.findById({ _id: camera.tree }).populate("camera");
+  let tree = await Tree.findOne({ _id: camera.tree }).populate("camera");
 
   await validateDataCamera(camera, tree, file);
   let regex = new RegExp(camera.code, "i");
@@ -73,8 +73,10 @@ let createCamera = async (data, file) => {
     });
   }
 
-  tree.camera = result._id;
-  tree.save();
+  if (tree) {
+    tree.camera = result._id;
+    tree.save();
+  }
   return responseStatus.Code200({
     message: responseStatus.CAMERA_CREATE_SUCCESS,
   });

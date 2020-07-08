@@ -1,5 +1,10 @@
 <!-- Navbar -->
 <style>
+
+  .profile-link {
+    cursor: pointer;
+  }
+
   .container-noti {
     position: relative;
     width: 30px;
@@ -44,11 +49,11 @@
     height: 440px;
   }
 
-#container-list-noti .header-list-noti {
-  height: 30px;
-  border-bottom: 1px solid #dddfe2;
-  font-weight: bold ;
-}
+  #container-list-noti .header-list-noti {
+    height: 30px;
+    border-bottom: 1px solid #dddfe2;
+    font-weight: bold;
+  }
 
   #container-list-noti .see-more {
     height: 30px;
@@ -57,18 +62,21 @@
     padding: 5px;
   }
 
-  #container-list-noti .see-more a{
+  #container-list-noti .see-more a {
     color: #385898;
     margin-top: 5px;
   }
-  #container-list-noti .see-more a:hover{
+
+  #container-list-noti .see-more a:hover {
     color: #385898;
     background-color: unset;
     box-shadow: unset;
     cursor: pointer;
-    text-decoration: underline solid #385898;;
- 
+    text-decoration: underline solid #385898;
+    ;
+
   }
+
   .menu-item {
     overflow: hidden;
     border-bottom: 1px solid #dddfe2;
@@ -180,11 +188,13 @@
         <span id="count-number" class="icon-number-noti">
         </span>
         <div id="container-list-noti" class="dropdown-menu dropdown-menu-right">
-          <div class="header-list-noti text-center"><h5>Thông Báo</h5></div>
-          <div class="body-list-noti"id="list-noti">
+          <div class="header-list-noti text-center">
+            <h5>Thông Báo</h5>
+          </div>
+          <div class="body-list-noti" id="list-noti">
           </div>
           <div id="loading-noti"></div>
-          <div class="see-more text-center"><a  onclick="visitLink('/notification')">Xem Thêm</a></div>
+          <div class="see-more text-center"><a onclick="visitLink('/notification')">Xem Thêm</a></div>
         </div>
       </div>
       <ul class="navbar-nav">
@@ -197,7 +207,7 @@
             </p>
           </a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownProfile">
-            <a class="dropdown-item" href="/profile">Profile</a>
+            <a class="dropdown-item profile-link">Profile</a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="" onclick="signout()">Log out</a>
           </div>
@@ -209,6 +219,10 @@
 <!-- End Navbar -->
 
 <script>
+    $('.profile-link').click(function () {
+      let user = JSON.parse(COMMON.getCookie('user'))
+      location.href = '/employee/' + user._id
+    })
   signout = () => {
     $.ajax({
       url: '/api/v1/auth/sign_out',

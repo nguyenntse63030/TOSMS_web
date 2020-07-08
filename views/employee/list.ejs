@@ -148,15 +148,17 @@
                                 </div>
 
                                 <div class="col-md-6">
-                                    <div class="form-group">
+                                    <div class="form-group" ng-if="user.role === 'manager'" >
+                                        <label class="bmd-label-floating" style="top: -30px">Chức Vụ</label>
+                                        <input class="form-control" ng-if="user.role === 'manager'"  value="{{role.WORKER}}" style="margin-top: 38px;"  disabled/>
+                                    </div>
+                                    <div class="form-group" ng-if="user.role === 'admin'">
                                         <label class="bmd-label-floating">Chức Vụ</label>
-                                        <select style="width: 100%;" class="form-control select2-single"
-                                            ng-model="employee.role" id="role">
-                                            <option value="manage">Giám Sát</option>
-                                            <option value="worker">Công Nhân</option>
+                                        <select style="width: 100%;" class="form-control select2-single" ng-model="employee.role" id="role">
+                                            <option value="{{role.MANAGER}}">Giám Sát</option>
+                                            <option value="{{role.WORKER}}">Công Nhân</option>
                                         </select>
                                     </div>
-
                                 </div>
                             </div>
                             <div class="row">

@@ -2,24 +2,29 @@ const mongoose = require("mongoose");
 const User = mongoose.model("User");
 const responseStatus = require("../../../configs/responseStatus");
 const common = require("../../common");
-const jwt = require("jsonwebtoken");
-const AWS = require("aws-sdk");
 const config = require("../../../config");
 const constant = require("../../../configs/constant");
-const mssql = require("mssql");
+const awsServices = require("../services/awsServices");
 
-async function getListUser(query) {
+async function getListUser(req, query) {
   let start = parseInt(query.start);
   let length = parseInt(query.length);
   let regex = new RegExp(query.search.value, "i");
-  let users = await User.find({ $or: [{ name: regex }, { status: regex }] })
+  let queryOpt = {};
+  let queryTotal = {};
+  if (req.user.role === constant.userRoles.ADMIN) {
+    queryOpt = { $and: [{ $or: [{ name: regex }, { status: regex }] }, { role: { $ne: 'admin' } }, { isActive: true }] };
+    queryTotal = { role: { $ne: 'admin' }, isActive: true }
+  } else {
+    queryOpt = { $and: [{ $or: [{ name: regex }, { status: regex }] }, { role: { $nin: ['admin', 'manager'] } }, { isActive: true }] };
+    queryTotal = { role: { $nin: ['admin', 'manager'] }, isActive: true }
+  }
+  let users = await User.find(queryOpt)
     .skip(start)
     .limit(length)
     .sort({ createdTime: -1 });
-  let recordsTotal = await User.countDocuments();
-  let recordsFiltered = await User.countDocuments({
-    $or: [{ name: regex }, { status: regex }],
-  });
+  let recordsTotal = await User.countDocuments(queryTotal);
+  let recordsFiltered = await User.countDocuments(queryOpt);
   let result = {
     recordsTotal: recordsTotal,
     recordsFiltered: recordsFiltered,
@@ -27,8 +32,10 @@ async function getListUser(query) {
   };
   return responseStatus.Code200(result);
 }
-async function getUser(id) {
-  let user = await User.findOne({ _id: id }, { password: 0 }).populate(
+
+async function getUser(req, id) {
+  let queryOpt = checkRoleGenerateQuery(req.user, id)
+  let user = await User.findOne(queryOpt, { password: 0 }).populate(
     "district"
   );
   if (!user) {
@@ -36,13 +43,24 @@ async function getUser(id) {
       errorMessage: responseStatus.USER_IS_NOT_FOUND,
     });
   }
+
+  if (user.role === req.user.role) {
+    if (user.id !== req.user.id) {
+      throw responseStatus.Code400({
+        errorMessage: responseStatus.INVALID_REQUEST,
+      });
+    }
+  }
+
   return responseStatus.Code200({ user });
 }
-let createUser = async (data, file) => {
-  let user = data;
-  // let user = await User.findById({ _id: camera.tree }).populate("camera");
 
-  await validateDataUser(user, file);
+let createUser = async (req, data, file) => {
+  if (req.user.role === constant.userRoles.MANAGER) {
+    data.role = constant.userRoles.WORKER
+  }
+  let user = data;
+  // await validateDataUser(user, file);
   let regex = new RegExp(user.username, "i");
   let checkExist = await User.findOne({ username: regex });
 
@@ -52,22 +70,49 @@ let createUser = async (data, file) => {
     });
   }
 
-  let pathImg = await awsServices.uploadImageToS3("userImg", file.image);
-  user.avata = pathImg;
-
+  let pathImg = await awsServices.uploadImageToS3("employeeAvata", file.avatar);
+  user.avatar = pathImg;
   let result = await User.create(user);
   if (!result) {
     throw responseStatus.Code400({
       errorMessage: responseStatus.USER_CREATE_FAIL,
     });
   }
-
-  // tree.camera = result._id;
-  // tree.save();
   return responseStatus.Code200({
     message: responseStatus.USER_CREATE_SUCCESS,
   });
 };
+// let validateDataUser = (user, file) => {
+//   // if (!user.role) {
+//   //   throw responseStatus.Code400({
+//   //     errorMessage: responseStatus.USER_ROLE_IS_CANT_EMPTY,
+//   //   });
+//   // }
+
+//   if (!file) {
+//     throw responseStatus.Code400({
+//       errorMessage: responseStatus.USER_IMAGE_IS_CANT_EMPTY,
+//     });
+//   }
+//   if (!user.fullname) {
+//     throw responseStatus.Code400({
+//       errorMessage: responseStatus.USER_FULLNAME_IS_CANT_EMPTY,
+//     });
+//   }
+
+//   if (!user.username) {
+//     throw responseStatus.Code400({
+//       errorMessage: responseStatus.USER_USERNAME_IS_CANT_EMPTY,
+//     });
+//   }
+
+//   if (!user.password) {
+//     throw responseStatus.Code400({
+//       errorMessage: responseStatus.USER_PASSWORD_IS_CANT_EMPTY,
+//     });
+//   }
+// };
+
 let deleteUser = async (id) => {
   let user = await User.findOne({ _id: id, isActive: true });
   if (!user) {
@@ -87,20 +132,34 @@ let deleteUser = async (id) => {
   });
 };
 
-let updateUser = async (id, data) => {
-  let user = await User.findOne({ _id: id, isActive: true });
+let updateUser = async (req, id, data) => {
+  let queryOpt = checkRoleGenerateQuery(req.user, id)
+  let user = await User.findOne(queryOpt, { password: 0 })
   if (!user) {
-    throw responseStatus.Code400({
+      throw responseStatus.Code400({
       errorMessage: responseStatus.USER_IS_NOT_FOUND,
     });
   }
-  (user.name = data.name || user.name),
-    (user.gender = data.gender || user.gender),
-    (user.role = data.role || user.role),
-    (user.birthday = data.birthday || user.birthday),
-    (user.email = data.email || user.email),
-    (user.role = data.role || user.role),
-    (user.address = data.address || user.address);
+
+  //mục đích để kiểm tra update profile của bản thân hay là người khác
+  if (user.role === req.user.role) {
+    if (user.id !== req.user.id) {
+      //nếu cùng role nhưng khác tài khoản thì không cho update
+      //ví dụ cả 2 role là manager nhưng id khác nhau thì không được update vì không có quyền
+      throw responseStatus.Code400({
+        errorMessage: responseStatus.INVALID_REQUEST,
+      });
+    }
+  }
+  if (req.user.role === constant.userRoles.ADMIN) {
+    //kiểm tra nêu role là admin thì cho phép update role nêu không phải vẫn update nhưng ko đổi role
+    (user.role = data.role || user.role)
+  }
+  (user.name = data.name || user.name);
+  (user.gender = data.gender || user.gender);
+  (user.birthday = data.birthday || user.birthday);
+  (user.email = data.email || user.email);
+  (user.address = data.address || user.address);
   let _user = await user.save();
   if (_user !== user) {
     throw responseStatus.Code400({
@@ -112,15 +171,28 @@ let updateUser = async (id, data) => {
     user: _user,
   });
 };
-let uploadImage = async (id, file) => {
-  let user = await User.findOne({ _id: id, isActive: true });
+
+let uploadImage = async (req, id, file) => {
+  let queryOpt = checkRoleGenerateQuery(req.user, id)
+  let user = await User.findOne(queryOpt, { password: 0 })
   if (!user) {
     throw responseStatus.Code400({
       errorMessage: responseStatus.USER_IS_NOT_FOUND,
     });
   }
+
+  //mục đích để kiểm tra update profile của bản thân hay là người khác
+  if (user.role === req.user.role) {
+    if (user.id !== req.user.id) {
+      //nếu cùng role nhưng khác tài khoản thì không cho update
+      //ví dụ cả 2 role là manager nhưng id khác nhau thì không được update vì không có quyền
+      throw responseStatus.Code400({
+        errorMessage: responseStatus.INVALID_REQUEST,
+      });
+    }
+  }
   let pathImg = await awsServices.uploadImageToS3("employeeAvata", file.image);
-  user.avata = pathImg || user.avata;
+  user.avatar = pathImg || user.avatar;
   let _user = await user.save();
   if (_user !== user) {
     throw responseStatus.Code400({
@@ -132,6 +204,14 @@ let uploadImage = async (id, file) => {
     user: _user,
   });
 };
+
+function checkRoleGenerateQuery(user, id) {
+  if (user.role === constant.userRoles.WORKER) {
+    return { _id: user.id, isActive: true }
+  } else {
+    return { $and: [{ _id: id }, { role: { $ne: 'admin' } }, { isActive: true }] }
+  }
+}
 
 module.exports = {
   getListUser,

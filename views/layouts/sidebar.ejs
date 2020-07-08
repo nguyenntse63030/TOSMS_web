@@ -31,13 +31,13 @@
     </div>
     <div class="sidebar-wrapper">
         <ul class="nav">
-            <li class="nav-item" id="employee-page">
+            <li class="nav-item role_admin" id="employee-page" style="display: none">
                 <a class="nav-link" href="/employee">
                     <i class="material-icons">person</i>
                     <p>Nhân Viên</p>
                 </a>
             </li>
-            <li class="nav-item" id="tree-page">
+            <li class="nav-item role_admin" id="tree-page" style="display: none">
                 <a class="nav-link" href="/tree">
                     <i class="material-icons">local_florist</i>
                     <p>Cây</p>
@@ -49,7 +49,7 @@
                     <p>Notification</p>
                 </a>
             </li>
-            <li class="nav-item" id="camera-page">
+            <li class="nav-item role_admin" id="camera-page" style="display: none">
                 <a class="nav-link" href="/camera">
                     <i class="material-icons">photo_camera</i>
                     <p>Camera</p>
@@ -66,7 +66,11 @@
         }
         else $('#dashboard-page').addClass('active');
 
-        //     let user = JSON.parse(COMMON.getCookie('user'))
+        let user = JSON.parse(COMMON.getCookie('user'))
+        if (user && user.role !== COMMON.userRoles.WORKER) {
+            $('.role_admin').css('display', 'block');
+        }
+
         //     $('#side-bar-role').text(user.role)
         //     $('#side-bar-name').text(user.name)
         //     $('#sb-photoURL').attr('src', user.photoURL)
