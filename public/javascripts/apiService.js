@@ -17,6 +17,9 @@ angular.module("TOSMS").factory("apiService", [
           headers: { "Content-Type": undefined },
         });
       },
+      getListWorker: () => {
+        return $http.get(apiVersion + "/user/worker")
+      },
       updateEmployee: (id, data) => {
         return $http.put(apiVersion + "/user/" + id, data);
       },
@@ -69,6 +72,9 @@ angular.module("TOSMS").factory("apiService", [
 
       getDetailNotification: (id) => {
         return $http.get(apiVersion + "/notification/" + id);
+      },
+      setWorkerToNoti: (workerId, id) => {
+        return $http.put(apiVersion + "/notification/" + id + "/worker", {workerId})
       },
       getListCities: () => {
         return $http.get(apiVersion + "/location/city");

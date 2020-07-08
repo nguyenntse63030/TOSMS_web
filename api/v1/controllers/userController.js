@@ -55,6 +55,12 @@ async function getUser(req, id) {
   return responseStatus.Code200({ user });
 }
 
+async function getListWorker() {
+  let queryOpt = {role: constant.userRoles.WORKER, isActive: true};
+  let users = await User.find(queryOpt);
+  return responseStatus.Code200({users})
+}
+
 let createUser = async (req, data, file) => {
   if (req.user.role === constant.userRoles.MANAGER) {
     data.role = constant.userRoles.WORKER
@@ -220,4 +226,5 @@ module.exports = {
   createUser,
   deleteUser,
   updateUser,
+  getListWorker
 };

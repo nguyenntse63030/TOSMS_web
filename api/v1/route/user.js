@@ -16,6 +16,16 @@ router.get("/", authorize([constants.userRoles.ADMIN, constants.userRoles.MANAGE
   }
 });
 
+router.get("/worker", authorize([constants.userRoles.ADMIN, constants.userRoles.MANAGER]), async (req, res, next) => {
+  try {
+    let response = await userController.getListWorker();
+    return res.send(response);
+  } catch (error) {
+    console.log(error);
+    return res.status(error.status || 500).send(error);
+  }
+});
+
 router.get("/:id", authorize(), async (req, res, next) => {
   try {
     let id = req.params.id;

@@ -41,4 +41,9 @@ var NotificationSchema = new mongoose.Schema({
     },
 });
 
+
+NotificationSchema.post('save', async function (notification) {
+    notification = await notification.populate('worker').execPopulate();
+    return notification;
+})
 mongoose.model('Notification', NotificationSchema);

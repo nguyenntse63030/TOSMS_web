@@ -1,25 +1,55 @@
 <% layout('../layouts/layout.ejs') -%>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" rel="stylesheet" />
 <style>
-.card-profile {
-  margin-top: 30px;
-  text-align: center;
-}
+    .card-profile {
+        margin-top: 30px;
+        text-align: center;
+    }
 
-.card-profile .noti-card {
-  margin: -50px auto 0;
-  border-radius: 5px;
-  width: 360px;
-  height: 290px;
-  overflow: hidden;
-  padding: 0;
-  box-shadow: 0 16px 38px -12px rgba(0, 0, 0, 0.56), 0 4px 25px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2);
-}
+    .card-profile .noti-card {
+        margin: -50px auto 0;
+        border-radius: 5px;
+        width: 360px;
+        height: 290px;
+        overflow: hidden;
+        padding: 0;
+        box-shadow: 0 16px 38px -12px rgba(0, 0, 0, 0.56), 0 4px 25px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2);
+    }
 
-.card-profile .noti-card img {
-  width: 100%;
-  height: 100%;
-}
+    .card-profile .noti-card img {
+        width: 100%;
+        height: 100%;
+    }
+
+    .card-header .btn-choose-worker:active:focus {
+        background: linear-gradient(60deg, #76fb80, #48abda);
+    }   
+
+    .modal-body table {
+        color: #5d5b5b;
+    }
+
+    .image-container {
+        overflow: hidden;
+        width: 50px;
+        height: 70px;
+    }
+
+    .image-container img {
+        object-fit: scale-down;
+        width: 100%;
+        height: 100%;
+    }
+
+    .worker-records:hover, .active {
+        background-color: #cbf7dc;
+    }
+
+    .worker-records {
+        color: #5d5b5b
+    }
+    
+    
 </style>
 <p id="notificationId" ng-hide="true"><%= notificationId %></p>
 <div class="container-fluid" ng-controller="detailController">
@@ -32,7 +62,7 @@
                     </a>
                 </div>
             </div>
-            <br/>
+            <br />
             <div class="col-md-5 card card-profile">
                 <div class="noti-card">
                     <a href="#">
@@ -42,45 +72,52 @@
             </div>
         </div>
     </div>
-        <div class="col-md-12 mg-0-auto">
-            <div class="card">
-                <div class="card-header card-header-primary">
-                    <h4 class="card-title"><%= title %></h4>
-                </div>
-                <div class="card-body">
-                    <form>
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label class="bmd-label-floating">Ngày cập nhật</label>
-                                    <input type="text" class="form-control"
-                                        value="{{notification.createdTime | date:'dd/MM/yyyy HH:mm:ss'}}" disabled>
-                                </div>
-                            </div>
-                            <div class="col-md-5">
-                                <div class="form-group">
-                                    <label class="bmd-label-floating">Nội dung</label>
-                                    <input type="text" class="form-control" value="{{notification.name}}" disabled>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label class="bmd-label-floating">Trạng thái xử lý</label>
-                                    <input type="text" class="form-control" value="{{notification.status}}" disabled>
-                                </div>
+    <div class="col-md-12 mg-0-auto">
+        <div class="card">
+            <div class="card-header card-header-primary d-flex justify-content-between">
+                <h4 class="card-title"><%= title %></h4>
+                <button class="btn btn-primary btn-choose-worker" ng-click="showModal()">Chọn Người Thi Công</button>
+            </div>
+            <div class="card-body">
+                <form>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="bmd-label-floating">Ngày cập nhật</label>
+                                <input type="text" class="form-control"
+                                    value="{{notification.createdTime | date:'dd/MM/yyyy HH:mm:ss'}}" disabled>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label for="note">Diễn tả</label>
-                                    <textarea type="text" rows="3" class="form-control" ng-model="notification.name"
-                                        ng-disabled="isNotEditing"></textarea>
-                                </div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label class="bmd-label-floating">Nội dung</label>
+                                <input type="text" class="form-control" value="{{notification.name}}" disabled>
                             </div>
                         </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="bmd-label-floating">Trạng thái xử lý</label>
+                                <input type="text" class="form-control" value="{{notification.status}}" disabled>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group" style="margin-top: -9px;">
+                                <label class="bmd-label-floating">Công Nhân</label><br/>
+                                <a href="/employee/{{notification.worker._id}}">{{notification.worker.name}}</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="note">Diễn tả</label>
+                                <textarea type="text" rows="3" class="form-control" ng-model="notification.name"
+                                    ng-disabled="isNotEditing"></textarea>
+                            </div>
+                        </div>
+                    </div>
 
-                        <!-- <div ng-show="isNotEditing" ng-hide="bill.status === 'PAID'">
+                    <!-- <div ng-show="isNotEditing" ng-hide="bill.status === 'PAID'">
                             <button type="submit" class="btn btn-danger pull-left" data-toggle="modal"
                                 data-target="#deleteBillModal">Delete</button>
                             <button type="submit" class="btn btn-primary pull-right"
@@ -93,31 +130,48 @@
                             <button type="submit" class="btn btn-danger pull-left"
                                 ng-click="isNotEditing=true">Cancel</button>
                         </div> -->
-                        <div class="clearfix"></div>
-                    </form>
-                </div>
+                    <div class="clearfix"></div>
+                </form>
             </div>
         </div>
+    </div>
     <!-- Modal -->
-    <!-- <div class="modal fade model-center" id="deleteBillModal" role="dialog" aria-hidden="true">
+    <div class="modal fade model-center" id="setWorker" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3 class="modal-title" id="addRoomModelLabel" data-color="purple">Delete Bill Confirm</h3>
+            <div class="modal-content card">
+                <div class="modal-header card-header card-header-primary">
+                    <h3 class="modal-title" id="addRoomModelLabel" >Chọn Công Nhân</h3>
                     <button type="button" class="close btn-close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <h3 class="model-content">Are you sure to delete this bill?</h3>
+                    <table class="table">
+                        <thead>
+                          <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Ảnh Đại Diện</th>
+                            <th scope="col">Tên</th>
+                            <th scope="col">Trực Thuộc</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr ng-repeat="worker in workers" ng-click="active($event, worker)" class="worker-records">
+                            <th scope="row">{{$index + 1}}</th>
+                            <td>
+                                <img src="{{worker.avatar}}" style="object-fit: scale-down;" width="50px" height="50px"/>
+                            </td>
+                            <td>{{worker.name}}</td>
+                            <td>{{worker.district}}</td>
+                          </tr>
+                        </tbody>
+                      </table>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary pull-right" ng-click="deleteBill()">Delete</button>
-                </div>
+                <button type="button" class="btn btn-danger float-left" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary float-right" ng-click="setWorkerToNoti()">Chọn</button>
             </div>
         </div>
-    </div> -->
+    </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script>
@@ -127,4 +181,5 @@
     $(document).ready(function () {
         $('.select2-single').select2()
     })
+
 </script>
