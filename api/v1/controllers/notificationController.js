@@ -8,7 +8,7 @@ const jwt = require('jsonwebtoken')
 const config = require('../../../config')
 const constant = require('../../../configs/constant')
 const admin = require('firebase-admin');
-const serviceAccount = require('../../../tosms-web-firebase-adminsdk-d84ef-668fc23427.json')
+const serviceAccount = require('../../../tosms-web-firebase-adminsdk-d84ef-9e95c65ffb.json')
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     databaseURL: config.DATABASE_FIREBASE
