@@ -4,6 +4,7 @@ app.controller("listController", [
   "apiService",
   function ($scope, apiService) {
     $scope.role = COMMON.userRoles;
+    $scope.user = (JSON.parse(COMMON.getCookie('user')));
     $scope.listEmployees = [];
     // $scope.listEmployees = await apiService.getListEmployee();
     let options = {

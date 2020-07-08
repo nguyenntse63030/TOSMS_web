@@ -81,10 +81,10 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="bmd-label-floating">Chức vụ</label>
-                                    <input type="text" class="form-control" value=" " ng-hide="true">
-                                    <select style="width: 100%;" class="form-control select2-single"
+                                    <input type="text" class="form-control" value="{{employee.role}}" ng-disabled="true" ng-if="role !== 'admin'">
+                                    <select ng-if="role === 'admin'" style="width: 100%;" class="form-control select2-single"
                                         ng-model="employee.role" id="role" ng-disabled="isNotEditing">
-                                        <option value="MANAGER">Giám Sát</option>
+                                        <option value="manager">Giám Sát</option>
                                         <option value="worker">Công Nhân</option>
                                     </select>
                                 </div>
@@ -104,7 +104,7 @@
                                 <div class="form-group">
                                     <label for="note">Quận</label>
                                     <input type="text" class="form-control" ng-model="employee.district.name"
-                                        value="{{employee.district.name}} " ng-disabled="isNotEditing">
+                                        value="{{employee.district.name}} " ng-disabled="isNotEditing || role !== 'admin'">
                                     <!-- <textarea type="text" rows="3" class="form-control" ng-model="employee.note"
                                         ng-disabled="isNotEditing" id="note"></textarea> -->
                                 </div>

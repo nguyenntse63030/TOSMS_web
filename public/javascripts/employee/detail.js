@@ -23,7 +23,7 @@ app.controller("detailController", [
     $scope.id = $("#code").text();
     $scope.isNotEditing = true;
     $scope.employee = {};
-
+    $scope.role = (JSON.parse(COMMON.getCookie('user'))).role;
     apiService
       .getProfileEmployee($scope.id)
       .then((res) => {
@@ -35,6 +35,7 @@ app.controller("detailController", [
       });
 
     $scope.updateEmployee = () => {
+      $scope.employee.birthday = getTimestampFromDatePicker($('#birthdate'))
       apiService
         .updateEmployee($scope.id, $scope.employee)
         .then((res) => {

@@ -11,16 +11,19 @@ async function getListUser(req, query) {
   let length = parseInt(query.length);
   let regex = new RegExp(query.search.value, "i");
   let queryOpt = {};
+  let queryTotal = {};
   if (req.user.role === constant.userRoles.ADMIN) {
-    queryOpt = {$and: [{ $or: [{ name: regex }, { status: regex }] }, {role: {$ne: 'admin'}}, {isActive: true}]};
+    queryOpt = { $and: [{ $or: [{ name: regex }, { status: regex }] }, { role: { $ne: 'admin' } }, { isActive: true }] };
+    queryTotal = { role: { $ne: 'admin' }, isActive: true }
   } else {
-    queryOpt = {$and: [{ $or: [{ name: regex }, { status: regex }] }, {role: {$nin: ['admin', 'manager']}},  {isActive: true}]};
+    queryOpt = { $and: [{ $or: [{ name: regex }, { status: regex }] }, { role: { $nin: ['admin', 'manager'] } }, { isActive: true }] };
+    queryTotal = { role: { $nin: ['admin', 'manager'] }, isActive: true }
   }
   let users = await User.find(queryOpt)
     .skip(start)
     .limit(length)
     .sort({ createdTime: -1 });
-  let recordsTotal = await User.countDocuments({isActive: true});
+  let recordsTotal = await User.countDocuments(queryTotal);
   let recordsFiltered = await User.countDocuments(queryOpt);
   let result = {
     recordsTotal: recordsTotal,
@@ -29,8 +32,10 @@ async function getListUser(req, query) {
   };
   return responseStatus.Code200(result);
 }
-async function getUser(id) {
-  let user = await User.findOne({ _id: id }, { password: 0 }).populate(
+
+async function getUser(req, id) {
+  let queryOpt = checkRoleGenerateQuery(req.user, id)
+  let user = await User.findOne(queryOpt, { password: 0 }).populate(
     "district"
   );
   if (!user) {
@@ -38,9 +43,22 @@ async function getUser(id) {
       errorMessage: responseStatus.USER_IS_NOT_FOUND,
     });
   }
+
+  if (user.role === req.user.role) {
+    if (user.id !== req.user.id) {
+      throw responseStatus.Code400({
+        errorMessage: responseStatus.INVALID_REQUEST,
+      });
+    }
+  }
+
   return responseStatus.Code200({ user });
 }
-let createUser = async (data, file) => {
+
+let createUser = async (req, data, file) => {
+  if (req.user.role === constant.userRoles.MANAGER) {
+    data.role = constant.userRoles.WORKER
+  }
   let user = data;
   // await validateDataUser(user, file);
   let regex = new RegExp(user.username, "i");
@@ -54,7 +72,6 @@ let createUser = async (data, file) => {
 
   let pathImg = await awsServices.uploadImageToS3("employeeAvata", file.avatar);
   user.avatar = pathImg;
-
   let result = await User.create(user);
   if (!result) {
     throw responseStatus.Code400({
@@ -114,20 +131,35 @@ let deleteUser = async (id) => {
     message: responseStatus.DELETE_USER_SUCCESS,
   });
 };
-let updateUser = async (id, data) => {
-  let user = await User.findOne({ _id: id, isActive: true });
+
+let updateUser = async (req, id, data) => {
+  let queryOpt = checkRoleGenerateQuery(req.user, id)
+  let user = await User.findOne(queryOpt, { password: 0 })
   if (!user) {
-    throw responseStatus.Code400({
+      throw responseStatus.Code400({
       errorMessage: responseStatus.USER_IS_NOT_FOUND,
     });
   }
-  (user.name = data.name || user.name),
-    (user.gender = data.gender || user.gender),
-    (user.role = data.role || user.role),
-    (user.birthday = data.birthday || user.birthday),
-    (user.email = data.email || user.email),
-    (user.role = data.role || user.role),
-    (user.address = data.address || user.address);
+
+  //mục đích để kiểm tra update profile của bản thân hay là người khác
+  if (user.role === req.user.role) {
+    if (user.id !== req.user.id) {
+      //nếu cùng role nhưng khác tài khoản thì không cho update
+      //ví dụ cả 2 role là manager nhưng id khác nhau thì không được update vì không có quyền
+      throw responseStatus.Code400({
+        errorMessage: responseStatus.INVALID_REQUEST,
+      });
+    }
+  }
+  if (req.user.role === constant.userRoles.ADMIN) {
+    //kiểm tra nêu role là admin thì cho phép update role nêu không phải vẫn update nhưng ko đổi role
+    (user.role = data.role || user.role)
+  }
+  (user.name = data.name || user.name);
+  (user.gender = data.gender || user.gender);
+  (user.birthday = data.birthday || user.birthday);
+  (user.email = data.email || user.email);
+  (user.address = data.address || user.address);
   let _user = await user.save();
   if (_user !== user) {
     throw responseStatus.Code400({
@@ -139,12 +171,25 @@ let updateUser = async (id, data) => {
     user: _user,
   });
 };
-let uploadImage = async (id, file) => {
-  let user = await User.findOne({ _id: id, isActive: true });
+
+let uploadImage = async (req, id, file) => {
+  let queryOpt = checkRoleGenerateQuery(req.user, id)
+  let user = await User.findOne(queryOpt, { password: 0 })
   if (!user) {
     throw responseStatus.Code400({
       errorMessage: responseStatus.USER_IS_NOT_FOUND,
     });
+  }
+
+  //mục đích để kiểm tra update profile của bản thân hay là người khác
+  if (user.role === req.user.role) {
+    if (user.id !== req.user.id) {
+      //nếu cùng role nhưng khác tài khoản thì không cho update
+      //ví dụ cả 2 role là manager nhưng id khác nhau thì không được update vì không có quyền
+      throw responseStatus.Code400({
+        errorMessage: responseStatus.INVALID_REQUEST,
+      });
+    }
   }
   let pathImg = await awsServices.uploadImageToS3("employeeAvata", file.image);
   user.avatar = pathImg || user.avatar;
@@ -159,6 +204,14 @@ let uploadImage = async (id, file) => {
     user: _user,
   });
 };
+
+function checkRoleGenerateQuery(user, id) {
+  if (user.role === constant.userRoles.WORKER) {
+    return { _id: user.id, isActive: true }
+  } else {
+    return { $and: [{ _id: id }, { role: { $ne: 'admin' } }, { isActive: true }] }
+  }
+}
 
 module.exports = {
   getListUser,

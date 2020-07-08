@@ -16,10 +16,10 @@ router.get("/", authorize([constants.userRoles.ADMIN, constants.userRoles.MANAGE
   }
 });
 
-router.get("/:id", authorize([constants.userRoles.ADMIN, constants.userRoles.MANAGER]), async (req, res, next) => {
+router.get("/:id", authorize(), async (req, res, next) => {
   try {
     let id = req.params.id;
-    let response = await userController.getUser(id);
+    let response = await userController.getUser(req, id);
     return res.send(response);
   } catch (error) {
     console.log(error);
@@ -29,7 +29,7 @@ router.get("/:id", authorize([constants.userRoles.ADMIN, constants.userRoles.MAN
 
 router.post("/", authorize([constants.userRoles.ADMIN, constants.userRoles.MANAGER]), multipartMiddleware, async (req, res, next) => {
   try {
-    let response = await userController.createUser(req.body, req.files);
+    let response = await userController.createUser(req, req.body, req.files);
     return res.send(response);
   } catch (error) {
     console.log(error);
@@ -39,7 +39,7 @@ router.post("/", authorize([constants.userRoles.ADMIN, constants.userRoles.MANAG
 
 router.put("/:id/image", authorize(), multipartMiddleware, async (req, res, next) => {
   try {
-    let response = await userController.uploadImage(req.params.id, req.files);
+    let response = await userController.uploadImage(req, req.params.id, req.files);
     return res.send(response);
   } catch (error) {
     console.log(error);
@@ -49,7 +49,7 @@ router.put("/:id/image", authorize(), multipartMiddleware, async (req, res, next
 
 router.put("/:id", authorize(), async (req, res, next) => {
   try {
-    let response = await userController.updateUser(req.params.id, req.body);
+    let response = await userController.updateUser(req, req.params.id, req.body);
     return res.send(response);
   } catch (error) {
     console.log(error);
