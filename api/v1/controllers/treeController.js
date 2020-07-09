@@ -90,16 +90,19 @@ let uploadImage = async (id, file) => {
 }
 
 let deleteTree = async (id) => {
-    let tree = await Tree.findOne({ _id: id, isActive: true });
+    let tree = await Tree.findOne({ _id: id, isActive: true }).populate('camera');
     if (!tree) {
         throw responseStatus.Code400({ errorMessage: responseStatus.TREE_IS_NOT_FOUND });
     }
-
-    tree.isActive = false
+    let camera = tree.camera;
+    tree.isActive = false;
+    tree.camera = undefined;
     let _tree = await tree.save();
     if (_tree !== tree) {
         throw responseStatus.Code400({ errorMessage: responseStatus.DELETE_TREE_FAIL });
     }
+    camera.tree = undefined;
+    await camera.save()
     return responseStatus.Code200({ message: responseStatus.DELETE_TREE_SUCCESS });
 }
 
