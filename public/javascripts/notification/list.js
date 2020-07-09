@@ -1,37 +1,54 @@
 var app = angular.module("TOSMS");
 app.controller("listController", ["$scope", "apiService", function ($scope, apiService) {
-  let options = {
-    processing: true,
-    serverSide: true,
-    language: {
-      decimal: ".",
-      thousands: ",",
-      url: "//cdn.datatables.net/plug-ins/1.10.19/i18n/Vietnamese.json",
-    },
-    search: {
-      caseInsensitive: true,
-    },
-    ajax: {
-      url: "/api/v1/notification",
-      dataSrc: (response) => {
-        return response.data.map((notification, i) => {
-          return {
-            id: ++i,
-            name: generateATag(notification, "name"),
-            status: generateATag(notification, "status"),
-            createdTime: generateATag(notification, "createdTime"),
-          };
-        });
+  let createOption = (url) => {
+    let options = {
+      processing: true,
+      serverSide: true,
+      responsive: true,
+      language: {
+        decimal: ".",
+        thousands: ",",
+        url: "//cdn.datatables.net/plug-ins/1.10.19/i18n/Vietnamese.json",
       },
-    },
-    columns: [
-      { data: "id" },
-      { data: "name" },
-      { data: "status" },
-      { data: "createdTime" },
-    ],
-  };
-  $("#notification-table").DataTable(options);
+      search: {
+        caseInsensitive: true,
+      },
+      ajax: {
+        url: url,
+        dataSrc: (response) => {
+          return response.data.map((notification, i) => {
+            return {
+              id: ++i,
+              name: generateATag(notification, "name"),
+              status: generateATag(notification, "status"),
+              createdTime: generateATag(notification, "createdTime"),
+            };
+          });
+        },
+      },
+      columns: [
+        { data: "id" },
+        { data: "name" },
+        { data: "status" },
+        { data: "createdTime" },
+      ],
+    };
+    return options;
+  }
+  $scope.done = false;
+  $scope.initNotificationTable = () => {
+    $scope.done = false
+    $("#notification-table").DataTable().destroy();
+    $("#notification-table").DataTable(createOption("/api/v1/notification"));
+  }
+
+  $scope.initNotificationTable();
+
+  $scope.initTableDoneStatus = () => {
+    $scope.done = true
+    $("#notification-table").DataTable().destroy();
+    $("#notification-table").DataTable(createOption("/api/v1/notification/done"));
+  }
 }
 ]);
 

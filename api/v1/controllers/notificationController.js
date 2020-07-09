@@ -32,15 +32,38 @@ async function createNotification(data) {
 async function getListNotification(req) {
     let query = req.query;
     let regex = new RegExp(query.search.value, 'i');
-    let queryOpt = { $or: [{ name: regex }, { status: regex }] }
+    let queryOpt = {status: {$in: [constant.priorityStatus.DANG_XU_LY, constant.priorityStatus.CHUA_XU_LY]}, $or: [{ name: regex }, { status: regex }] }
     let queryCount = {}
     if (req.user.role === constant.userRoles.WORKER) {
-        queryOpt = { worker: req.user.id, status: { $in: [constant.priorityStatus.CHUA_XU_LY, constant.priorityStatus.DANG_XU_LY] }, name: regex }
-        queryCount = { worker: req.user.id }
+        queryOpt = { worker: req.user.id, status: constant.priorityStatus.DANG_XU_LY, $or: [{ name: regex }, { status: regex }] }
+        queryCount = { worker: req.user.id, status: constant.priorityStatus.DANG_XU_LY }
     }
     let start = parseInt(query.start);
     let length = parseInt(query.length);
-  
+
+    let notifications = await Notification.find(queryOpt).skip(start).limit(length).sort({ createdTime: -1 });
+    let recordsTotal = await Notification.countDocuments(queryCount);
+    let recordsFiltered = await Notification.countDocuments(queryOpt);
+    let result = {
+        recordsTotal: recordsTotal,
+        recordsFiltered: recordsFiltered,
+        data: notifications
+    }
+    return responseStatus.Code200(result);
+}
+
+async function getListNotificationDone(req) {
+    let query = req.query;
+    let regex = new RegExp(query.search.value, 'i');
+    let queryOpt = { status: constant.priorityStatus.DA_XU_LY, $or: [{ name: regex }, { status: regex }] }
+    let queryCount = { status: constant.priorityStatus.DA_XU_LY }
+    if (req.user.role === constant.userRoles.WORKER) {
+        queryOpt = { worker: req.user.id, status: constant.priorityStatus.DA_XU_LY, $or: [{ name: regex }, { status: regex }] }
+        queryCount = { worker: req.user.id, status: constant.priorityStatus.DA_XU_LY }
+    }
+    let start = parseInt(query.start);
+    let length = parseInt(query.length);
+
     let notifications = await Notification.find(queryOpt).skip(start).limit(length).sort({ createdTime: -1 });
     let recordsTotal = await Notification.countDocuments(queryCount);
     let recordsFiltered = await Notification.countDocuments(queryOpt);
@@ -64,18 +87,18 @@ async function getNotification(req, id) {
     return responseStatus.Code200({ notification });
 }
 
-let sendNotification = async (result) => {
-        let notification = {
-            title: 'Cảnh Báo Vấn Đề',
-            body: result.name,
-            icon: result.image,
-            link: '/notification/' + result.id,
-            readed: false,
-            createdTime: admin.firestore.FieldValue.serverTimestamp()
-        }
-        let userRef = firestore.collection("manager");
-        let response = await userRef.add(notification);
-        return;
+let sendNotification = (result) => {
+    let notification = {
+        title: 'Cảnh Báo Vấn Đề',
+        body: result.name,
+        icon: result.image,
+        link: '/notification/' + result.id,
+        readed: false,
+        createdTime: admin.firestore.FieldValue.serverTimestamp()
+    }
+    let userRef = firestore.collection("manager");
+    let response = userRef.add(notification);
+    return;
 }
 
 let setNotificationReaded = async () => {
@@ -95,17 +118,34 @@ let setWorkerToNoti = async (req) => {
     if (!notification) {
         throw responseStatus.Code400({ errorMessage: responseStatus.NOTIFICATION_IS_NOT_FOUND });
     }
+    notification.status = constant.priorityStatus.DANG_XU_LY;
     notification.worker = workerId;
     let _notification = await notification.save();
-    
+
     return responseStatus.Code200({ notification: _notification, message: responseStatus.SET_WORKER_TO_NOTI_SUCCESS });
 }
 
+let setStatusNotiSuccess = async (req) => {
+    let id = req.params.id;
+    let notification = await Notification.findOne({ _id: id, worker: req.user.id });
+    if (!notification) {
+        throw responseStatus.Code400({ errorMessage: responseStatus.NOTIFICATION_IS_NOT_FOUND });
+    }
+
+    if (notification.status != constant.priorityStatus.DANG_XU_LY) {
+        throw responseStatus.Code400({ errorMessage: responseStatus.ERRO_SET_NOTI_STATUS });
+    }
+    notification.status = constant.priorityStatus.DA_XU_LY;
+    let _notification = await notification.save();
+    return responseStatus.Code200({ notification: _notification, message: responseStatus.SET_NOTI_STATUS_SUCCESS })
+}
 module.exports = {
     createNotification,
     getListNotification,
     getNotification,
     sendNotification,
     setNotificationReaded,
-    setWorkerToNoti
+    setWorkerToNoti,
+    setStatusNotiSuccess,
+    getListNotificationDone
 }

@@ -1,6 +1,7 @@
 var app = angular.module('TOSMS')
 app.controller('detailController', ['$scope', 'apiService', function ($scope, apiService) {
     $scope.notificationId = $('#notificationId').text().trim();
+    $scope.user = JSON.parse(COMMON.getCookie('user'))
     apiService.getDetailNotification($scope.notificationId).then((res) => {
         $scope.notification = res.data.notification;
     }).catch((err) => {
@@ -19,8 +20,9 @@ app.controller('detailController', ['$scope', 'apiService', function ($scope, ap
     }
 
     $scope.active = ($event, worker) => {
+        $('.active').removeClass()
         $event.currentTarget.className = $event.currentTarget.className + ' active';
-        $scope.workerId = worker._id
+        $scope.workerId = worker._id;
     }
 
     $scope.setWorkerToNoti = () => {
@@ -31,10 +33,26 @@ app.controller('detailController', ['$scope', 'apiService', function ($scope, ap
                 $scope.notification = res.data.notification
                 $('#setWorker').modal('hide')
                 showNotification(res.data.message, "success");
-               
             }
         }).catch(err => {
             showNotification(err, "danger");
         })
     }
+
+    
+    $scope.setNotiStatusSuccess = () => {
+        apiService.setNotiStatusSuccess($scope.notificationId).then((res) => {
+          if (res.data.errorMessage) {
+              console.log(res)
+            showNotification(res.data.errorMessage, "danger");
+          } else {
+            $scope.notification = res.data.notification
+            $('#confirm-success').modal('hide')
+            showNotification(res.data.message, "success");
+          }
+        })
+        .catch((error) => {
+            showNotification(error.data.errorMessage, "danger");
+        });
+      }
 }])

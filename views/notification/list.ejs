@@ -20,6 +20,20 @@
         object-fit: scale-down;
         margin-bottom: 10px;
     }
+
+    .card-header .btn-change-tab, 
+    .card-header .btn-change-tab:hover,
+    .card-header .btn-change-tab:focus,
+    .card-header .btn-change-tab:active:focus {
+        background-color: white;
+    }
+    
+    .card-header .btn-change-tab p {
+        background: linear-gradient(60deg, #76fb80, #48abda);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin: 0;
+    }
 </style>
 <div class="container-fluid" ng-controller="listController">
     <div class="row">
@@ -27,14 +41,17 @@
             <div class="card">
                 <div class="card-header card-header-primary" style="z-index: 1 !important">
                     <div class="row">
-                        <div class="col-md-8">
+                        <div class="col-md-12 d-flex justify-content-between">
                             <h4 class="card-title" style="line-height: 50px">Notification</h4>
+                            <button class="btn btn-primary btn-change-tab d-none" ng-class="{'d-block': done !== false}" ng-click="initNotificationTable()"><p>Chưa Xử Lý</p></button>
+                            <button class="btn btn-primary btn-change-tab" ng-hide="done" ng-click="initTableDoneStatus()"><p>Đã Xử Lý</p></button>
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table" id="notification-table" style="width: 100% !important">
+                        <table class="table table table-striped table-bordered dt-responsive nowrap"
+                            id="notification-table" style="width: 100% !important">
                             <thead class="text-primary">
                                 <tr>
                                     <th style="width: 5%">STT</th>

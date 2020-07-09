@@ -85,6 +85,9 @@ angular.module("TOSMS").factory("apiService", [
       getListWard: (districtId) => {
         return $http.get(apiVersion + "/location/district/" + districtId);
       },
+      setNotiStatusSuccess: (id) => {
+        return $http.put(apiVersion + "/notification/" + id + "/status")
+      }
     };
   },
 ]);
