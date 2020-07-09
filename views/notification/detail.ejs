@@ -60,15 +60,15 @@
         <div class="col-md-12 d-flex justify-content-around">
             <div class="col-md-5 d-none d-lg-block card card-profile">
                 <div class="noti-card">
-                    <a href="#">
+                    <a ng-href="/tree/{{notification.tree}}">
                         <img class="img" src="{{notification.image || '/images/logo/tree-avatar.jpg'}}" />
                     </a>
                 </div>
             </div>
-            <br />
+            <br />  
             <div class="col-md-5 mx-md-auto card card-profile">
                 <div class="noti-card">
-                    <a href="#">
+                    <a ng-href="/tree/{{notification.tree}}">
                         <img class="img" src="{{notification.imageDetected || '/images/logo/tree-avatar.jpg'}}" />
                     </a>
                 </div>
@@ -123,7 +123,7 @@
                             </div>
                         </div>
                     </div>
-                    <!-- <button type="submit" class="btn btn-primary pull-right d-none" ng-class="{'d-block': notification.status === 'Đang Xử Lý'}"data-toggle="modal" data-target="#confirm-success" ng-click="">Đã Hoàn Thành</button> -->
+                    <button type="submit" class="btn btn-primary pull-right d-none" ng-class="{'d-block': notification.status === 'Đang Xử Lý'}"data-toggle="modal" data-target="#confirm-success" ng-click="">Đã Hoàn Thành</button>
                     <div class="clearfix"></div>
                 </form>
             </div>

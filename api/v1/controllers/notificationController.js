@@ -20,8 +20,11 @@ async function createNotification(data) {
     let camera = await Camera.findById({ _id: data.cameraId }).populate('tree');
     if (!camera) {
         throw responseStatus.Code400({ errorMessage: 'Camera không tồn tại' });
-    }
+    }   
     data.tree = camera.tree._id;
+    camera.tree.note = constant.priorityStatus.CHUA_XU_LY;
+    camera.tree.description = data.name
+    await camera.tree.save();
     let notification = await Notification.create(data)
     if (!notification) {
         throw responseStatus.Code400({ errorMessage: responseStatus.CREATE_NOTIFICATION_FAIL })
@@ -114,20 +117,22 @@ let setWorkerToNoti = async (req) => {
     let id = req.params.id;
     let workerId = req.body.workerId;
     let queryOpt = { _id: id }
-    let notification = await Notification.findOne(queryOpt);
+    let notification = await Notification.findOne(queryOpt).populate('tree');
     if (!notification) {
         throw responseStatus.Code400({ errorMessage: responseStatus.NOTIFICATION_IS_NOT_FOUND });
     }
+    notification.tree.note = constant.priorityStatus.DANG_XU_LY;
     notification.status = constant.priorityStatus.DANG_XU_LY;
     notification.worker = workerId;
     let _notification = await notification.save();
+    await notification.tree.save()
 
     return responseStatus.Code200({ notification: _notification, message: responseStatus.SET_WORKER_TO_NOTI_SUCCESS });
 }
 
 let setStatusNotiSuccess = async (req) => {
     let id = req.params.id;
-    let notification = await Notification.findOne({ _id: id, worker: req.user.id });
+    let notification = await Notification.findOne({ _id: id, worker: req.user.id }).populate('tree');
     if (!notification) {
         throw responseStatus.Code400({ errorMessage: responseStatus.NOTIFICATION_IS_NOT_FOUND });
     }
@@ -135,8 +140,11 @@ let setStatusNotiSuccess = async (req) => {
     if (notification.status != constant.priorityStatus.DANG_XU_LY) {
         throw responseStatus.Code400({ errorMessage: responseStatus.ERRO_SET_NOTI_STATUS });
     }
+    notification.tree.note = constant.treeProblemDisplay.NO_PROBLEM;
+    notification.tree.description = constant.TREE_NOT_DESCRIPTION;
     notification.status = constant.priorityStatus.DA_XU_LY;
     let _notification = await notification.save();
+    await notification.tree.save()
     return responseStatus.Code200({ notification: _notification, message: responseStatus.SET_NOTI_STATUS_SUCCESS })
 }
 module.exports = {

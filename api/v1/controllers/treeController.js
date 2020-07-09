@@ -135,7 +135,9 @@ let getListTree = async (query) => {
     return responseStatus.Code200(result);
 }
 
-let getListNotiOfTree = async (id, query) => {
+let getListNotiOfTree = async (req) => {
+    let id =  req.params.id;
+    let query = req.query;
     let start = parseInt(query.start);
     let length = parseInt(query.length);
     let startDate = parseInt(query.startDate);
@@ -145,10 +147,19 @@ let getListNotiOfTree = async (id, query) => {
     if (!tree) {
         throw responseStatus.Code400({ errorMessage: responseStatus.TREE_IS_NOT_FOUND });
     }
-    let notifications = await Notification.find({ $and: [{ $or: [{ name: regex }, { status: regex }] }, { tree: tree._id }, { createdTime: { $gt: startDate, $lt: endDate} }] }).
-        skip(start).limit(length).sort({ createdTime: -1 });
-    let recordsTotal = await Notification.countDocuments();
-    let recordsFiltered = await Notification.countDocuments({ $and: [{ $or: [{ name: regex }, { status: regex }] }, { tree: tree._id }, { createdTime: { $gt: startDate, $lt: endDate } }] })
+    let queryOpt = { $and: [{ $or: [{ name: regex }, { status: regex }] }, { tree: tree._id }, { createdTime: { $gt: startDate, $lt: endDate} }] };
+    let queryCount = {};
+    let queryFilter = { $and: [{ $or: [{ name: regex }, { status: regex }] }, { tree: tree._id }, { createdTime: { $gt: startDate, $lt: endDate } }] };
+   
+    if (req.user.role === constant.userRoles.WORKER) {
+        queryOpt = { $and: [{ $or: [{ name: regex }, { status: regex }] }, { tree: tree._id }, { createdTime: { $gt: startDate, $lt: endDate} }, {worker: req.user.id}] };
+        queryCount = {worker: req.user.id};
+        queryFilter = { $and: [{ $or: [{ name: regex }, { status: regex }] }, { tree: tree._id }, { createdTime: { $gt: startDate, $lt: endDate } }, {worker: req.user.id}] };
+    }
+
+    let notifications = await Notification.find(queryOpt).skip(start).limit(length).sort({ createdTime: -1 });
+    let recordsTotal = await Notification.countDocuments(queryCount);
+    let recordsFiltered = await Notification.countDocuments(queryFilter)
     let result = {
         recordsTotal: recordsTotal,
         recordsFiltered: recordsFiltered,

@@ -313,7 +313,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div ng-show="isNotEditing" ng-hide="bill.status === 'PAID'">
+                        <div ng-show="isNotEditing" ng-hide="bill.status === 'PAID'" class="d-none" ng-class="{'d-block': user.role !== 'worker'}">
                             <button type="submit" class="btn btn-danger pull-left" data-toggle="modal"
                                 data-target="#deleteEmployeeModal">Xóa</button>
                             <button type="submit" class="btn btn-primary pull-right"

@@ -9,7 +9,7 @@ module.exports = {
     INCLINED_TREE: "Cây bị nghiêng",
     NO_PROBLEM: "Cây bình thường",
   },
-
+  TREE_NOT_DESCRIPTION: "Không có",
   userRoles: {
     ADMIN: "admin",
     MANAGER: "manager",

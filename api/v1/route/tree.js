@@ -3,8 +3,10 @@ const router = express.Router();
 const treeController = require('../controllers/treeController')
 const multipart = require("connect-multiparty");
 const multipartMiddleware = multipart();
+const authorize = require("../middleware/authorize");
+const constants = require('../../../configs/constant')
 
-router.post('/', multipartMiddleware, async (req, res, next) => {
+router.post('/', authorize([constants.userRoles.ADMIN, constants.userRoles.MANAGER]), multipartMiddleware, async (req, res, next) => {
     try {
         let response = await treeController.createTree(req.body, req.files);
         return res.send(response);
@@ -15,7 +17,7 @@ router.post('/', multipartMiddleware, async (req, res, next) => {
 
 })
 
-router.put('/:id', async (req, res, next) => {
+router.put('/:id', authorize([constants.userRoles.ADMIN, constants.userRoles.MANAGER]), async (req, res, next) => {
     try {
         let response = await treeController.updateTree(req.params.id, req.body);
         return res.send(response);
@@ -25,7 +27,7 @@ router.put('/:id', async (req, res, next) => {
     }
 })
 
-router.put('/:id/image', multipartMiddleware, async (req, res, next) => {
+router.put('/:id/image', authorize([constants.userRoles.ADMIN, constants.userRoles.MANAGER]), multipartMiddleware, async (req, res, next) => {
     try {
         let response = await treeController.uploadImage(req.params.id, req.files);
         return res.send(response);
@@ -35,7 +37,7 @@ router.put('/:id/image', multipartMiddleware, async (req, res, next) => {
     }
 })
 
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', authorize([constants.userRoles.ADMIN, constants.userRoles.MANAGER]), async (req, res, next) => {
     try {
         let response = await treeController.deleteTree(req.params.id);
         return res.send(response);
@@ -45,9 +47,9 @@ router.delete('/:id', async (req, res, next) => {
     }
 })
 
-router.get('/:id/notification', async (req, res, next) => {
+router.get('/:id/notification', authorize(), async (req, res, next) => {
     try {
-        let response = await treeController.getListNotiOfTree(req.params.id, req.query);
+        let response = await treeController.getListNotiOfTree(req);
         return res.send(response);
     } catch (error) {
         console.log(error);
@@ -55,7 +57,7 @@ router.get('/:id/notification', async (req, res, next) => {
     }
 })
 
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', authorize(), async (req, res, next) => {
     try {
         let response = await treeController.getDetailTree(req.params.id);
         return res.send(response);
@@ -65,7 +67,7 @@ router.get('/:id', async (req, res, next) => {
     }
 })
 
-router.get('/', async (req, res, next) => {
+router.get('/', authorize([constants.userRoles.ADMIN, constants.userRoles.MANAGER]), async (req, res, next) => {
     try {
         let response = await treeController.getListTree(req.query);
         return res.send(response);

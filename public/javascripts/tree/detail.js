@@ -16,7 +16,7 @@ app.controller('detailController', ['$scope', 'apiService', function ($scope, ap
     $scope.id = $('#id').text();
     $scope.isNotEditing = true;
     $scope.tree = {};
-
+    $scope.user = JSON.parse(COMMON.getCookie('user'))
     loadLocation($scope, apiService)
 
     apiService.getDetailTree($scope.id).then((res) => {
