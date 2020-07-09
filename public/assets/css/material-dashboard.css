@@ -5651,7 +5651,7 @@ button.close {
   width: 100%;
   text-align: center;
   font-weight: bold;
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
 .modal-body {
@@ -11492,7 +11492,7 @@ fieldset[disabled] .is-focused .switch label:focus {
 .is-focused .form-control {
   background-image: linear-gradient(
       to top,
-      #9c27b0 2px,
+      #a2a2a2 2px,
       rgba(156, 39, 176, 0) 2px
     ),
     linear-gradient(to top, #d2d2d2 1px, rgba(210, 210, 210, 0) 1px);
@@ -13390,7 +13390,7 @@ fieldset[disabled][disabled] .has-rose .form-control,
 
 .bmd-form-group label {
   /* color: #AAAAAA; */
-  color: #ab47bc;
+  color: #000000;
 }
 
 .bmd-form-group .radio label,
@@ -13671,7 +13671,7 @@ label {
 .is-filled .bmd-label-floating {
   top: -1rem;
   left: 0;
-  color: #ab47bc !important;
+  color: #000000 !important;
   font-size: 14px;
 }
 
@@ -15701,7 +15701,7 @@ fieldset[disabled] .form-group.is-focused .togglebutton label {
 }
 
 .sidebar[data-color="purple"] li.active > a {
-  background-color: #9c27b0;
+  background-color: #3ad607;
   box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.14),
     0 7px 10px -5px rgba(156, 39, 176, 0.4);
 }
@@ -17336,12 +17336,12 @@ legend {
 }
 
 a {
-  color: #9c27b0;
+  color: #000000;
 }
 
 a:hover,
 a:focus {
-  color: #89229b;
+  color: #000000;
   text-decoration: none;
 }
 

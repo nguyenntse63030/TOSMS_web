@@ -41,7 +41,8 @@
         height: 100%;
     }
 
-    .worker-records:hover {
+    .worker-records:hover,
+    .active {
         background-color: #cbf7dc;
     }
 
@@ -86,20 +87,23 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="bmd-label-floating">Ngày cập nhật</label>
+                                <label class="bmd-label-floating" style=" color: black; font-weight: bold;">Ngày cập
+                                    nhật</label>
                                 <input type="text" class="form-control"
                                     value="{{notification.createdTime | date:'dd/MM/yyyy HH:mm:ss'}}" disabled>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="bmd-label-floating">Nội dung</label>
+                                <label class="bmd-label-floating" style=" color: black; font-weight: bold;">Nội
+                                    dung</label>
                                 <input type="text" class="form-control" value="{{notification.name}}" disabled>
                             </div>
                         </div>
                         <div class="col-md-6 col-xs-2">
                             <div class="form-group">
-                                <label class="bmd-label-floating">Trạng thái xử lý</label>
+                                <label class="bmd-label-floating" style=" color: black; font-weight: bold;">Trạng thái
+                                    xử lý</label>
                                 <input type="text" class="form-control" value="{{notification.status}}" disabled>
                             </div>
                         </div>
@@ -113,7 +117,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="note">Diễn tả</label>
+                                <label for="note" style=" color: black; font-weight: bold;">Diễn tả</label>
                                 <textarea type="text" rows="3" class="form-control" ng-model="notification.name"
                                     ng-disabled="true"></textarea>
                             </div>
@@ -130,7 +134,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content card">
                 <div class="modal-header card-header card-header-primary">
-                    <h3 class="modal-title" id="addRoomModelLabel" >Chọn Công Nhân</h3>
+                    <h3 class="modal-title" id="addRoomModelLabel">Chọn Công Nhân</h3>
                     <button type="button" class="close btn-close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -138,24 +142,25 @@
                 <div class="modal-body">
                     <table class="table">
                         <thead>
-                          <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Ảnh Đại Diện</th>
-                            <th scope="col">Tên</th>
-                            <th scope="col">Trực Thuộc</th>
-                          </tr>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Ảnh Đại Diện</th>
+                                <th scope="col">Tên</th>
+                                <th scope="col">Trực Thuộc</th>
+                            </tr>
                         </thead>
                         <tbody>
-                          <tr ng-repeat="worker in workers" ng-click="active($event, worker)" class="worker-records">
-                            <th scope="row">{{$index + 1}}</th>
-                            <td>
-                                <img src="{{worker.avatar}}" style="object-fit: scale-down;" width="50px" height="50px"/>
-                            </td>
-                            <td>{{worker.name}}</td>
-                            <td>{{worker.district}}</td>
-                          </tr>
+                            <tr ng-repeat="worker in workers" ng-click="active($event, worker)" class="worker-records">
+                                <th scope="row">{{$index + 1}}</th>
+                                <td>
+                                    <img src="{{worker.avatar}}" style="object-fit: scale-down;" width="50px"
+                                        height="50px" />
+                                </td>
+                                <td>{{worker.name}}</td>
+                                <td>{{worker.district}}</td>
+                            </tr>
                         </tbody>
-                      </table>
+                    </table>
                 </div>
                 <button type="button" class="btn btn-danger float-left" data-dismiss="modal">Đóng</button>
                 <button type="button" class="btn btn-primary float-right" ng-click="setWorkerToNoti()">Chọn</button>

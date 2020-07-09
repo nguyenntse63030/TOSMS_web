@@ -37,14 +37,16 @@
 
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="bmd-label-floating">Hãng Camera</label>
+                                    <label class="bmd-label-floating" style=" color: black; font-weight: bold;">Hãng
+                                        Camera</label>
                                     <input type="text" class="form-control" ng-model="camera.cameraType" id="cameraType"
                                         value="{{camera.cameraType}} " ng-disabled="isNotEditing">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="bmd-label-floating">Trạng Thái</label>
+                                    <label class="bmd-label-floating" style=" color: black; font-weight: bold;">Trạng
+                                        Thái</label>
                                     <input type="text" class="form-control" ng-model="camera.status" id="code"
                                         value="{{camera.status}} " ng-disabled="isNotEditing">
                                 </div>
@@ -53,14 +55,16 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="bmd-label-floating">IP Address</label>
+                                    <label class="bmd-label-floating" style=" color: black; font-weight: bold;">IP
+                                        Address</label>
                                     <input type="text" class="form-control" ng-model="camera.ipAddress" id="ip"
                                         value="{{camera.ipAddress}} " ng-disabled="isNotEditing">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="bmd-label-floating">Ngày tạo</label>
+                                    <label class="bmd-label-floating" style=" color: black; font-weight: bold;">Ngày
+                                        tạo</label>
                                     <input type="text" class="form-control" name="createdTime" id="createdTime"
                                         value="{{camera.createdTime | date:'dd/MM/yyyy HH:mm:ss'}}"
                                         ng-disabled="isNotEditing">
@@ -70,7 +74,8 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="bmd-label-floating">Cây</label>
+                                    <label class="bmd-label-floating"
+                                        style=" color: black; font-weight: bold;">Cây</label>
                                     <input type="text" class="form-control" ng-model="camera.tree.code"
                                         value="{{camera.tree.code}} " ng-disabled="isNotEditing">
                                 </div>
@@ -134,7 +139,8 @@
                 </div>
             </div>
             <div class="pull-left col-md-12 center-button">
-                <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#viewCameraModal" ng-click="getCameraStream()">Xem
+                <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#viewCameraModal"
+                    ng-click="getCameraStream()">Xem
                     Camera</button>
             </div>
         </div>
