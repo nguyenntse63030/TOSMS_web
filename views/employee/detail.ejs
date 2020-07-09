@@ -111,7 +111,7 @@
                             </div>
                         </div>
                         <div ng-show="isNotEditing" ng-hide="bill.status === 'PAID'">
-                            <button type="submit" class="btn btn-danger pull-left" data-toggle="modal"
+                            <button type="submit" ng-if="user.role !== 'worker'" class="btn btn-danger pull-left" data-toggle="modal"
                                 data-target="#deleteEmployeeModal">Xóa</button>
                             <button type="submit" class="btn btn-primary pull-right"
                                 ng-click="isNotEditing=false;">Chỉnh sửa</button>

@@ -22,6 +22,7 @@ app.controller("detailController", [
   function ($scope, apiService) {
     $scope.id = $("#code").text();
     $scope.isNotEditing = true;
+    $scope.user = JSON.parse(COMMON.getCookie('user'));
     $scope.employee = {};
     $scope.role = (JSON.parse(COMMON.getCookie('user'))).role;
     apiService
