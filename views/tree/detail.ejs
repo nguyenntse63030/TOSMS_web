@@ -164,6 +164,26 @@
     .datepicker-dropdown.datepicker-orient-top:before {
         border-top: 7px solid rgba(0, 0, 0, .1);
     }
+
+    .timepicker-hours .table-condensed,
+    .timepicker-minutes .table-condensed {
+        width: 100%;
+        text-align: center;
+    }
+    .table-condensed td a:hover{
+        background-color: unset;
+    }
+    .hour, .minute {
+        width: 50px;
+        height: 50px;
+        border-radius: 25px;
+    }
+
+    .timepicker-hours .table-condensed td:hover,
+    .timepicker-minutes .table-condensed td:hover {
+        background-color: #eee;
+        cursor: pointer;
+    }
 </style>
 
 <div class="container-fluid" ng-controller="detailController">

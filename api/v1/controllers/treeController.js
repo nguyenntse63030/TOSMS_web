@@ -138,15 +138,17 @@ let getListTree = async (query) => {
 let getListNotiOfTree = async (id, query) => {
     let start = parseInt(query.start);
     let length = parseInt(query.length);
+    let startDate = parseInt(query.startDate);
+    let endDate = parseInt(query.endDate)
     let regex = new RegExp(query.search.value, 'i');
     let tree = await Tree.findOne({ _id: id, isActive: true });
     if (!tree) {
         throw responseStatus.Code400({ errorMessage: responseStatus.TREE_IS_NOT_FOUND });
     }
-    let notifications = await Notification.find({ $and: [{ $or: [{ name: regex }, { status: regex }] }, { tree: tree._id }, { createdTime: { $gt: query.startDate, $lt: query.endDate } }] }).
+    let notifications = await Notification.find({ $and: [{ $or: [{ name: regex }, { status: regex }] }, { tree: tree._id }, { createdTime: { $gt: startDate, $lt: endDate} }] }).
         skip(start).limit(length).sort({ createdTime: -1 });
     let recordsTotal = await Notification.countDocuments();
-    let recordsFiltered = await Notification.countDocuments({ $or: [{ name: regex }, { status: regex }] })
+    let recordsFiltered = await Notification.countDocuments({ $and: [{ $or: [{ name: regex }, { status: regex }] }, { tree: tree._id }, { createdTime: { $gt: startDate, $lt: endDate } }] })
     let result = {
         recordsTotal: recordsTotal,
         recordsFiltered: recordsFiltered,
