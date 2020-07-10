@@ -18,7 +18,7 @@ async function createAdmin() {
         }
         let admin = new User()
         admin.username = username
-        admin.password = admin.hashPassword(password)
+        // admin.password = admin.hashPassword(password)
         await admin.save()
         console.log('Tạo tài khoản ADMIN thành công')
         console.log('Username: ', username)
