@@ -38,17 +38,14 @@ app.controller("detailController", [
         showNotification("Co loi!", "danger");
       });
 
-    $scope.getListTree = () => {
-      apiService.getListTree().then(response => {
-        $scope.trees = response.data.data
-        if (!$scope.trees.length) {
-          return showNotification('Hiện tại bạn chưa tạo cây để theo dõi', 'warning')
-        }
-      }).catch(err => {
-        showNotification(err.data.errorMessage, 'warning')
-      })
-    }
-    $scope.getListTree();
+    // $scope.getListTree = () => {
+    //   apiService.getListTree().then(response => {
+    //     $scope.trees = response.data.data
+    //   }).catch(err => {
+    //     showNotification(err.data.errorMessage, 'warning')
+    //   })
+    // }
+    // $scope.getListTree();
     
     $scope.deleteCamera = () => {
       apiService
