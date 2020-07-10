@@ -43,6 +43,9 @@ function checkResult(result) {
             case constant.treeProblem.INCLINED_TREE:
                 name += constant.treeProblemDisplay.INCLINED_TREE + ' - '
                 break;
+                
+            case constant.treeProblem.ELECTRIC_WIRE:
+                name += constant.treeProblemDisplay.ELECTRIC_WIRE + ' - '
         }
     }
     if (name) {

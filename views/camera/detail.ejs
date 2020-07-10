@@ -72,13 +72,15 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6" ng-if="trees.length">
+                            <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="tree">Cây</label>
-                                    <select class="form-control select-2"  ng-disabled="isNotEditing" ng-model="camera.tree._id" id="treeId">
+                                    <input type="text" class="form-control" name="tree" id="tree"
+                                        value="{{camera.tree.code}}" ng-disabled="isNotEditing">
+                                    <!-- <select class="form-control select-2"  ng-disabled="isNotEditing" ng-model="camera.tree._id" id="treeId">
                                         <option ng-repeat="tree in trees" ng-value="tree._id">
                                             {{tree.code}}</option>
-                                    </select>
+                                    </select> -->
                                 </div>
                             </div>
                             <!-- <div class="col-md-6">

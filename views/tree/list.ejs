@@ -19,6 +19,9 @@
         object-fit: scale-down;
         margin-bottom: 10px;
     }
+    #image-to-change:hover {
+        cursor: pointer;
+    }
 </style>
 <div class="container-fluid" ng-controller="listController">
     <div class="row">
@@ -66,7 +69,7 @@
                     <div class="form-container">
                         <form id="create-tree">
                             <div>
-                                <img id="image-to-change" src="/images/logo/logotree1.png" onclick="chooseFile()" />
+                                <img id="image-to-change" src="/images/logo/picture_icon.png" onclick="chooseFile()" />
                                 <input id="file" type="file" accept="image/*" style="display:none"
                                     onchange="onChangeImage(event)" />
                             </div>

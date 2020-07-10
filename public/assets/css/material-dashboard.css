@@ -15701,7 +15701,7 @@ fieldset[disabled] .form-group.is-focused .togglebutton label {
 }
 
 .sidebar[data-color="purple"] li.active > a {
-  background-color: #3ad607;
+  background-color: #ab03c7;
   box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.14),
     0 7px 10px -5px rgba(156, 39, 176, 0.4);
 }
@@ -17835,7 +17835,7 @@ label {
 .card.bg-primary,
 .card.card-rotate.bg-primary .front,
 .card.card-rotate.bg-primary .back {
-  background: linear-gradient(60deg, #76fb80, #48abda);
+  background: linear-gradient(60deg, #b912d6, #b912d6);
 }
 
 .card .card-header-info .card-icon,
@@ -19933,7 +19933,7 @@ Copyright (c) 2015 Daniel Eden
 }
 
 .card .table tr:hover td {
-  background-color: #cbf7dc;
+  background-color: #d10ef3;
 }
 
 .card .table tr td a {
