@@ -67,7 +67,6 @@
         else $('#dashboard-page').addClass('active');
 
         let user = JSON.parse(COMMON.getCookie('user'))
-        debugger
         if (user && user.role !== COMMON.userRoles.WORKER) {
             $('.role_admin').css('display', 'block');
         }

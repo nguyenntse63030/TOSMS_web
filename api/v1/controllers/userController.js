@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const User = mongoose.model("User");
+const District = mongoose.model("District");
 const responseStatus = require("../../../configs/responseStatus");
 const common = require("../../common");
 const config = require("../../../config");
@@ -13,11 +14,23 @@ async function getListUser(req, query) {
   let queryOpt = {};
   let queryTotal = {};
   if (req.user.role === constant.userRoles.ADMIN) {
-    queryOpt = { $and: [{ $or: [{ name: regex }, { status: regex }] }, { role: { $ne: 'admin' } }, { isActive: true }] };
-    queryTotal = { role: { $ne: 'admin' }, isActive: true }
+    queryOpt = {
+      $and: [
+        { $or: [{ name: regex }, { status: regex }] },
+        { role: { $ne: "admin" } },
+        { isActive: true },
+      ],
+    };
+    queryTotal = { role: { $ne: "admin" }, isActive: true };
   } else {
-    queryOpt = { $and: [{ $or: [{ name: regex }, { status: regex }] }, { role: { $nin: ['admin', 'manager'] } }, { isActive: true }] };
-    queryTotal = { role: { $nin: ['admin', 'manager'] }, isActive: true }
+    queryOpt = {
+      $and: [
+        { $or: [{ name: regex }, { status: regex }] },
+        { role: { $nin: ["admin", "manager"] } },
+        { isActive: true },
+      ],
+    };
+    queryTotal = { role: { $nin: ["admin", "manager"] }, isActive: true };
   }
   let users = await User.find(queryOpt)
     .skip(start)
@@ -34,10 +47,8 @@ async function getListUser(req, query) {
 }
 
 async function getUser(req, id) {
-  let queryOpt = checkRoleGenerateQuery(req.user, id)
-  let user = await User.findOne(queryOpt, { password: 0 }).populate(
-    "district"
-  );
+  let queryOpt = checkRoleGenerateQuery(req.user, id);
+  let user = await User.findOne(queryOpt, { password: 0 }).populate("district");
   if (!user) {
     throw responseStatus.Code400({
       errorMessage: responseStatus.USER_IS_NOT_FOUND,
@@ -56,16 +67,22 @@ async function getUser(req, id) {
 }
 
 async function getListWorker() {
-  let queryOpt = {role: constant.userRoles.WORKER, isActive: true};
+  let queryOpt = { role: constant.userRoles.WORKER, isActive: true };
   let users = await User.find(queryOpt);
-  return responseStatus.Code200({users})
+  return responseStatus.Code200({ users });
 }
 
 let createUser = async (req, data, file) => {
   if (req.user.role === constant.userRoles.MANAGER) {
-    data.role = constant.userRoles.WORKER
+    data.role = constant.userRoles.WORKER;
   }
   let user = data;
+  // let district = await District.findById({ _id: data.district });
+  // if (!district) {
+  //   throw responseStatus.Code400({
+  //     errorMessage: responseStatus.LOCATION_WRONG,
+  //   });
+  // }
   // await validateDataUser(user, file);
   let regex = new RegExp(user.username, "i");
   let checkExist = await User.findOne({ username: regex });
@@ -75,6 +92,8 @@ let createUser = async (req, data, file) => {
       errorMessage: responseStatus.USERNAME_IS_CANT_DUPLICATE,
     });
   }
+  // user.district = user.district;
+  // user.districtName = district.name;
 
   let pathImg = await awsServices.uploadImageToS3("employeeAvata", file.avatar);
   user.avatar = pathImg;
@@ -139,10 +158,10 @@ let deleteUser = async (id) => {
 };
 
 let updateUser = async (req, id, data) => {
-  let queryOpt = checkRoleGenerateQuery(req.user, id)
-  let user = await User.findOne(queryOpt, { password: 0 })
+  let queryOpt = checkRoleGenerateQuery(req.user, id);
+  let user = await User.findOne(queryOpt, { password: 0 });
   if (!user) {
-      throw responseStatus.Code400({
+    throw responseStatus.Code400({
       errorMessage: responseStatus.USER_IS_NOT_FOUND,
     });
   }
@@ -159,13 +178,13 @@ let updateUser = async (req, id, data) => {
   }
   if (req.user.role === constant.userRoles.ADMIN) {
     //kiểm tra nêu role là admin thì cho phép update role nêu không phải vẫn update nhưng ko đổi role
-    (user.role = data.role || user.role)
+    user.role = data.role || user.role;
   }
-  (user.name = data.name || user.name);
-  (user.gender = data.gender || user.gender);
-  (user.birthday = data.birthday || user.birthday);
-  (user.email = data.email || user.email);
-  (user.address = data.address || user.address);
+  user.name = data.name || user.name;
+  user.gender = data.gender || user.gender;
+  user.birthday = data.birthday || user.birthday;
+  user.email = data.email || user.email;
+  user.address = data.address || user.address;
   let _user = await user.save();
   if (_user !== user) {
     throw responseStatus.Code400({
@@ -179,8 +198,8 @@ let updateUser = async (req, id, data) => {
 };
 
 let uploadImage = async (req, id, file) => {
-  let queryOpt = checkRoleGenerateQuery(req.user, id)
-  let user = await User.findOne(queryOpt, { password: 0 })
+  let queryOpt = checkRoleGenerateQuery(req.user, id);
+  let user = await User.findOne(queryOpt, { password: 0 });
   if (!user) {
     throw responseStatus.Code400({
       errorMessage: responseStatus.USER_IS_NOT_FOUND,
@@ -213,9 +232,11 @@ let uploadImage = async (req, id, file) => {
 
 function checkRoleGenerateQuery(user, id) {
   if (user.role === constant.userRoles.WORKER) {
-    return { _id: user.id, isActive: true }
+    return { _id: user.id, isActive: true };
   } else {
-    return { $and: [{ _id: id }, { role: { $ne: 'admin' } }, { isActive: true }] }
+    return {
+      $and: [{ _id: id }, { role: { $ne: "admin" } }, { isActive: true }],
+    };
   }
 }
 
@@ -226,5 +247,5 @@ module.exports = {
   createUser,
   deleteUser,
   updateUser,
-  getListWorker
+  getListWorker,
 };
