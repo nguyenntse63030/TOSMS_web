@@ -1,9 +1,13 @@
 const mongoose = require('mongoose')
 require('../configs/loadModelsMongoose')
 const User = mongoose.model('User')
+const constants = require('../configs/constant')
 
 let username = process.argv[2]
 let password = process.argv[3]
+
+// let username = 'admin'
+// let password = '1111'
 
 async function createAdmin() {
     try {
@@ -18,11 +22,13 @@ async function createAdmin() {
         }
         let admin = new User()
         admin.username = username
-        admin.password = admin.hashPassword(password)
-        await admin.save()
+        admin.role = constants.userRoles.ADMIN
+        admin.password = password
+        admin = await admin.save()
         console.log('Tạo tài khoản ADMIN thành công')
         console.log('Username: ', username)
         console.log('Password: ', password)
+        console.log(admin)
         process.exit()
     } catch (error) {
         console.log(error)

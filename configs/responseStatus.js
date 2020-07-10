@@ -145,7 +145,7 @@ module.exports = {
     );
   },
 
-  IVALID_PHONE_OR_PASSWORD: "Username hoặc Password không đúng",
+  IVALID_USERNAME_OR_PASSWORD: "Username hoặc Password không đúng",
   INVALID_REQUEST: "Yêu cầu không hợp lệ",
   UPLOAD_IMAGE_FAIL: "Upload Image To S3 Faild",
   UPLOAD_IMAGE_SUCCESSFULLY: "Upload Image To S3 Successfully",
