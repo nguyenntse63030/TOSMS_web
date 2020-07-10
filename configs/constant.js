@@ -2,13 +2,16 @@ module.exports = {
   treeProblem: {
     BROKEN_BRANCH: "broken_branch",
     INCLINED_TREE: "inclined_tree",
+    ELECTRIC_WIRE: "electric_wire",
   },
 
   treeProblemDisplay: {
     BROKEN_BRANCH: "Cây bị gãy cành",
     INCLINED_TREE: "Cây bị nghiêng",
+    ELECTRIC_WIRE: "Cây bị vướng dây điện",
     NO_PROBLEM: "Cây bình thường",
   },
+  
   TREE_NOT_DESCRIPTION: "Không có",
   userRoles: {
     ADMIN: "admin",

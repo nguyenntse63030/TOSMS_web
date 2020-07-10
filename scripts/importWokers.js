@@ -26,7 +26,7 @@ async function createWorker() {
         address: worker.address,
       };
       let user = new User(data);
-      user.password = user.hashPassword("1111");
+      user.password = "1111";
       await user.save();
     }
   } catch (error) {
