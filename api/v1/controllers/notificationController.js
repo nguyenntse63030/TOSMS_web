@@ -20,7 +20,7 @@ async function createNotification(data) {
     let camera = await Camera.findById({ _id: data.cameraId }).populate('tree');
     if (!camera) {
         throw responseStatus.Code400({ errorMessage: 'Camera không tồn tại' });
-    }   
+    }
     data.tree = camera.tree._id;
     camera.tree.note = constant.priorityStatus.CHUA_XU_LY;
     camera.tree.description = data.name
@@ -35,7 +35,7 @@ async function createNotification(data) {
 async function getListNotification(req) {
     let query = req.query;
     let regex = new RegExp(query.search.value, 'i');
-    let queryOpt = {status: {$in: [constant.priorityStatus.DANG_XU_LY, constant.priorityStatus.CHUA_XU_LY]}, $or: [{ name: regex }, { status: regex }] }
+    let queryOpt = { status: { $in: [constant.priorityStatus.DANG_XU_LY, constant.priorityStatus.CHUA_XU_LY] }, $or: [{ name: regex }, { status: regex }] }
     let queryCount = {}
     if (req.user.role === constant.userRoles.WORKER) {
         queryOpt = { worker: req.user.id, status: constant.priorityStatus.DANG_XU_LY, $or: [{ name: regex }, { status: regex }] }
@@ -104,16 +104,16 @@ let sendNotification = (result) => {
     return;
 }
 
-let setNotificationReaded = async () => {
+let setNotificationReaded = async() => {
     let snapshot = await firestore.collection('manager').get()
-    snapshot.forEach(async (doc) => {
+    snapshot.forEach(async(doc) => {
         let docUpdate = firestore.collection('manager').doc(doc.id)
         let result = await docUpdate.update({ readed: true })
     });
     return { result: true }
 }
 
-let setWorkerToNoti = async (req) => {
+let setWorkerToNoti = async(req) => {
     let id = req.params.id;
     let workerId = req.body.workerId;
     let queryOpt = { _id: id }
@@ -130,9 +130,10 @@ let setWorkerToNoti = async (req) => {
     return responseStatus.Code200({ notification: _notification, message: responseStatus.SET_WORKER_TO_NOTI_SUCCESS });
 }
 
-let setStatusNotiSuccess = async (req) => {
+let setStatusNotiSuccess = async(req) => {
     let id = req.params.id;
-    let notification = await Notification.findOne({ _id: id, worker: req.user.id }).populate('tree');
+    // let notification = await Notification.findOne({ _id: id, worker: req.user.id }).populate('tree');
+    let notification = await Notification.findOne({ _id: id }).populate('tree');
     if (!notification) {
         throw responseStatus.Code400({ errorMessage: responseStatus.NOTIFICATION_IS_NOT_FOUND });
     }
@@ -140,11 +141,20 @@ let setStatusNotiSuccess = async (req) => {
     if (notification.status != constant.priorityStatus.DANG_XU_LY) {
         throw responseStatus.Code400({ errorMessage: responseStatus.ERRO_SET_NOTI_STATUS });
     }
-    notification.tree.note = constant.treeProblemDisplay.NO_PROBLEM;
-    notification.tree.description = constant.TREE_NOT_DESCRIPTION;
+
+    // noti chưa xử lý của cây
+    let noti = await Notification.findOne({ tree: notification.tree, status: constant.priorityStatus.CHUA_XU_LY }).sort({createdTime: 1})
+    if (!noti) {
+        notification.tree.note = constant.treeProblemDisplay.NO_PROBLEM;
+        notification.tree.description = constant.TREE_NOT_DESCRIPTION;
+    } else {
+        notification.tree.note = noti.status
+        notification.tree.description = noti.name
+    }
+    await notification.tree.save()
+
     notification.status = constant.priorityStatus.DA_XU_LY;
     let _notification = await notification.save();
-    await notification.tree.save()
     return responseStatus.Code200({ notification: _notification, message: responseStatus.SET_NOTI_STATUS_SUCCESS })
 }
 module.exports = {
