@@ -61,7 +61,7 @@ app.controller("listController", [
       let username = $("#username").val();
       let password = $("#password").val();
 
-      let check = validateUser(file, fullname, username, password, checkExist);
+      let check = validateUser(file, fullname, username, password);
 
       if (check) {
         formData.append("avatar", file);
@@ -89,8 +89,12 @@ app.controller("listController", [
               document.getElementById("create-employee").reset();
               $(".modal-header .close").click();
             } else {
-              return showNotification(response.errorMessage, "warning");
+              return showNotification(response.errorMessage, "danger");
             }
+          },
+          error: function (error) {
+            console.log(error);
+            showNotification(error.responseJSON.errorMessage, "danger");
           },
         });
       }
@@ -102,7 +106,7 @@ app.controller("listController", [
   },
 ]);
 
-function validateUser(file, fullname, username, password, checkExist) {
+function validateUser(file, fullname, username, password) {
   let check = true;
   if (!file) {
     check = false;
@@ -120,13 +124,6 @@ function validateUser(file, fullname, username, password, checkExist) {
   if (!password) {
     check = false;
     return showNotification("Mật khẩu không được bỏ trống.", "warning");
-  }
-  if (!checkExist) {
-    check = false;
-    return showNotification(
-      "Tài khoản đã tồn tại vui lòng đổi tài khoản khác.",
-      "warning"
-    );
   }
   return check;
 }
