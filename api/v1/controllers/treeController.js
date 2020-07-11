@@ -121,7 +121,8 @@ let getListTree = async (query) => {
         let start = parseInt(query.start);
         let length = parseInt(query.length)
         let regex = new RegExp(query.search.value, 'i');
-        let trees = await Tree.find({ $and: [{ $or: [{ note: regex }, { treeType: regex }, { street: regex }, { wardName: regex }, { districtName: regex }, { cityName: regex }] }, { isActive: true }] }).skip(start).limit(length).sort({ createdTime: -1 }).populate('district', { ward: 0 }).
+        let sort = optSortTree(query.order[0])
+        let trees = await Tree.find({ $and: [{ $or: [{ note: regex }, { treeType: regex }, { street: regex }, { wardName: regex }, { districtName: regex }, { cityName: regex }] }, { isActive: true }] }).skip(start).limit(length).sort(sort).populate('district', { ward: 0 }).
             populate('ward').populate('city', { city: 0 }).exec();
         let recordsTotal = await Tree.countDocuments({ isActive: true });
         let recordsFiltered = await Tree.countDocuments({ $and: [{ $or: [{ note: regex }, { treeType: regex }, { street: regex }, { wardName: regex }, { districtName: regex }, { cityName: regex }] }, { isActive: true }] })
@@ -129,7 +130,8 @@ let getListTree = async (query) => {
         result = {
             recordsTotal: recordsTotal,
             recordsFiltered: recordsFiltered,
-            data: trees
+            data: trees,
+            sort: query.order[0].column !== '0' ? 'asc': query.order[0].dir
         }
     } else {
         let trees = await Tree.find({ isActive: true, camera: null }).sort({ createdTime: -1 })
@@ -169,6 +171,24 @@ let getListNotiOfTree = async (req) => {
         data: notifications
     }
     return responseStatus.Code200(result);
+}
+
+let optSortTree = (sortOpt) => {
+    let sort = {}
+    switch (sortOpt.column) {
+        case '0': 
+            sort = {createdTime: sortOpt.dir};
+        case '1': 
+            sort = {street: sortOpt.dir, ward: sortOpt.dir, district: sortOpt.dir, city: sortOpt.dir};
+    
+        case '2':
+            sort = {note: sortOpt.dir};
+        case '3': 
+            sort = {createdTime: sortOpt.dir};
+
+        break;
+    }
+    return sort;
 }
 
 module.exports = {

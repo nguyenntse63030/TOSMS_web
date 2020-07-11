@@ -9,6 +9,7 @@ app.controller('listController', ['$scope', 'apiService', function ($scope, apiS
                 thousands: ',',
                 url: '//cdn.datatables.net/plug-ins/1.10.19/i18n/Vietnamese.json'
             },
+            order: [[1, 'desc'], [2, 'desc'], [3, 'desc']],
             search: {
                 caseInsensitive: true
             },
@@ -26,11 +27,11 @@ app.controller('listController', ['$scope', 'apiService', function ($scope, apiS
                 }
             },
             columns: [
-                { data: 'id' },
-                { data: 'location' },
-                { data: 'note' },
-                { data: 'createdTime' },
-            ]
+                { data: 'id', name: 'id', orderable: false },
+                { data: 'location', name: 'location' },
+                { data: 'note', name: 'note' },
+                { data: 'createdTime', name: 'createdTime' },
+            ],
         }
         $('#tree-table').DataTable(options);
         loadLocation($scope, apiService)
@@ -77,8 +78,12 @@ app.controller('listController', ['$scope', 'apiService', function ($scope, apiS
                         initDatatale()
                         showNotification(response.message, 'success');
                     } else {
-                        showNotification(response.errorMessage, 'warning')
+                        showNotification(response.errorMessage, 'danger')
                     }
+                },
+                error: function (error) {
+                    console.log(error)
+                    showNotification(error.responseJSON.errorMessage, 'danger')
                 }
             })
         }
