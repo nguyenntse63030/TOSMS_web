@@ -46,7 +46,7 @@ app.controller("detailController", [
     //   })
     // }
     // $scope.getListTree();
-    
+
     $scope.deleteCamera = () => {
       apiService
         .deleteCamera($scope.id)
@@ -85,9 +85,11 @@ app.controller("detailController", [
       if (!checkCameraStream) {
         apiService.getCameraStream($scope.camera._id).then((res) => {
           checkCameraStream = true
+          let canvas = document.getElementById('video')
           player = new JSMpeg.Player('ws://localhost:' + res.data.port, {
-            canvas: document.getElementById('video') // Canvas should be a canvas DOM element
+            canvas: canvas // Canvas should be a canvas DOM element
           })
+          $('#video').css('width','1285px')
         }).catch((error) => {
           showNotification(error, "danger");
         })

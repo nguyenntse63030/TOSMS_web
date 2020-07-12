@@ -125,25 +125,21 @@ let updateCamera = async (id, data) => {
       errorMessage: responseStatus.CAMERA_IS_NOT_FOUND,
     });
   }
-  let tree = await Tree.findfindByIdOne({ _id: camera.tree });
+  let tree = await Tree.findOne({ _id: camera.tree });
   // let tree = await Tree.findById({ _id: camera.tree });
   // let tree = await Tree.findOne({ _id: camera.tree }).populate("camera");
-  (camera.cameraType = data.cameraType || camera.cameraType),
-    (camera.status = data.status || camera.status),
-    (camera.ipAddress = data.ipAddress || camera.ipAddress),
-    (camera.tree = data.tree || camera.tree);
-  camera.tree = tree.code;
+  camera.cameraType = data.cameraType || camera.cameraType
+  camera.status = data.status || camera.status
+  camera.ipAddress = data.ipAddress || camera.ipAddress
+  camera.tree = data.tree || camera.tree
+  camera.code = tree.code;
   camera.modifiedTime = Date.now();
   let _camera = await camera.save();
   if (tree) {
-    tree.camera = result._id;
+    tree.camera = _camera._id;
     tree.save();
   }
-  if (_camera !== camera) {
-    throw responseStatus.Code400({
-      errorMessage: responseStatus.UPDATE_CAMERA_FAIL,
-    });
-  }
+
   return responseStatus.Code200({
     message: responseStatus.UPDATE_CAMERA_SUCCESS,
     camera: _camera,
@@ -190,10 +186,12 @@ async function getCameraStream(cameraID) {
       errorMessage: responseStatus.CAMERA_IS_NOT_FOUND,
     });
   }
-
+  let url = "rtsp://admin:123456@" + camera.ipAddress.trim()
   let player = new RTSPStream({
     name: camera.code,
-    streamUrl: "rtsp://" + camera.ipAddress.trim(),
+    streamUrl: url,
+    width: 1400,
+    height: 800,
     // wsPort: 9999,
     ffmpegOptions: {
       // options ffmpeg flags
