@@ -16,6 +16,12 @@ app.controller("listController", [
           thousands: ",",
           url: "//cdn.datatables.net/plug-ins/1.10.19/i18n/Vietnamese.json",
         },
+        order: [
+          [1, "desc"],
+          [2, "desc"],
+          [3, "desc"],
+          [4, "desc"],
+        ],
         search: {
           caseInsensitive: true,
         },
@@ -37,12 +43,12 @@ app.controller("listController", [
         },
         columns: [
           // { data: "avatar" },
-          { data: "id" },
-          { data: "fullname" },
-          { data: "role" },
-          { data: "address" },
+          { data: "id", name: "id", orderable: false },
+          { data: "fullname", name: "fullname" },
+          { data: "role", name: "role" },
+          { data: "address", name: "address" },
           // { data: "status" },
-          { data: "createdTime" },
+          { data: "createdTime", name: "createdTime" },
         ],
       };
       $("#employees-table").DataTable(options);

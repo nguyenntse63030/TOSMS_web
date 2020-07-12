@@ -12,6 +12,7 @@ let getListCamera = async (query) => {
     let start = parseInt(query.start);
     let length = parseInt(query.length);
     let regex = new RegExp(query.search.value, "i");
+    let sort = optSortCamera(query.order[0]);
     let cameras = await Camera.find({
       $and: [
         {
@@ -22,7 +23,7 @@ let getListCamera = async (query) => {
     })
       .skip(start)
       .limit(length)
-      .sort({ createdTime: -1 });
+      .sort(sort);
     let recordsTotal = await Camera.countDocuments({ isActive: true });
     let recordsFiltered = await Camera.countDocuments({
       $and: [
@@ -36,6 +37,7 @@ let getListCamera = async (query) => {
       recordsTotal: recordsTotal,
       recordsFiltered: recordsFiltered,
       data: cameras,
+      sort: query.order[0].column !== "0" ? "asc" : query.order[0].dir,
     };
   } else {
     let cameras = await Camera.find({ isActive: true }).sort({
@@ -128,10 +130,10 @@ let updateCamera = async (id, data) => {
   let tree = await Tree.findOne({ _id: camera.tree });
   // let tree = await Tree.findById({ _id: camera.tree });
   // let tree = await Tree.findOne({ _id: camera.tree }).populate("camera");
-  camera.cameraType = data.cameraType || camera.cameraType
-  camera.status = data.status || camera.status
-  camera.ipAddress = data.ipAddress || camera.ipAddress
-  camera.tree = data.tree || camera.tree
+  camera.cameraType = data.cameraType || camera.cameraType;
+  camera.status = data.status || camera.status;
+  camera.ipAddress = data.ipAddress || camera.ipAddress;
+  camera.tree = data.tree || camera.tree;
   camera.code = tree.code;
   camera.modifiedTime = Date.now();
   let _camera = await camera.save();
@@ -223,6 +225,26 @@ let uploadImage = async (id, file) => {
     camera: _camera,
   });
 };
+let optSortCamera = (sortOpt) => {
+  let sort = {};
+  switch (sortOpt.column) {
+    case "0":
+      sort = { createdTime: sortOpt.dir };
+    case "1":
+      sort = { code: sortOpt.dir };
+
+    case "2":
+      sort = { ipAddress: sortOpt.dir };
+    case "3":
+      sort = { status: sortOpt.dir };
+    case "4":
+      sort = { createdTime: sortOpt.dir };
+
+      break;
+  }
+  return sort;
+};
+
 module.exports = {
   getListCamera,
   createCamera,
