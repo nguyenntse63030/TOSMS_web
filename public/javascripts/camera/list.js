@@ -127,21 +127,21 @@ function validateCamera(file, code, ip) {
     check = false;
     $("#modalConfirmNotTree").modal("hide");
     $("#modalCreateCamera").modal("show");
-    return showNotification("Bạn phải chọn ảnh trước khi tạo.", "warning");
+    return showNotification("Bạn phải chọn ảnh trước khi tạo.", "danger");
   }
 
   if (!code) {
     check = false;
     $("#modalConfirmNotTree").modal("hide");
     $("#modalCreateCamera").modal("show");
-    return showNotification("Camera code không thể bỏ trống.", "warning");
+    return showNotification("Camera code không thể bỏ trống.", "danger");
   }
 
   if (!ip) {
     check = false;
     $("#modalConfirmNotTree").modal("hide");
     $("#modalCreateCamera").modal("show");
-    return showNotification("Camera IP không được bỏ trống.", "warning");
+    return showNotification("Camera IP không được bỏ trống.", "danger");
   }
   return check;
 }

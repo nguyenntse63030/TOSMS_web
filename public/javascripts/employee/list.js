@@ -116,20 +116,20 @@ function validateUser(file, fullname, username, password) {
   let check = true;
   if (!file) {
     check = false;
-    return showNotification("Bạn phải chọn ảnh trước khi tạo.", "warning");
+    return showNotification("Bạn phải chọn ảnh trước khi tạo.", "danger");
   }
 
   if (!fullname) {
     check = false;
-    return showNotification("Tên người dùng không thể bỏ trống.", "warning");
+    return showNotification("Tên người dùng không thể bỏ trống.", "danger");
   }
   if (!username) {
     check = false;
-    return showNotification("Tên tài khoản không được bỏ trống.", "warning");
+    return showNotification("Tên tài khoản không được bỏ trống.", "danger");
   }
   if (!password) {
     check = false;
-    return showNotification("Mật khẩu không được bỏ trống.", "warning");
+    return showNotification("Mật khẩu không được bỏ trống.", "danger");
   }
   return check;
 }
