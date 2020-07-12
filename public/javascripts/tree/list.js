@@ -15,6 +15,7 @@ app.controller("listController", [
           [1, "desc"],
           [2, "desc"],
           [3, "desc"],
+          [4, "desc"],
         ],
         search: {
           caseInsensitive: true,
@@ -26,6 +27,7 @@ app.controller("listController", [
               return {
                 id: ++i,
                 location: generateATag(tree, "location"),
+                code: generateATag(tree, "code"),
                 note: generateATag(tree, "note"),
                 createdTime: generateATag(tree, "createdTime"),
               };
@@ -35,6 +37,7 @@ app.controller("listController", [
         columns: [
           { data: "id", name: "id", orderable: false },
           { data: "location", name: "location" },
+          { data: "code", name: "code" },
           { data: "note", name: "note" },
           { data: "createdTime", name: "createdTime" },
         ],
@@ -127,7 +130,7 @@ function validateCreateTree(
   if (!latitude) {
     check = false;
     return showNotification("Vĩ độ không được bỏ trống.", "danger");
-  } 
+  }
   if (!longtitude) {
     check = false;
     return showNotification("Kinh độ không được bỏ trống.", "danger");
