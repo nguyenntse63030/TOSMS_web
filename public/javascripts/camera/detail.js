@@ -86,10 +86,9 @@ app.controller("detailController", [
         apiService.getCameraStream($scope.camera._id).then((res) => {
           checkCameraStream = true
           let canvas = document.getElementById('video')
-          player = new JSMpeg.Player('ws://localhost:' + res.data.port, {
+          player = new JSMpeg.Player('ws://'+ window.location.hostname + ':' + res.data.port, {
             canvas: canvas // Canvas should be a canvas DOM element
           })
-          $('#video').css('width','1285px')
         }).catch((error) => {
           showNotification(error, "danger");
         })

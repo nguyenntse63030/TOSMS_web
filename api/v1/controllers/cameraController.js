@@ -186,10 +186,10 @@ async function getCameraStream(cameraID) {
       errorMessage: responseStatus.CAMERA_IS_NOT_FOUND,
     });
   }
-  let url = "rtsp://admin:123456@" + camera.ipAddress.trim()
+  // let url = "rtsp://admin:123456@" + camera.ipAddress.trim()
   let player = new RTSPStream({
     name: camera.code,
-    streamUrl: url,
+    streamUrl: camera.ipAddress.trim(),
     width: 1400,
     height: 800,
     // wsPort: 9999,
