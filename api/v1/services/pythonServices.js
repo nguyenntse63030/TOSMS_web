@@ -24,7 +24,8 @@ async function processData(data) {
         image: data.image,
         cameraId: data.camera_id,
         imageDetected: data.imageDetected,
-        createdTime: new Date(data.timestamp).getTime() || Date.now()
+        // createdTime: new Date(data.timestamp).getTime() || Date.now()
+        createdTime: Date.now()
     }
 
     let notification = await notificationController.createNotification(notificationData)
