@@ -18,7 +18,6 @@ async function processImage(files) {
 }
 
 async function processData(data) {
-    data.result = JSON.parse(data.result)
     let notificationData = {
         name: checkResult(data.result),
         description: '',
@@ -59,6 +58,7 @@ async function processDataFromPython(data, files) {
     if (common.isEmptyObject(data)) {
         throw responseStatus.Code400({ errorMessage: responseStatus.DATA_IS_NOT_FOUND })
     }
+    data.result = JSON.parse(data.result)
     if (common.isEmptyObject(data.result)) {
         throw responseStatus.Code400({ errorMessage: responseStatus.DATA_IS_NOT_FOUND })
     }
