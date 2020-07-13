@@ -85,7 +85,8 @@ app.controller("detailController", [
           }
         })
         .catch((error) => {
-          showNotification(error, "danger");
+          console.log(error);
+          showNotification("Vui lòng chọn ảnh muốn thay đổi!", "danger");
         });
     };
   },
