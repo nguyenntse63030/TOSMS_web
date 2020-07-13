@@ -23,14 +23,17 @@ app.controller("detailController", [
     $scope.id = $("#id").text();
     $scope.isNotEditing = true;
     $scope.camera = {};
-    let checkCameraStream = false
+    let checkCameraStream = false;
 
     apiService
       .getDetailCamera($scope.id)
       .then((res) => {
         $scope.camera = res.data.camera;
         if (!$scope.camera.tree) {
-          showNotification('Bạn chưa chọn cây để theo dõi cho camera hoặc cây đã bị xóa.', 'warning')
+          showNotification(
+            "Bạn chưa chọn cây để theo dõi cho camera hoặc cây đã bị xóa.",
+            "warning"
+          );
         }
       })
       .catch((error) => {
@@ -83,17 +86,23 @@ app.controller("detailController", [
 
     $scope.getCameraStream = () => {
       if (!checkCameraStream) {
-        apiService.getCameraStream($scope.camera._id).then((res) => {
-          checkCameraStream = true
-          let canvas = document.getElementById('video')
-          player = new JSMpeg.Player('ws://'+ window.location.hostname + ':' + res.data.port, {
-            canvas: canvas // Canvas should be a canvas DOM element
+        apiService
+          .getCameraStream($scope.camera._id)
+          .then((res) => {
+            checkCameraStream = true;
+            let canvas = document.getElementById("video");
+            player = new JSMpeg.Player(
+              "ws://" + window.location.hostname + ":" + res.data.port,
+              {
+                canvas: canvas, // Canvas should be a canvas DOM element
+              }
+            );
           })
-        }).catch((error) => {
-          showNotification(error, "danger");
-        })
+          .catch((error) => {
+            showNotification(error, "danger");
+          });
       }
-    }
+    };
     $scope.uploadImageCamera = () => {
       let formData = new FormData();
       let file = $scope.cameraImage;
@@ -106,6 +115,7 @@ app.controller("detailController", [
           } else {
             $scope.camera = res.data.camera;
             showNotification(res.data.message, "success");
+            $(".modal-header .close").click();
           }
         })
         .catch((error) => {

@@ -22,9 +22,9 @@ app.controller("detailController", [
   function ($scope, apiService) {
     $scope.id = $("#code").text();
     $scope.isNotEditing = true;
-    $scope.user = JSON.parse(COMMON.getCookie('user'));
+    $scope.user = JSON.parse(COMMON.getCookie("user"));
     $scope.employee = {};
-    $scope.role = (JSON.parse(COMMON.getCookie('user'))).role;
+    $scope.role = JSON.parse(COMMON.getCookie("user")).role;
     apiService
       .getProfileEmployee($scope.id)
       .then((res) => {
@@ -36,7 +36,7 @@ app.controller("detailController", [
       });
 
     $scope.updateEmployee = () => {
-      $scope.employee.birthday = getTimestampFromDatePicker($('#birthdate'))
+      $scope.employee.birthday = getTimestampFromDatePicker($("#birthdate"));
       apiService
         .updateEmployee($scope.id, $scope.employee)
         .then((res) => {
@@ -81,6 +81,7 @@ app.controller("detailController", [
           } else {
             $scope.employee = res.data.user;
             showNotification(res.data.message, "success");
+            $(".modal-header .close").click();
           }
         })
         .catch((error) => {
