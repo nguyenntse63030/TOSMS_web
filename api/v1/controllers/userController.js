@@ -11,6 +11,7 @@ async function getListUser(req, query) {
   let start = parseInt(query.start);
   let length = parseInt(query.length);
   let regex = new RegExp(query.search.value, "i");
+  let sort = optSortUser(query.order[0]);
   let queryOpt = {};
   let queryTotal = {};
   if (req.user.role === constant.userRoles.ADMIN) {
@@ -32,16 +33,14 @@ async function getListUser(req, query) {
     };
     queryTotal = { role: { $nin: ["admin", "manager"] }, isActive: true };
   }
-  let users = await User.find(queryOpt)
-    .skip(start)
-    .limit(length)
-    .sort({ createdTime: -1 });
+  let users = await User.find(queryOpt).skip(start).limit(length).sort(sort);
   let recordsTotal = await User.countDocuments(queryTotal);
   let recordsFiltered = await User.countDocuments(queryOpt);
   let result = {
     recordsTotal: recordsTotal,
     recordsFiltered: recordsFiltered,
     data: users,
+    sort: query.order[0].column !== "0" ? "asc" : query.order[0].dir,
   };
   return responseStatus.Code200(result);
 }
@@ -239,6 +238,25 @@ function checkRoleGenerateQuery(user, id) {
     };
   }
 }
+let optSortUser = (sortOpt) => {
+  let sort = {};
+  switch (sortOpt.column) {
+    case "0":
+      sort = { createdTime: sortOpt.dir };
+    case "1":
+      sort = { fullname: sortOpt.dir };
+
+    case "2":
+      sort = { role: sortOpt.dir };
+    case "3":
+      sort = { address: sortOpt.dir };
+    case "4":
+      sort = { createdTime: sortOpt.dir };
+
+      break;
+  }
+  return sort;
+};
 
 module.exports = {
   getListUser,

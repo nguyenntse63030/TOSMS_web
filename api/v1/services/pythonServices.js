@@ -18,14 +18,14 @@ async function processImage(files) {
 }
 
 async function processData(data) {
-    data.result = JSON.parse(data.result)
     let notificationData = {
         name: checkResult(data.result),
         description: '',
         image: data.image,
         cameraId: data.camera_id,
         imageDetected: data.imageDetected,
-        createdTime: new Date(data.timestamp).getTime() || Date.now()
+        // createdTime: new Date(data.timestamp).getTime() || Date.now()
+        createdTime: Date.now()
     }
 
     let notification = await notificationController.createNotification(notificationData)
@@ -59,8 +59,10 @@ async function processDataFromPython(data, files) {
     if (common.isEmptyObject(data)) {
         throw responseStatus.Code400({ errorMessage: responseStatus.DATA_IS_NOT_FOUND })
     }
+    data.result = JSON.parse(data.result)
     if (common.isEmptyObject(data.result)) {
-        throw responseStatus.Code400({ errorMessage: responseStatus.DATA_IS_NOT_FOUND })
+        // throw responseStatus.Code400({ errorMessage: responseStatus.DATA_IS_NOT_FOUND })
+        return responseStatus.Code200({ message: responseStatus.PROCESS_DATA_FROM_PYTHON_SUCCESSFULLY })
     }
     let fileURLs = await processImage(files)
     data = Object.assign({}, data, fileURLs);

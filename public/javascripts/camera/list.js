@@ -30,6 +30,12 @@ function initDatatale() {
       thousands: ",",
       url: "//cdn.datatables.net/plug-ins/1.10.19/i18n/Vietnamese.json",
     },
+    order: [
+      [1, "desc"],
+      [2, "desc"],
+      [3, "desc"],
+      [4, "desc"],
+    ],
     search: {
       caseInsensitive: true,
     },
@@ -48,11 +54,11 @@ function initDatatale() {
       },
     },
     columns: [
-      { data: "id" },
-      { data: "code" },
-      { data: "ipAddress" },
-      { data: "status" },
-      { data: "createdTime" },
+      { data: "id", name: "id", orderable: false },
+      { data: "code", name: "code" },
+      { data: "ipAddress", name: "ipAddress" },
+      { data: "status", name: "status" },
+      { data: "createdTime", name: "createdTime" },
     ],
   };
   $("#camera-table").DataTable(options);
@@ -121,21 +127,21 @@ function validateCamera(file, code, ip) {
     check = false;
     $("#modalConfirmNotTree").modal("hide");
     $("#modalCreateCamera").modal("show");
-    return showNotification("Bạn phải chọn ảnh trước khi tạo.", "warning");
+    return showNotification("Bạn phải chọn ảnh trước khi tạo.", "danger");
   }
 
   if (!code) {
     check = false;
     $("#modalConfirmNotTree").modal("hide");
     $("#modalCreateCamera").modal("show");
-    return showNotification("Camera code không thể bỏ trống.", "warning");
+    return showNotification("Camera code không thể bỏ trống.", "danger");
   }
 
   if (!ip) {
     check = false;
     $("#modalConfirmNotTree").modal("hide");
     $("#modalCreateCamera").modal("show");
-    return showNotification("Camera IP không được bỏ trống.", "warning");
+    return showNotification("Camera IP không được bỏ trống.", "danger");
   }
   return check;
 }
