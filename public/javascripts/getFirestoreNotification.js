@@ -106,7 +106,10 @@ LIST_NOTIES.scroll(function () {
 })
 
 let createNotiElement = (notification, appendBefore) => {
-  let notiElement = '<div class="row menu-item" onclick="visitLink(\'' + notification.link + '\')"><div class="col-3 align-self-center"><div class="card card-body"><img src="' + notification.icon + '"/></div></div><div class="col-9"><div class="card text-noti-content"><div class="card-body"><h5 class="card-title">' + notification.title + '</h5>' + '<p class="card-text">' + notification.body + '</p></div></div></div></div>';
+  let timestamp = notification.createdTime.seconds*1000;
+  let date = formatDate(new Date(timestamp)); 
+
+  let notiElement = '<div class="row menu-item" onclick="visitLink(\'' + notification.link + '\')"><div class="col-3 align-self-center"><div class="card card-body"><img src="' + notification.icon + '"/></div></div><div class="col-9"><div class="card text-noti-content"><div class="card-body"><h5 class="card-title">' + notification.title + '</h5>' + '<p class="card-text mt-1">' + notification.body + '</p></div><p class="card-body my-1">' + date + '</p></div></div></div>';
   if (!appendBefore) {
     LIST_NOTIES.append(notiElement);
   } else {
