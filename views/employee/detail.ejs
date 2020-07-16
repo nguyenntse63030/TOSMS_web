@@ -60,7 +60,6 @@
                                         ng-model="employee.gender" ng-disabled="isNotEditing">
                                         <option value="Nam">Nam</option>
                                         <option value="Nữ">Nữ</option>
-                                        <option value="Other">Khác</option>
                                     </select>
                                 </div>
                             </div>
@@ -120,8 +119,8 @@
                             </div>
                         </div>
                         <div ng-show="isNotEditing" ng-hide="bill.status === 'PAID'">
-                            <button type="submit" ng-if="user.role !== 'worker'" class="btn btn-danger pull-left" data-toggle="modal"
-                                data-target="#deleteEmployeeModal">Xóa</button>
+                            <button type="submit" ng-if="user.role !== 'worker'" class="btn btn-danger pull-left"
+                                data-toggle="modal" data-target="#deleteEmployeeModal">Xóa</button>
                             <button type="submit" class="btn btn-primary pull-right"
                                 ng-click="isNotEditing=false;">Chỉnh sửa</button>
                         </div>

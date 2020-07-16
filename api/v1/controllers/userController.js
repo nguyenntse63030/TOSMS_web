@@ -75,6 +75,7 @@ let createUser = async (req, data, file) => {
   if (req.user.role === constant.userRoles.MANAGER) {
     data.role = constant.userRoles.WORKER;
   }
+  data.birthday = parseInt(data.birthday);
   let user = data;
   // let district = await District.findById({ _id: data.district });
   // if (!district) {

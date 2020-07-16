@@ -60,21 +60,29 @@ app.controller("listController", [
       let file = $("#file")[0].files[0];
       let fullname = $("#fullname").val();
       let email = $("#email").val();
-      let birthdate = $("#birthdate").val();
+      // let birthdate = $("#birthdate").val();
       let gender = $("#gender").val();
       let role = $("#role").val();
       let address = $("#address").val();
       let username = $("#username").val();
       let password = $("#password").val();
+      let birthdate = getTimestampFromDatePicker($("#birthdate"));
 
-      let check = validateUser(file, fullname, username, password);
+      let check = validateUser(
+        file,
+        fullname,
+        username,
+        password,
+        gender,
+        role
+      );
 
       if (check) {
         formData.append("avatar", file);
         formData.append("name", fullname);
         formData.append("email", email);
         formData.append("address", address);
-        formData.append("birthdate", birthdate);
+        formData.append("birthday", birthdate);
         // formData.append("district", district);
         formData.append("gender", gender);
         formData.append("role", role);
@@ -112,13 +120,12 @@ app.controller("listController", [
   },
 ]);
 
-function validateUser(file, fullname, username, password) {
+function validateUser(file, fullname, username, password, gender, role) {
   let check = true;
   if (!file) {
     check = false;
     return showNotification("Bạn phải chọn ảnh trước khi tạo.", "danger");
   }
-
   if (!fullname) {
     check = false;
     return showNotification("Tên người dùng không thể bỏ trống.", "danger");
@@ -126,6 +133,14 @@ function validateUser(file, fullname, username, password) {
   if (!username) {
     check = false;
     return showNotification("Tên tài khoản không được bỏ trống.", "danger");
+  }
+  if (gender === "? undefined:undefined ?") {
+    check = false;
+    return showNotification("Vui lòng chọn giới tính.", "danger");
+  }
+  if (role === "? undefined:undefined ?") {
+    check = false;
+    return showNotification("Vui lòng chọn chức vụ.", "danger");
   }
   if (!password) {
     check = false;

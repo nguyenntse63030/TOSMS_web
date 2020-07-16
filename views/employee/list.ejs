@@ -142,7 +142,6 @@
                                             ng-model="employee.gender">
                                             <option value="Nam">Nam</option>
                                             <option value="Nữ">Nữ</option>
-                                            <option value="Other">Other</option>
                                         </select>
                                     </div>
                                 </div>
@@ -225,20 +224,26 @@
     clickSideBar('employee-page')
 
     $(document).ready(function () {
-        // $(".select2-single").select2().val("Nam").trigger("change");
-
-        $("#birthdate")
-            .datepicker({
-                dateFormat: "dd/mm/yy",
-                autoclose: true,
-                changeMonth: true,
-                changeYear: true,
-                yearRange: "-100:" + new Date().getFullYear(),
-            })
-            .datepicker("setDate", "today");
+        // $('#birthdate').datepicker({
+        //     dateFormat: 'dd/mm/yy',
+        //     autoclose: true,
+        //     changeMonth: true,
+        //     changeYear: true,
+        //     yearRange: '-100:' + new Date().getFullYear()
+        // })
+        // setTimeout(() => {
+        //     numberFormat()
+        // }, 200);
+        $('#birthdate').datepicker({
+            dateFormat: 'dd/mm/yy',
+            autoclose: true,
+            changeMonth: true,
+            changeYear: true,
+            yearRange: '-100:' + new Date().getFullYear()
+        }).datepicker('setDate', 'today')
         setTimeout(() => {
-            numberFormat();
-            $("#fullname").focus();
+            numberFormat()
+            $('#fullname').focus()
         }, 200);
     });
     function chooseFile() {
