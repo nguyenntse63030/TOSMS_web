@@ -3,6 +3,7 @@ const responseStatus = require('../../../configs/responseStatus');
 const awsServices = require('../services/awsServices')
 const constant = require('../../../configs/constant')
 const notificationController = require('../controllers/notificationController')
+const treeDetectLocationServices = require('./treeDetectLocationServices')
 
 async function processImage(files) {
     if (!files) {
@@ -19,7 +20,7 @@ async function processImage(files) {
 
 async function processData(data) {
     let notificationData = {
-        name: checkResult(data.result),
+        name: await checkResult(data.result, data.camera_id),
         description: '',
         image: data.image,
         cameraId: data.camera_id,
@@ -32,10 +33,18 @@ async function processData(data) {
     return notification
 }
 
-function checkResult(result) {
+async function checkResult(result, cameraID) {
     let name = ''
-    for (let key in result) {
-        switch (key) {
+    for (let problem of result) {
+        let treeDetectLocationData = {
+            camera: cameraID,
+            xmin: problem.xmin,
+            ymin: problem.ymin, 
+            xmax: problem.xmax,
+            ymax: problem.ymax
+        }
+        await treeDetectLocationServices.createTreeDetectLocation(treeDetectLocationData)
+        switch (problem.object) {
             case constant.treeProblem.BROKEN_BRANCH:
                 name += constant.treeProblemDisplay.BROKEN_BRANCH + ' - '
                 break;
@@ -46,6 +55,7 @@ function checkResult(result) {
                 
             case constant.treeProblem.ELECTRIC_WIRE:
                 name += constant.treeProblemDisplay.ELECTRIC_WIRE + ' - '
+                break;
         }
     }
     if (name) {
@@ -59,6 +69,7 @@ async function processDataFromPython(data, files) {
     if (common.isEmptyObject(data)) {
         throw responseStatus.Code400({ errorMessage: responseStatus.DATA_IS_NOT_FOUND })
     }
+    data.result = data.result.split("'").join('"');
     data.result = JSON.parse(data.result)
     if (common.isEmptyObject(data.result)) {
         // throw responseStatus.Code400({ errorMessage: responseStatus.DATA_IS_NOT_FOUND })
