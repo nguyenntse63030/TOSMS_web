@@ -29,6 +29,9 @@ app.controller("detailController", [
       .getDetailCamera($scope.id)
       .then((res) => {
         $scope.camera = res.data.camera;
+        setTimeout(() => {
+          $('#treeId').val('')
+        }, 1000);
         if (!$scope.camera.tree) {
           showNotification(
             "Bạn chưa chọn cây để theo dõi cho camera hoặc cây đã bị xóa.",
@@ -41,14 +44,14 @@ app.controller("detailController", [
         showNotification("Co loi!", "danger");
       });
 
-    // $scope.getListTree = () => {
-    //   apiService.getListTree().then(response => {
-    //     $scope.trees = response.data.data
-    //   }).catch(err => {
-    //     showNotification(err.data.errorMessage, 'warning')
-    //   })
-    // }
-    // $scope.getListTree();
+    $scope.getListTree = () => {
+      apiService.getListTree().then(response => {
+        $scope.trees = response.data.data
+      }).catch(err => {
+        showNotification(err.data.errorMessage, 'warning')
+      })
+    }
+    $scope.getListTree();
 
     $scope.deleteCamera = () => {
       apiService
@@ -69,14 +72,18 @@ app.controller("detailController", [
     };
 
     $scope.updateCamera = () => {
+      $scope.camera.tree = $scope.selectedTree ? $scope.selectedTree : undefined
       apiService
         .updateCamera($scope.id, $scope.camera)
         .then((res) => {
           if (res.data.errorMessage) {
             showNotification(res.data.errorMessage, "danger");
           } else {
-            $scope.camera = res.data.camera;
+            $scope.showSelectTree()
             showNotification(res.data.message, "success");
+            setTimeout(() => {
+              window.location.reload()
+            }, 2000);
           }
         })
         .catch((error) => {
@@ -123,5 +130,13 @@ app.controller("detailController", [
           showNotification("Vui lòng chọn ảnh muốn thay đổi!", "danger");
         });
     };
+
+    $scope.showSelectTree = (check) => {
+      if (check) {
+        $("#treeId").select2().next().show();
+      } else {
+        $("#treeId").select2().next().hide();
+      }
+    }
   },
 ]);

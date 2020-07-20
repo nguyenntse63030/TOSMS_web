@@ -22,6 +22,10 @@
     a:focus {
         color: #ffffff
     }
+
+    .select2-container {
+        top: 10px;
+    }
 </style>
 <p id="id" ng-hide="true"><%= id %></p>
 <div class="container-fluid" ng-controller="detailController">
@@ -48,12 +52,11 @@
                                     <label class="bmd-label-floating" style=" color: black; font-weight: bold;">Trạng
                                         Thái</label>
                                     <input type="text" class="form-control" ng-model="camera.status" id="code"
-                                        value="{{camera.status}} " ng-disabled="isNotEditing">
+                                        value="{{camera.status}} " ng-disabled="true">
                                 </div>
                             </div>
                         </div>
                         <div class="row">
-
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="bmd-label-floating" style="font-weight: bold;">Ngày cập
@@ -69,7 +72,7 @@
                                         tạo</label>
                                     <input type="text" class="form-control" name="createdTime" id="createdTime"
                                         value="{{camera.createdTime | date:'dd/MM/yyyy HH:mm:ss'}}"
-                                        ng-disabled="isNotEditing">
+                                        ng-disabled="true">
                                 </div>
                             </div>
                         </div>
@@ -86,48 +89,28 @@
                                 <div class="form-group">
                                     <label for="tree">Cây</label>
                                     <input type="text" class="form-control" name="tree" id="tree"
-                                        value="{{camera.tree.code}}" ng-disabled="isNotEditing">
-                                    <!-- <select class="form-control select-2"  ng-disabled="isNotEditing" ng-model="camera.tree._id" id="treeId">
-                                        <option ng-repeat="tree in trees" ng-value="tree._id">
-                                            {{tree.code}}</option>
-                                    </select> -->
+                                        value="{{camera.tree.code}}" ng-disabled="isNotEditing" ng-hide="!isNotEditing">
+                                    <select style="width: 100%;" class="form-control" name="treeId" id="treeId"
+                                        ng-model="selectedTree">
+                                        <option value="">Không chọn cây</option>
+                                        <option ng-repeat="tree in trees" value="{{tree._id}}">
+                                            {{tree.code}}
+                                        </option>
+                                    </select>
                                 </div>
                             </div>
-                            <!-- <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="bmd-label-floating">Ngày tạo</label>
-                                    <input type="text" class="form-control" name="createdTime" id="createdTime"
-                                        value="{{camera.createdTime | date:'dd/MM/yyyy'}}" ng-disabled="isNotEditing">
-                                </div>
-                            </div> -->
                         </div>
-                        <!-- <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="bmd-label-floating">CameraID</label>
-                                    <input type="text" class="form-control" ng-model="tree.cameraID"
-                                        value="{{tree.cameraID}} " ng-disabled="isNotEditing">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="bmd-label-floating">Địa chỉ</label>
-                                    <input type="text" class="form-control" ng-model="tree.location"
-                                        value="{{tree.location}}" ng-disabled="isNotEditing">
-                                </div>
-                            </div>
-                        </div> -->
                         <div ng-show="isNotEditing" ng-hide="bill.status === 'PAID'">
                             <button type="submit" class="btn btn-danger pull-left" data-toggle="modal"
                                 data-target="#deleteEmployeeModal">Xóa</button>
                             <button type="submit" class="btn btn-primary pull-right"
-                                ng-click="isNotEditing=false;">Chỉnh sửa</button>
+                                ng-click="isNotEditing=false;showSelectTree(true)">Chỉnh sửa</button>
                         </div>
 
                         <div ng-show="!isNotEditing">
                             <button type="submit" class="btn btn-success pull-right"
                                 ng-click="isNotEditing=true;updateCamera()">Lưu</button>
-                            <button type="submit" class="btn btn-danger pull-left" ng-click="isNotEditing=true">Hủy
+                            <button type="submit" class="btn btn-danger pull-left" ng-click="isNotEditing=true;showSelectTree()">Hủy
                                 bỏ</button>
                         </div>
                         <div class="clearfix"></div>
@@ -220,13 +203,9 @@
             changeYear: true,
             yearRange: '-100:' + new Date().getFullYear()
         })
-        $('#selected-apartment').select2({
-            placeholder: 'Select a apartment'
-        });
-        $('#selected-room').select2({
-            placeholder: 'Select a room'
-        });
-        $('.select2-single').select2()
+        $('#treeId').select2()
+        $("#treeId").select2().next().hide();
+
         setTimeout(() => {
             numberFormat()
         }, 200);
