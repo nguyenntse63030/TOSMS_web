@@ -1,5 +1,6 @@
 <% layout('../layouts/layout.ejs') -%>
 <link href="/stylesheets/notification/list.css" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" rel="stylesheet" />
 <style>
     .table-row-link {
         color: #000000;
@@ -21,18 +22,21 @@
         margin-bottom: 10px;
     }
 
-    .card-header .btn-change-tab, 
+    .card-header .btn-change-tab,
     .card-header .btn-change-tab:hover,
     .card-header .btn-change-tab:focus,
     .card-header .btn-change-tab:active:focus {
         background-color: white;
     }
-    
+
     .card-header .btn-change-tab p {
-        background: linear-gradient(60deg, #76fb80, #48abda);
+        background: linear-gradient(60deg, #b912d6, #b912d6);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         margin: 0;
+    }
+    .select2-container{
+        top: 12px;
     }
 </style>
 <div class="container-fluid" ng-controller="listController">
@@ -41,17 +45,37 @@
             <div class="card">
                 <div class="card-header card-header-primary" style="z-index: 1 !important">
                     <div class="row">
-                        <div class="col-md-12 d-flex justify-content-between">
+                        <div class="col-md-2" style="width: max-content">
                             <h4 class="card-title" style="line-height: 50px">Notification</h4>
-                            <button class="btn btn-primary btn-change-tab d-none" ng-class="{'d-block': done !== false}" ng-click="initNotificationTable()"><p>Chưa Xử Lý</p></button>
-                            <button class="btn btn-primary btn-change-tab" ng-hide="done" ng-click="initTableDoneStatus()"><p>Đã Xử Lý</p></button>
+                        </div>
+                        <div class="col-md-10">
+                            <select style="width: 15%;" class="selected" id="selectedDistrict" ng-model="selectedDistrict" ng-change="getWardByDistrict();generateFindObj()">
+                                <option value="">Tất cả</option>
+                                <option ng-repeat="district in districts" value="{{district._id}}">
+                                    {{district.name}}
+                                </option>
+                            </select>
+                            <select style="width: 15%" class="selected" id="selectedWard" ng-model="selectedWard" ng-change="generateFindObj()">
+                                <option value="">Tất cả</option>
+                                <option ng-repeat="ward in wards" value="{{ward._id}}">
+                                    {{ward.name}}
+                                </option>
+                            </select>
+                            <button class="btn btn-primary btn-change-tab d-none pull-right"
+                                ng-class="{'d-block': done !== false}" ng-click="initNotificationTable()">
+                                <p>Chưa Xử Lý</p>
+                            </button>
+                            <button class="btn btn-primary btn-change-tab pull-right" ng-hide="done"
+                                ng-click="initTableDoneStatus()">
+                                <p>Đã Xử Lý</p>
+                            </button>
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table table-striped dt-responsive nowrap"
-                            id="notification-table" style="width: 100% !important">
+                        <table class="table table table-striped dt-responsive nowrap" id="notification-table"
+                            style="width: 100% !important">
                             <thead class="text-primary">
                                 <tr>
                                     <th style="width: 5%">STT</th>
@@ -72,4 +96,8 @@
 
 <script>
     clickSideBar('notification-page')
+    $(document).ready(function () {
+        $('.selected').select2()
+        $("#selectedWard").select2().next().css('margin-left','20px');
+    })
 </script>

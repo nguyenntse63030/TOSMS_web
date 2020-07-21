@@ -132,19 +132,21 @@ async function updateCamera(id, data) {
   camera.status = data.status || camera.status;
   camera.ipAddress = data.ipAddress || camera.ipAddress;
   camera.modifiedTime = Date.now();
-  if (data.tree) {
+
+  if (camera.tree) { // Nếu camera đã có cây thì phải bỏ cây đó ra khỏi camera
     let oldTree = await Tree.findById(camera.tree)
     if (!oldTree) {
-      throw responseStatus.Code400({errorMessage: responseStatus.TREE_IS_NOT_FOUND})
+      throw responseStatus.Code400({ errorMessage: responseStatus.TREE_IS_NOT_FOUND })
     }
-
-    let newTree = await Tree.findById(data.tree)
-    if (!newTree) {
-      throw responseStatus.Code400({errorMessage: responseStatus.TREE_IS_NOT_FOUND})
-    }
-
     oldTree.camera = undefined;
     await oldTree.save()
+  }
+
+  if (data.tree) { // Thêm cây mới vào camera
+    let newTree = await Tree.findById(data.tree)
+    if (!newTree) {
+      throw responseStatus.Code400({ errorMessage: responseStatus.TREE_IS_NOT_FOUND })
+    }
 
     newTree.camera = camera._id
     await newTree.save();

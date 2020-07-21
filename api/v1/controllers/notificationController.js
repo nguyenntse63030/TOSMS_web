@@ -61,7 +61,17 @@ async function getListNotification(req) {
   }
   let start = parseInt(query.start);
   let length = parseInt(query.length);
-
+  if (query.find) {
+    let findObj = query.find
+    let trees
+    if (findObj.district && findObj.ward) {
+      trees = await Tree.find({ district: query.find.district, ward: query.find.ward }, { _id: 1 })
+    } else if (findObj.district) {
+      trees = await Tree.find({ district: query.find.district }, { _id: 1 })
+    }
+    queryOpt.tree = {$in: trees}
+  }
+  // queryOpt = Object.assign({}, queryOpt, query.find);
   let notifications = await Notification.find(queryOpt)
     .skip(start)
     .limit(length)
