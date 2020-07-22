@@ -11,16 +11,22 @@ async function createTreeDetectLocation(data) {
 
 async function getAll() {
     let result = await TreeDetectLocation.find()
-    return responseStatus.Code200({treeDetectLocatin: result})
+    return responseStatus.Code200({ treeDetectLocatin: result })
 }
 
 async function getByCameraID(cameraID) {
-    let result = await TreeDetectLocation.find({camera: cameraID})
-    return responseStatus.Code200({treeDetectLocation: result})
+    let result = await TreeDetectLocation.find({ camera: cameraID })
+    return responseStatus.Code200({ treeDetectLocation: result })
+}
+
+async function resetByCameraID(cameraID) {
+    await TreeDetectLocation.remove({ camera: cameraID })
+    return responseStatus.Code200({ message: 'RESET SUCCESSFULLY' })
 }
 
 module.exports = {
     getAll,
     getByCameraID,
-    createTreeDetectLocation
+    createTreeDetectLocation,
+    resetByCameraID
 }
