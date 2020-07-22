@@ -7,3 +7,6 @@ body {
   justify-content: center;
 }
 
+.pointer{
+  cursor: pointer !important;
+}

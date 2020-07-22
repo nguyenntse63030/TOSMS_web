@@ -128,7 +128,7 @@ async function getNotification(req, id) {
   if (req.user.role === constant.userRoles.WORKER) {
     queryOpt = { _id: id, worker: req.user.id };
   }
-  let notification = await Notification.findOne(queryOpt).populate("worker");
+  let notification = await Notification.findOne(queryOpt).populate("worker").populate('tree', 'code treeType');
   if (!notification) {
     throw responseStatus.Code400({
       errorMessage: responseStatus.NOTIFICATION_IS_NOT_FOUND,

@@ -55,4 +55,12 @@ app.controller('detailController', ['$scope', 'apiService', function ($scope, ap
             showNotification(error.data.errorMessage, "danger");
         });
       }
+
+      $scope.linkToTree = () => {
+          window.location.href = '/tree/' + $scope.notification.tree._id
+      }
+
+      $scope.linkToWorker = () => {
+          window.location.href = '/user/' + $scope.notification.worker._id
+      }
 }])

@@ -65,7 +65,7 @@
                     </a>
                 </div>
             </div>
-            <br />  
+            <br />
             <div class="col-md-5 mx-md-auto card card-profile">
                 <div class="noti-card">
                     <a ng-href="/tree/{{notification.tree}}">
@@ -85,6 +85,20 @@
             <div class="card-body">
                 <form>
                     <div class="row">
+                        <div class="col-md-6 pointer" ng-click="linkToTree()">
+                            <div class="form-group">
+                                <label class="bmd-label-floating" style=" color: black; font-weight: bold;">Mã
+                                    Cây</label>
+                                <input type="text" class="form-control pointer" value="{{notification.tree.code}}" disabled>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="bmd-label-floating" style=" color: black; font-weight: bold;">Loại
+                                    cây</label>
+                                <input type="text" class="form-control" value="{{notification.tree.treeType}}" disabled>
+                            </div>
+                        </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="bmd-label-floating" style=" color: black; font-weight: bold;">Ngày cập
@@ -107,10 +121,11 @@
                                 <input type="text" class="form-control" value="{{notification.status}}" disabled>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6 pointer" ng-show="notification.worker" ng-click="linkToWorker()">
                             <div class="form-group" style="margin-top: -9px;">
                                 <label class="bmd-label-floating">Công Nhân</label><br />
-                                <a href="/employee/{{notification.worker._id}}">{{notification.worker.name}}</a>
+                                <input type="text" class="form-control pointer" value="{{notification.worker.name}}" disabled>
+                                <!-- <a href="/employee/{{notification.worker._id}}">{{notification.worker.name}}</a> -->
                             </div>
                         </div>
                     </div>
@@ -123,7 +138,9 @@
                             </div>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary pull-right d-none" ng-class="{'d-block': notification.status === 'Đang Xử Lý'}"data-toggle="modal" data-target="#confirm-success" ng-click="">Hoàn Thành</button>
+                    <button type="submit" class="btn btn-primary pull-right d-none"
+                        ng-class="{'d-block': notification.status === 'Đang Xử Lý'}" data-toggle="modal"
+                        data-target="#confirm-success" ng-click="">Hoàn Thành</button>
                     <div class="clearfix"></div>
                 </form>
             </div>
@@ -177,9 +194,11 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <h4 class="text-center my-5">Ấn <b><i>Xác Nhận</i></b> Nếu Bạn Muốn Thông Báo Công Việc Đã Hoàn Thành.</h4>
+                    <h4 class="text-center my-5">Ấn <b><i>Xác Nhận</i></b> Nếu Bạn Muốn Thông Báo Công Việc Đã Hoàn
+                        Thành.</h4>
                     <button type="button" class="btn btn-danger float-left" data-dismiss="modal">Đóng</button>
-                    <button type="button" class="btn btn-primary float-right" ng-click="setNotiStatusSuccess()">Xác Nhận</button>
+                    <button type="button" class="btn btn-primary float-right" ng-click="setNotiStatusSuccess()">Xác
+                        Nhận</button>
                 </div>
             </div>
         </div>
