@@ -91,10 +91,10 @@ async function processDataFromPython(data, files) {
     }
     data.result = data.result.split("'").join('"');
     data.result = JSON.parse(data.result)
-    if (common.isEmptyObject(data.result)) {
-        // throw responseStatus.Code400({ errorMessage: responseStatus.DATA_IS_NOT_FOUND })
-        return responseStatus.Code200({ message: responseStatus.PROCESS_DATA_FROM_PYTHON_SUCCESSFULLY })
-    }
+    // if (common.isEmptyObject(data.result)) {
+    //     // throw responseStatus.Code400({ errorMessage: responseStatus.DATA_IS_NOT_FOUND })
+    //     return responseStatus.Code200({ message: responseStatus.PROCESS_DATA_FROM_PYTHON_SUCCESSFULLY })
+    // }
     let fileURLs = await processImage(files)
     data = Object.assign({}, data, fileURLs);
     let result = await processData(data)
