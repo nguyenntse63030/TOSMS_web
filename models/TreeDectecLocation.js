@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 const constants = require('../configs/constant');
 
 var TreeDetectLocationSchema = new mongoose.Schema({
+    object: {
+        type: String,
+        default: ''
+    },
     camera: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Camera'

@@ -3,12 +3,18 @@ module.exports = {
     BROKEN_BRANCH: "broken_branch",
     INCLINED_TREE: "inclined_tree",
     ELECTRIC_WIRE: "electric_wire",
+    KITE: "kite",
+    SYRINGE: "syringe",
+    TREE_BODY: "tree_body",
   },
 
   treeProblemDisplay: {
     BROKEN_BRANCH: "Cây bị gãy cành",
     INCLINED_TREE: "Cây bị nghiêng",
-    ELECTRIC_WIRE: "Cây bị vướng dây điện",
+    ELECTRIC_WIRE: "Cây có vật lạ",
+    KITE: "Cây có vật lạ",
+    SYRINGE: "Cây có vật lạ",
+    CANT_DETECT: 'Camera hoặc cây có vấn đề',
     NO_PROBLEM: "Cây bình thường",
   },
   

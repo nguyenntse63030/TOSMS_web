@@ -69,7 +69,7 @@ async function getListNotification(req) {
     } else if (findObj.district) {
       trees = await Tree.find({ district: query.find.district }, { _id: 1 })
     }
-    queryOpt.tree = {$in: trees}
+    queryOpt.tree = { $in: trees }
   }
   // queryOpt = Object.assign({}, queryOpt, query.find);
   let notifications = await Notification.find(queryOpt)
