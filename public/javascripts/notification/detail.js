@@ -39,28 +39,28 @@ app.controller('detailController', ['$scope', 'apiService', function ($scope, ap
         })
     }
 
-    
+
     $scope.setNotiStatusSuccess = () => {
         apiService.setNotiStatusSuccess($scope.notificationId).then((res) => {
-          if (res.data.errorMessage) {
-              console.log(res)
-            showNotification(res.data.errorMessage, "danger");
-          } else {
-            $scope.notification = res.data.notification
-            $('#confirm-success').modal('hide')
-            showNotification(res.data.message, "success");
-          }
+            if (res.data.errorMessage) {
+                console.log(res)
+                showNotification(res.data.errorMessage, "danger");
+            } else {
+                $scope.notification = res.data.notification
+                $('#confirm-success').modal('hide')
+                showNotification(res.data.message, "success");
+            }
         })
-        .catch((error) => {
-            showNotification(error.data.errorMessage, "danger");
-        });
-      }
+            .catch((error) => {
+                showNotification(error.data.errorMessage, "danger");
+            });
+    }
 
-      $scope.linkToTree = () => {
-          window.location.href = '/tree/' + $scope.notification.tree._id
-      }
+    $scope.linkToTree = () => {
+        window.open('/tree/' + $scope.notification.tree._id, '_blank')
+    }
 
-      $scope.linkToWorker = () => {
-          window.location.href = '/user/' + $scope.notification.worker._id
-      }
+    $scope.linkToWorker = () => {
+        window.open('/employee/' + $scope.notification.worker._id, '_blank')
+    }
 }])

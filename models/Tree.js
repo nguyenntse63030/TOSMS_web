@@ -80,4 +80,8 @@ var TreeSchema = new mongoose.Schema({
     },
 });
 
+TreeSchema.pre('save', function () {
+    this.modifiedTime = Date.now()
+})
+
 mongoose.model('Tree', TreeSchema);

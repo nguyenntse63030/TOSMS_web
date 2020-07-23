@@ -48,6 +48,7 @@
 
     .modal-body .active {
         background-color: #49acd9;
+        color: white;
     }
 
     .worker-records {
@@ -80,7 +81,7 @@
             <div class="card-header card-header-primary d-flex justify-content-between">
                 <h4 class="card-title"><%= title %></h4>
                 <button class="btn btn-primary btn-choose-worker d-none" ng-class="{'d-block': user.role !== 'worker'}"
-                    ng-click="showModal()">Chọn Người Thi Công</button>
+                    ng-click="showModal()" ng-show="notification.status !== 'Đã Xử Lý'">Chọn Người Thi Công</button>
             </div>
             <div class="card-body">
                 <form>
@@ -89,7 +90,8 @@
                             <div class="form-group">
                                 <label class="bmd-label-floating" style=" color: black; font-weight: bold;">Mã
                                     Cây</label>
-                                <input type="text" class="form-control pointer" value="{{notification.tree.code}}" disabled>
+                                <input type="text" class="form-control pointer" value="{{notification.tree.code}}"
+                                    disabled>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -122,10 +124,10 @@
                             </div>
                         </div>
                         <div class="col-md-6 pointer" ng-show="notification.worker" ng-click="linkToWorker()">
-                            <div class="form-group" style="margin-top: -9px;">
-                                <label class="bmd-label-floating">Công Nhân</label><br />
-                                <input type="text" class="form-control pointer" value="{{notification.worker.name}}" disabled>
-                                <!-- <a href="/employee/{{notification.worker._id}}">{{notification.worker.name}}</a> -->
+                            <div class="form-group">
+                                <label class="bmd-label-floating" style=" color: black; font-weight: bold;">Công Nhân</label>
+                                <input type="text" class="form-control pointer" value="{{notification.worker.name}}"
+                                    disabled>
                             </div>
                         </div>
                     </div>
@@ -168,7 +170,7 @@
                         </thead>
                         <tbody>
                             <tr ng-repeat="worker in workers" ng-click="active($event, worker)" class="worker-records">
-                                <th scope="row">{{$index + 1}}</th>
+                                <td scope="row">{{$index + 1}}</th>
                                 <td>
                                     <img src="{{worker.avatar}}" style="object-fit: scale-down;" width="50px"
                                         height="50px" />

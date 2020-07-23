@@ -1,4 +1,5 @@
 <% layout('../layouts/layout.ejs') -%>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" rel="stylesheet" />
 <style>
     .table-row-link {
         color: #000000;
@@ -138,7 +139,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="bmd-label-floating">Giới Tính</label>
-                                        <select style="width: 100%;" id="gender" class="form-control select2-single"
+                                        <select style="width: 100%;" id="gender" class="form-control"
                                             ng-model="employee.gender">
                                             <option value="Nam">Nam</option>
                                             <option value="Nữ">Nữ</option>
@@ -154,7 +155,7 @@
                                     </div>
                                     <div class="form-group" ng-if="user.role === 'admin'">
                                         <label class="bmd-label-floating">Chức Vụ</label>
-                                        <select style="width: 100%;" class="form-control select2-single"
+                                        <select style="width: 100%;" class="form-control"
                                             ng-model="employee.role" id="role">
                                             <option value="{{role.MANAGER}}">Giám Sát</option>
                                             <option value="{{role.WORKER}}">Công Nhân</option>
@@ -224,26 +225,19 @@
     clickSideBar('employee-page')
 
     $(document).ready(function () {
-        // $('#birthdate').datepicker({
-        //     dateFormat: 'dd/mm/yy',
-        //     autoclose: true,
-        //     changeMonth: true,
-        //     changeYear: true,
-        //     yearRange: '-100:' + new Date().getFullYear()
-        // })
-        // setTimeout(() => {
-        //     numberFormat()
-        // }, 200);
+        let defaultDate = new Date('1-1-' + (new Date().getFullYear() - 60))
         $('#birthdate').datepicker({
             dateFormat: 'dd/mm/yy',
             autoclose: true,
             changeMonth: true,
             changeYear: true,
-            yearRange: '-100:' + new Date().getFullYear()
-        }).datepicker('setDate', 'today')
+            yearRange: '-60:-18'
+        }).datepicker('setDate', defaultDate)
         setTimeout(() => {
             numberFormat()
             $('#fullname').focus()
+            $('#gender').select2().select2('val', $('#gender option:eq(1)').val());
+            $('#role').select2().select2('val', $('#role option:eq(1)').val());
         }, 200);
     });
     function chooseFile() {
