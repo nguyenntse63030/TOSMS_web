@@ -33,6 +33,9 @@ async function getListUser(req, query) {
     };
     queryTotal = { role: { $nin: ["admin", "manager"] }, isActive: true };
   }
+  if (query.find) {
+    queryOpt = Object.assign({}, queryOpt, query.find);
+  }
   let users = await User.find(queryOpt).skip(start).limit(length).sort(sort);
   let recordsTotal = await User.countDocuments(queryTotal);
   let recordsFiltered = await User.countDocuments(queryOpt);
@@ -77,12 +80,12 @@ let createUser = async (req, data, file) => {
   }
   data.birthday = parseInt(data.birthday);
   let user = data;
-  // let district = await District.findById({ _id: data.district });
-  // if (!district) {
-  //   throw responseStatus.Code400({
-  //     errorMessage: responseStatus.LOCATION_WRONG,
-  //   });
-  // }
+  let district = await District.findById({ _id: data.district });
+  if (!district) {
+    throw responseStatus.Code400({
+      errorMessage: responseStatus.LOCATION_WRONG,
+    });
+  }
   // await validateDataUser(user, file);
   let regex = new RegExp(user.username, "i");
   let checkExist = await User.findOne({ username: regex });
