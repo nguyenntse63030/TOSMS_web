@@ -146,7 +146,7 @@ function initNotificationDatatable() {
             image: generateATag(notification, "image"),
             name: generateATag(notification, "name"),
             status: generateATag(notification, "status"),
-            createdTime: generateATag(notification, "createdTime"),
+            modifiedTime: generateATag(notification, "modifiedTime"),
           };
         });
       },
@@ -156,7 +156,7 @@ function initNotificationDatatable() {
       { data: "image" },
       { data: "name" },
       { data: "status" },
-      { data: "createdTime" },
+      { data: "modifiedTime" },
     ],
   };
   $("#notification-table").DataTable(options);
@@ -164,7 +164,7 @@ function initNotificationDatatable() {
 
 function generateATag(notification, property) {
   let data = notification[property];
-  if (property === "createdTime") {
+  if (property === "modifiedTime") {
     data = parseInt(data);
     data = formatDate(data);
   } else if (property === "image") {

@@ -69,7 +69,17 @@ async function getListNotification(req) {
   }
   let start = parseInt(query.start);
   let length = parseInt(query.length);
-
+  if (query.find) {
+    let findObj = query.find
+    let trees
+    if (findObj.district && findObj.ward) {
+      trees = await Tree.find({ district: query.find.district, ward: query.find.ward }, { _id: 1 })
+    } else if (findObj.district) {
+      trees = await Tree.find({ district: query.find.district }, { _id: 1 })
+    }
+    queryOpt.tree = { $in: trees }
+  }
+  // queryOpt = Object.assign({}, queryOpt, query.find);
   let notifications = await Notification.find(queryOpt)
     .skip(start)
     .limit(length)
@@ -126,7 +136,7 @@ async function getNotification(req, id) {
   if (req.user.role === constant.userRoles.WORKER) {
     queryOpt = { _id: id, worker: req.user.id };
   }
-  let notification = await Notification.findOne(queryOpt).populate("worker");
+  let notification = await Notification.findOne(queryOpt).populate("worker").populate('tree', 'code treeType');
   if (!notification) {
     throw responseStatus.Code400({
       errorMessage: responseStatus.NOTIFICATION_IS_NOT_FOUND,
@@ -196,22 +206,34 @@ let setStatusNotiSuccess = async (req) => {
     });
   }
 
-  // noti chưa xử lý của cây
-  let noti = await Notification.findOne({
+  notification.status = constant.priorityStatus.DA_XU_LY;
+  let _notification = await notification.save();
+
+  // noti đang xử lý của cây
+  let notiProcessing = await Notification.findOne({
     tree: notification.tree,
-    status: constant.priorityStatus.CHUA_XU_LY,
+    status: constant.priorityStatus.DANG_XU_LY,
   }).sort({ createdTime: 1 });
-  if (!noti) {
-    notification.tree.note = constant.treeProblemDisplay.NO_PROBLEM;
-    notification.tree.description = constant.TREE_NOT_DESCRIPTION;
+  if (notiProcessing) {
+    notification.tree.note = notiProcessing.status;
+    notification.tree.description = notiProcessing.name;
   } else {
-    notification.tree.note = noti.status;
-    notification.tree.description = noti.name;
+    // noti chưa xử lý của cây
+    let notiUnprocess = await Notification.findOne({
+      tree: notification.tree,
+      status: constant.priorityStatus.CHUA_XU_LY,
+    }).sort({ createdTime: 1 });
+    if (notiUnprocess) {
+      notification.tree.note = notiUnprocess.status;
+      notification.tree.description = notiUnprocess.name;
+    } else {
+      notification.tree.note = constant.treeProblemDisplay.NO_PROBLEM;
+      notification.tree.description = constant.TREE_NOT_DESCRIPTION;
+    }
   }
   await notification.tree.save();
 
-  notification.status = constant.priorityStatus.DA_XU_LY;
-  let _notification = await notification.save();
+
   return responseStatus.Code200({
     notification: _notification,
     message: responseStatus.SET_NOTI_STATUS_SUCCESS,

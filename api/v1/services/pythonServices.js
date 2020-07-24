@@ -3,6 +3,8 @@ const responseStatus = require('../../../configs/responseStatus');
 const awsServices = require('../services/awsServices')
 const constant = require('../../../configs/constant')
 const notificationController = require('../controllers/notificationController')
+const treeDetectLocationServices = require('./treeDetectLocationServices');
+const { NotExtended } = require('http-errors');
 
 async function processImage(files) {
     if (!files) {
@@ -19,7 +21,6 @@ async function processImage(files) {
 
 async function processData(data) {
     let notificationData = {
-        name: checkResult(data.result),
         description: '',
         image: data.image,
         cameraId: data.camera_id,
@@ -27,25 +28,54 @@ async function processData(data) {
         // createdTime: new Date(data.timestamp).getTime() || Date.now()
         createdTime: Date.now()
     }
+    if (data.result.length > 0) {
+        notificationData.name = await checkResult(data.result, data.camera_id)
+    } else {
+        notificationData.name = constant.treeProblemDisplay.CANT_DETECT
+        let treeDetectLocationData = {
+            object: '',
+            camera: data.camera_id,
+            xmin: 0,
+            ymin: 0,
+            xmax: 0,
+            ymax: 0
+        }
+        await treeDetectLocationServices.createTreeDetectLocation(treeDetectLocationData)
+    }
 
     let notification = await notificationController.createNotification(notificationData)
     return notification
 }
 
-function checkResult(result) {
+async function checkResult(result, cameraID) {
     let name = ''
-    for (let key in result) {
-        switch (key) {
-            case constant.treeProblem.BROKEN_BRANCH:
-                name += constant.treeProblemDisplay.BROKEN_BRANCH + ' - '
-                break;
+    for (let problem of result) {
+        if (problem.object !== constant.treeProblem.TREE_BODY) {
+            let treeDetectLocationData = {
+                object: problem.object,
+                camera: cameraID,
+                xmin: problem.xmin,
+                ymin: problem.ymin,
+                xmax: problem.xmax,
+                ymax: problem.ymax
+            }
+            await treeDetectLocationServices.createTreeDetectLocation(treeDetectLocationData)
+            switch (problem.object) {
+                case constant.treeProblem.BROKEN_BRANCH:
+                    name += constant.treeProblemDisplay.BROKEN_BRANCH + ' - '
+                    break;
 
-            case constant.treeProblem.INCLINED_TREE:
-                name += constant.treeProblemDisplay.INCLINED_TREE + ' - '
-                break;
-                
-            case constant.treeProblem.ELECTRIC_WIRE:
-                name += constant.treeProblemDisplay.ELECTRIC_WIRE + ' - '
+                case constant.treeProblem.INCLINED_TREE:
+                    if (problem.degrees) {
+                        let degrees = Math.round(problem.degrees)
+                        name += constant.treeProblemDisplay.INCLINED_TREE + ' ' + degrees + ' độ - '
+                    }
+                    break;
+
+                default:
+                    name += constant.treeProblemDisplay.ELECTRIC_WIRE + ' - '
+                    break;
+            }
         }
     }
     if (name) {
@@ -59,11 +89,12 @@ async function processDataFromPython(data, files) {
     if (common.isEmptyObject(data)) {
         throw responseStatus.Code400({ errorMessage: responseStatus.DATA_IS_NOT_FOUND })
     }
+    data.result = data.result.split("'").join('"');
     data.result = JSON.parse(data.result)
-    if (common.isEmptyObject(data.result)) {
-        // throw responseStatus.Code400({ errorMessage: responseStatus.DATA_IS_NOT_FOUND })
-        return responseStatus.Code200({ message: responseStatus.PROCESS_DATA_FROM_PYTHON_SUCCESSFULLY })
-    }
+    // if (common.isEmptyObject(data.result)) {
+    //     // throw responseStatus.Code400({ errorMessage: responseStatus.DATA_IS_NOT_FOUND })
+    //     return responseStatus.Code200({ message: responseStatus.PROCESS_DATA_FROM_PYTHON_SUCCESSFULLY })
+    // }
     let fileURLs = await processImage(files)
     data = Object.assign({}, data, fileURLs);
     let result = await processData(data)

@@ -25,7 +25,7 @@ var UserSchema = new mongoose.Schema({
   },
   birthday: {
     type: Number,
-    default: 0,
+    default: Date.now,
   },
   address: {
     type: String,
@@ -72,10 +72,10 @@ UserSchema.methods.hashPassword = function (password) {
   return crypto.AES.encrypt(password, this.username).toString();
 };
 
-UserSchema.pre('save', async function () {
+UserSchema.pre("save", async function () {
   if (this.password) {
     let password = await this.hashPassword(this.password);
-    this.password = password
+    this.password = password;
   }
-})
+});
 mongoose.model("User", UserSchema);

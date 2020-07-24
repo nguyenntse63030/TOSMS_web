@@ -119,34 +119,75 @@ let deleteCamera = async (id) => {
   });
 };
 
-let updateCamera = async (id, data) => {
-  let camera = await Camera.findOne({ _id: id, isActive: true });
-
+async function updateCamera(id, data) {
+  let camera = await Camera.findOne({ _id: id, isActive: true })
   if (!camera) {
     throw responseStatus.Code400({
       errorMessage: responseStatus.CAMERA_IS_NOT_FOUND,
     });
   }
-  let tree = await Tree.findOne({ _id: camera.tree });
-  // let tree = await Tree.findById({ _id: camera.tree });
+  // let tree = await Tree.findOne({ _id: camera.tree });
   // let tree = await Tree.findOne({ _id: camera.tree }).populate("camera");
   camera.cameraType = data.cameraType || camera.cameraType;
   camera.status = data.status || camera.status;
   camera.ipAddress = data.ipAddress || camera.ipAddress;
-  camera.tree = data.tree || camera.tree;
-  camera.code = tree.code;
   camera.modifiedTime = Date.now();
-  let _camera = await camera.save();
-  if (tree) {
-    tree.camera = _camera._id;
-    tree.save();
+
+  if (camera.tree) { // Nếu camera đã có cây thì phải bỏ cây đó ra khỏi camera
+    let oldTree = await Tree.findById(camera.tree)
+    if (!oldTree) {
+      throw responseStatus.Code400({ errorMessage: responseStatus.TREE_IS_NOT_FOUND })
+    }
+    oldTree.camera = undefined;
+    await oldTree.save()
   }
+
+  if (data.tree) { // Thêm cây mới vào camera
+    let newTree = await Tree.findById(data.tree)
+    if (!newTree) {
+      throw responseStatus.Code400({ errorMessage: responseStatus.TREE_IS_NOT_FOUND })
+    }
+
+    newTree.camera = camera._id
+    await newTree.save();
+    camera.tree = newTree._id
+  }
+  let _camera = await camera.save();
 
   return responseStatus.Code200({
     message: responseStatus.UPDATE_CAMERA_SUCCESS,
     camera: _camera,
   });
 };
+
+// let updateCamera = async (id, data) => {
+//   let camera = await Camera.findOne({ _id: id, isActive: true });
+
+//   if (!camera) {
+//     throw responseStatus.Code400({
+//       errorMessage: responseStatus.CAMERA_IS_NOT_FOUND,
+//     });
+//   }
+//   let tree = await Tree.findOne({ _id: camera.tree });
+//   // let tree = await Tree.findById({ _id: camera.tree });
+//   // let tree = await Tree.findOne({ _id: camera.tree }).populate("camera");
+//   camera.cameraType = data.cameraType || camera.cameraType;
+//   camera.status = data.status || camera.status;
+//   camera.ipAddress = data.ipAddress || camera.ipAddress;
+//   camera.tree = data.tree || camera.tree;
+//   camera.code = data.code;
+//   camera.modifiedTime = Date.now();
+//   let _camera = await camera.save();
+//   if (tree) {
+//     tree.camera = _camera._id;
+//     tree.save();
+//   }
+
+//   return responseStatus.Code200({
+//     message: responseStatus.UPDATE_CAMERA_SUCCESS,
+//     camera: _camera,
+//   });
+// };
 
 let validateDataCamera = (camera, tree, file) => {
   if (!camera.code) {

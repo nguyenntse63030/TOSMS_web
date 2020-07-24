@@ -1,4 +1,5 @@
 <% layout('../layouts/layout.ejs') -%>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" rel="stylesheet" />
 <style>
     .table-row-link {
         color: #000000;
@@ -19,6 +20,9 @@
         object-fit: scale-down;
         margin-bottom: 10px;
     }
+    .select2-container{
+        top: 12px;
+    }
 </style>
 <div class="container-fluid" ng-controller="listController">
     <div class="row">
@@ -30,8 +34,17 @@
             <div class="card">
                 <div class="card-header card-header-primary" style="z-index: 1 !important">
                     <div class="row">
-                        <div class="col-md-8">
+                        <div class="col-md-2" style="width: max-content;">
                             <h4 class="card-title" style="line-height: 50px">Nhân Viên</h4>
+                        </div>
+                        <div class="col-md-10">
+                            <select style="width: 15%;" class="selected" id="selectedDistrict"
+                                ng-model="selectedDistrict" ng-change="generateFindObj()">
+                                <option value="">Tất cả</option>
+                                <option ng-repeat="district in districts" value="{{district._id}}">
+                                    {{district.name}}
+                                </option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -40,49 +53,13 @@
                         <table class="table" id="employees-table" style="width: 100% !important">
                             <thead class="text-primary">
                                 <tr>
-                                    <!-- <th style="width: 5%;">Ảnh</th> -->
                                     <th style="width: 5%">Id</th>
                                     <th style="width: 15%">Tên Nhân Viên</th>
                                     <th style="width: 10%">Chức Vụ</th>
                                     <th style="width: 20%">Địa Chỉ</th>
-                                    <!-- <th style="width: 10%">Trạng Thái</th> -->
                                     <th style="width: 20%">Ngày Tạo</th>
                                 </tr>
                             </thead>
-                            <!-- <tbody> -->
-                            <!-- <tr ng-repeat="employee in listEmployees">
-                                        <td data-order="{{employee.createdTime}}">
-                                            <a href="/bill/{{employee.id}}">
-                                                {{employee.createdTime | date:'dd/MM/yyyy HH:mm:ss'}}
-                                            </a>
-                                        </td>
-                                        <td>
-                                            <a href="/bill/{{employee.id}}">
-                                                {{employee.id}}
-                                            </a>
-                                        </td>
-                                        <td>
-                                            <a href="/bill/{{employee.id}}">
-                                                {{employee.fullname}}
-                                            </a>
-                                        </td>
-                                        <td>
-                                            <a href="/bill/{{employee.id}}">
-                                                {{employee.role}}
-                                            </a>
-                                        </td>
-                                        <td>
-                                            <a href="/bill/{{employee.id}}">
-                                                {{employee.address}}
-                                            </a>
-                                        </td>
-                                        <td>
-                                            <a href="/bill/{{employee.id}}">
-                                                active
-                                            </a>
-                                        </td>
-                                    </tr> -->
-                            <!-- </tbody> -->
                         </table>
                     </div>
                 </div>
@@ -103,8 +80,8 @@
                 <div class="modal-body">
                     <div class="form-container">
                         <form id="create-employee">
-                            <div>
-                                <img id="image-to-change" src="/images/logo/user1.png" onclick="chooseFile()" />
+                            <div class="pointer">
+                                <img id="image-to-change" src="/images/logo/user-avatar.jpg" onclick="chooseFile()" />
                                 <input id="file" type="file" accept="avatar/*" style="display:none"
                                     onchange="onChangeImage(event)" />
                             </div>
@@ -138,11 +115,10 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="bmd-label-floating">Giới Tính</label>
-                                        <select style="width: 100%;" id="gender" class="form-control select2-single"
+                                        <select style="width: 100%;" id="gender" class="form-control"
                                             ng-model="employee.gender">
                                             <option value="Nam">Nam</option>
                                             <option value="Nữ">Nữ</option>
-                                            <option value="Other">Other</option>
                                         </select>
                                     </div>
                                 </div>
@@ -155,32 +131,23 @@
                                     </div>
                                     <div class="form-group" ng-if="user.role === 'admin'">
                                         <label class="bmd-label-floating">Chức Vụ</label>
-                                        <select style="width: 100%;" class="form-control select2-single"
-                                            ng-model="employee.role" id="role">
-                                            <option value="{{role.MANAGER}}">Giám Sát</option>
-                                            <option value="{{role.WORKER}}">Công Nhân</option>
+                                        <select style="width: 100%;" class="form-control" ng-model="employee.role"
+                                            id="role">
+                                            <option value="{{role.MANAGER}}">Quản Lý</option>
+                                            <option value="{{role.WORKER}}">Nhân Viên</option>
                                         </select>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <!-- <div class="form-group col-md-4">
-                                    <label for="city">Thành Phố</label>
-                                    <select class="form-control" ng-change="getListDistrict()" ng-model="city"
-                                        id="city">
-                                        <option ng-repeat="city in cities" value="{{city._id}}">
-                                            {{city.name}}</option>
-                                    </select>
-                                </div>
                                 <div class="col-md-6">
                                     <label for="district">Quận</label>
-                                    <select class="form-control" ng-change="getListWard()" ng-model="district"
-                                        id="district">
+                                    <select style="width: 100%" class="form-control" ng-model="district" id="district">
                                         <option ng-repeat="district in districts" value="{{district._id}}">
                                             {{district.name}}</option>
                                     </select>
-                                </div> -->
-                                <div class="col-md-12">
+                                </div>
+                                <div class="col-md-6" style="top: 10px;">
                                     <div class="form-group">
                                         <label class="bmd-label-floating">Địa Chỉ</label>
                                         <input type="text" class="form-control" id="address"
@@ -188,12 +155,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="ip">IP Camera</label>
-                                        <input type="text" class="form-control" id="ip" placeholder="Nhập địa chỉ IP">
-                                    </div>
-                                </div> -->
                     </div>
                     <div class="row">
                         <div class="col-md-6">
@@ -225,20 +186,21 @@
     clickSideBar('employee-page')
 
     $(document).ready(function () {
-        // $(".select2-single").select2().val("Nam").trigger("change");
-
-        $("#birthdate")
-            .datepicker({
-                dateFormat: "dd/mm/yy",
-                autoclose: true,
-                changeMonth: true,
-                changeYear: true,
-                yearRange: "-100:" + new Date().getFullYear(),
-            })
-            .datepicker("setDate", "today");
+        let defaultDate = new Date('1-1-' + (new Date().getFullYear() - 60))
+        $('#birthdate').datepicker({
+            dateFormat: 'dd/mm/yy',
+            autoclose: true,
+            changeMonth: true,
+            changeYear: true,
+            yearRange: '-60:-18'
+        }).datepicker('setDate', defaultDate)
         setTimeout(() => {
-            numberFormat();
-            $("#fullname").focus();
+            numberFormat()
+            $('#fullname').focus()
+            $('#gender').select2().select2('val', $('#gender option:eq(1)').val());
+            $('#role').select2().select2('val', $('#role option:eq(1)').val());
+            $('#district').select2().select2('val', $('#district option:eq(1)').val());
+            $('.selected').select2()
         }, 200);
     });
     function chooseFile() {

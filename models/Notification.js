@@ -46,4 +46,8 @@ NotificationSchema.post('save', async function (notification) {
     notification = await notification.populate('worker').execPopulate();
     return notification;
 })
+
+NotificationSchema.pre('save', function () {
+    this.modifiedTime = Date.now()
+})
 mongoose.model('Notification', NotificationSchema);

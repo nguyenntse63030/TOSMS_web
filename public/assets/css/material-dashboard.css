@@ -8856,24 +8856,24 @@ a.text-dark:focus {
 
 .btn.btn-primary {
   color: #fff;
-  background-color: #88c6c3;
-  border-color: #80b6eb;
+  background-color: #b912d6;
+  border-color: #b912d6;
   box-shadow: 0 2px 2px 0 rgba(17, 17, 17, 0.14),
     0 3px 1px -2px rgba(156, 39, 176, 0.2), 0 1px 5px 0 rgba(156, 39, 176, 0.12);
 }
 
 .btn.btn-primary:hover {
   color: #fff;
-  background-color: #9124a3;
-  border-color: #701c7e;
+  background-color: #a30fbd;
+  border-color: #a30fbd;
 }
 
 .btn.btn-primary:focus,
 .btn.btn-primary.focus,
 .btn.btn-primary:hover {
   color: #fff;
-  background-color: #4bec50;
-  border-color: #701c7e;
+  background-color: #a30fbd;
+  border-color: #a30fbd;
 }
 
 .btn.btn-primary:active,
@@ -8948,8 +8948,8 @@ a.text-dark:focus {
 }
 
 .btn.btn-secondary {
-  color: #333333;
-  background-color: #fafafa;
+  color: white;
+  background-color: #f44336;
   border-color: #ccc;
   box-shadow: 0 2px 2px 0 rgba(250, 250, 250, 0.14),
     0 3px 1px -2px rgba(250, 250, 250, 0.2),
@@ -8957,16 +8957,16 @@ a.text-dark:focus {
 }
 
 .btn.btn-secondary:hover {
-  color: #333333;
-  background-color: #f2f2f2;
+  color: white;
+  background-color: #ee1505;
   border-color: #adadad;
 }
 
 .btn.btn-secondary:focus,
 .btn.btn-secondary.focus,
 .btn.btn-secondary:hover {
-  color: #333333;
-  background-color: #f2f2f2;
+  color: white;
+  background-color: #ee1505;
   border-color: #adadad;
 }
 
@@ -19934,6 +19934,7 @@ Copyright (c) 2015 Daniel Eden
 
 .card .table tr:hover td {
   background-color: #d10ef3;
+  color: white;
 }
 
 .card .table tr td a {
