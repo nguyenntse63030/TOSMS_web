@@ -1,15 +1,15 @@
 
 const firebaseConfig = {
-  apiKey: "AIzaSyB7EPFR3o1xXSyye7neNRao6j68dVeVpbY",
-  authDomain: "tosms-web.firebaseapp.com",
-  databaseURL: "https://tosms-web.firebaseio.com",
-  projectId: "tosms-web",
-  storageBucket: "tosms-web.appspot.com",
-  messagingSenderId: "215697346340",
-  appId: "1:215697346340:web:3fd5c13f24fb2475ec2db1"
+  apiKey: "AIzaSyAop2fWhqm-6j_FUh4B5-gdXyLYFBpkg60",
+  authDomain: "tosms-web-b75d4.firebaseapp.com",
+  databaseURL: "https://tosms-web-b75d4.firebaseio.com",
+  projectId: "tosms-web-b75d4",
+  storageBucket: "tosms-web-b75d4.appspot.com",
+  messagingSenderId: "564659263879",
+  appId: "1:564659263879:web:8fb8b790b9fbdbc3ce9b22"  
 };
 
-// Initialize Firebase
+// Initialize Firebase  
 firebase.initializeApp(firebaseConfig);
 
 // khởi tạo hằng số
@@ -115,7 +115,7 @@ let createNotiElement = (notification, appendBefore) => {
   } else {
     $(notiElement).prependTo(LIST_NOTIES);
   }
-}
+} 
 
 $('.container-noti').click(() => {
   if (check > 0) {

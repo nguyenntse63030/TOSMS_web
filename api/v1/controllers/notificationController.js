@@ -1,14 +1,14 @@
-const mongoose = require("mongoose");
-const Notification = mongoose.model("Notification");
-const Camera = mongoose.model("Camera");
-const Tree = mongoose.model("Tree");
-const responseStatus = require("../../../configs/responseStatus");
-const common = require("../../common");
-const jwt = require("jsonwebtoken");
-const config = require("../../../config");
-const constant = require("../../../configs/constant");
-const admin = require("firebase-admin");
-const serviceAccount = require("../../../tosms-web-firebase-adminsdk-d84ef-9e95c65ffb.json");
+const mongoose = require('mongoose')
+const Notification = mongoose.model('Notification')
+const Camera = mongoose.model('Camera')
+const Tree = mongoose.model('Tree')
+const responseStatus = require('../../../configs/responseStatus')
+const common = require('../../common')
+const jwt = require('jsonwebtoken')
+const config = require('../../../config')
+const constant = require('../../../configs/constant')
+const admin = require('firebase-admin');
+const serviceAccount = require('../../../tosms-web-b75d4-firebase-adminsdk-784qt-6769504989.json')
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: config.DATABASE_FIREBASE,
@@ -44,9 +44,17 @@ async function getListNotification(req) {
         constant.priorityStatus.DANG_XU_LY,
         constant.priorityStatus.CHUA_XU_LY,
       ],
-    },
-    $or: [{ name: regex }, { status: regex }],
+    },  
+    $or: [{ name: regex }, { status: regex }],  
   };
+  if (query.queryProblems && !query.queryProblems.includes(constant.ALL)) {
+    let filter = []
+    query.queryProblems.map( (problem) => {
+      filter.push({name: new RegExp(problem, 'i')}) 
+    }) 
+    
+    queryOpt.$or = filter
+  }
   let queryCount = {};
   if (req.user.role === constant.userRoles.WORKER) {
     queryOpt = {
