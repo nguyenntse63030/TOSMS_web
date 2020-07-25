@@ -6,7 +6,11 @@ app.controller('detailController', ['$scope', 'apiService', function ($scope, ap
         $scope.notification = res.data.notification;
     }).catch((err) => {
         console.log(err);
-    });
+        showNotification(err.data.errorMessage || err.statusText, 'danger');
+        setTimeout(function () {
+            location.href = "/notification";
+        }, 1000);
+    }); 
 
     apiService.getListWorker().then(res => {
         $scope.workers = res.data.users
