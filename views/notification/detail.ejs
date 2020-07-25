@@ -6,6 +6,10 @@
         text-align: center;
     }
 
+    .card-title {
+        line-height: 2.7em;
+    }
+
     .card-profile .noti-card {
         margin: -50px auto 0;
         border-radius: 5px;
@@ -41,10 +45,10 @@
         height: 100%;
     }
 
-    .worker-records:hover,
+    /* .worker-records:hover,
     .active {
         background-color: #cbf7dc;
-    }
+    } */
 
     .modal-body .active {
         background-color: #49acd9;
@@ -54,34 +58,49 @@
     .worker-records {
         color: #5d5b5b
     }
+
+    .card-header .btn-change-tab,
+    .card-header .btn-change-tab:hover,
+    .card-header .btn-change-tab:focus,
+    .card-header .btn-change-tab:active:focus {
+        background-color: white;
+        color: #b912d6;
+    }
+
 </style>
-<p id="notificationId" ng-hide="true"><%= notificationId %></p>
+<p id="notificationId" class="d-none"><%= notificationId %></p>
 <div class="container-fluid" ng-controller="detailController">
+
     <div class="row flex">
-        <div class="col-md-12 d-flex justify-content-around">
+        <div class="col-md-12 d-flex justify-content-between tree-image">
             <div class="col-md-5 d-none d-lg-block card card-profile">
                 <div class="noti-card">
-                    <a ng-href="/tree/{{notification.tree}}">
+                    <a ng-href="/tree/{{notification.tree._id}}">
                         <img class="img" src="{{notification.image || '/images/logo/tree-avatar.jpg'}}" />
                     </a>
                 </div>
             </div>
-            <br />
-            <div class="col-md-5 mx-md-auto card card-profile">
+            <div class="col-md-5 mx-sm-auto mx-lg-0 card card-profile">
                 <div class="noti-card">
-                    <a ng-href="/tree/{{notification.tree}}">
+                    <a ng-href="/tree/{{notification.tree._id}}">
                         <img class="img" src="{{notification.imageDetected || '/images/logo/tree-avatar.jpg'}}" />
                     </a>
                 </div>
-            </div>
+            </div>  
         </div>
     </div>
     <div class="col-md-12 mg-0-auto">
+        <a ng-href="/tree/{{notification.tree._id}}" class="btn btn-primary">Xem chi tiêt cây</a>
         <div class="card">
             <div class="card-header card-header-primary d-flex justify-content-between">
                 <h4 class="card-title"><%= title %></h4>
-                <button class="btn btn-primary btn-choose-worker d-none" ng-class="{'d-block': user.role !== 'worker'}"
-                    ng-click="showModal()" ng-show="notification.status !== 'Đã Xử Lý'">Chọn Người Thi Công</button>
+                <div class="d-flex">
+                    <button class="btn btn-primary btn-change-tab d-none" ng-class="{'d-block': user.role !== 'worker'}"
+                        ng-click="showModal()" ng-show="notification.status !== 'Đã Xử Lý'">Chọn Công Nhân</button>
+                    <button class="btn btn-primary btn-change-tab d-none"
+                        ng-class="{'d-block': user.role !== 'worker' && notification.worker._id}"
+                        ng-click="linkToWorker()">Xem Hồ Sơ Công Nhân</button>
+                </div>
             </div>
             <div class="card-body">
                 <form>
@@ -123,11 +142,11 @@
                                 <input type="text" class="form-control" value="{{notification.status}}" disabled>
                             </div>
                         </div>
-                        <div class="col-md-6 pointer" ng-show="notification.worker" ng-click="linkToWorker()">
+                        <div class="col-md-6" ng-show="notification.worker">
                             <div class="form-group">
-                                <label class="bmd-label-floating" style=" color: black; font-weight: bold;">Công Nhân</label>
-                                <input type="text" class="form-control pointer" value="{{notification.worker.name}}"
-                                    disabled>
+                                <label class="bmd-label-floating" style=" color: black; font-weight: bold;">Công
+                                    Nhân</label>
+                                <input type="text" class="form-control" value="{{notification.worker.name}}" disabled>
                             </div>
                         </div>
                     </div>
