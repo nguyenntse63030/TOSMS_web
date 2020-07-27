@@ -16,7 +16,7 @@ let createTree = async (data, file) => {
   let tree = data;
   let ward = await Ward.findById({ _id: data.ward });
   let district = await District.findById({ _id: data.district });
-  let city = await City.findById({ _id: data.city });
+  let city = await City.findOne()
   if (!ward || !district || !city) {
     throw responseStatus.Code400({
       errorMessage: responseStatus.LOCATION_WRONG,
@@ -32,9 +32,9 @@ let createTree = async (data, file) => {
   }
   tree.image = file.image;
   common.validateDataTree(tree);
-  tree.city = tree.city;
-  tree.district = tree.district;
-  tree.ward = tree.ward;
+  tree.city = city._id
+  tree.district = district._id
+  tree.ward = ward._id
   tree.wardName = ward.name;
   tree.districtName = district.name;
   tree.cityName = city.name;
@@ -43,7 +43,7 @@ let createTree = async (data, file) => {
   tree.googleMapsUrl = common.createMapsUrl(tree.latitude, tree.longitude);
   let pathImg = await awsServices.uploadImageToS3("treeImage", file.image);
   tree.image = pathImg;
-  let _tree = await Tree.create(tree);
+  await Tree.create(tree);
   return responseStatus.Code200({ message: "Tạo cây thành công." });
 };
 
@@ -145,29 +145,45 @@ let getDetailTree = async (id) => {
   return responseStatus.Code200({ tree });
 };
 
-let getListTree = async (query) => {
+let getListTree = async (query, user) => {
   let result = {};
   if (query.start && query.length) {
     let start = parseInt(query.start);
     let length = parseInt(query.length);
     let regex = new RegExp(query.search.value, "i");
     let sort = optSortTree(query.order[0]);
-    let trees = await Tree.find({
-      $and: [
-        {
-          $or: [
-            { code: regex },
-            { note: regex },
-            { treeType: regex },
-            { street: regex },
-            { wardName: regex },
-            { districtName: regex },
-            { cityName: regex },
-          ],
-        },
-        { isActive: true },
+    let treeQuery = {
+      $or: [
+        { code: regex },
+        { note: regex },
+        { treeType: regex },
+        { street: regex },
+        { wardName: regex },
+        { districtName: regex },
+        { cityName: regex },
       ],
-    })
+      isActive: true,
+    }
+    // {
+    //   $and: [
+    //     {
+    //       $or: [
+    //         { code: regex },
+    //         { note: regex },
+    //         { treeType: regex },
+    //         { street: regex },
+    //         { wardName: regex },
+    //         { districtName: regex },
+    //         { cityName: regex },
+    //       ],
+    //     },
+    //     { isActive: true },
+    //   ],
+    // }
+    if (user.role !== constant.userRoles.ADMIN) {
+      treeQuery.district = user.district
+    }
+    let trees = await Tree.find(treeQuery)
       .skip(start)
       .limit(length)
       .sort(sort)

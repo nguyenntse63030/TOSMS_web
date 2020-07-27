@@ -50,13 +50,13 @@
                         </div>
                         <div class="col-md-10">
                             <select style="width: 15%;" class="selected" id="selectedDistrict" ng-model="selectedDistrict" ng-change="getWardByDistrict();generateFindObj()">
-                                <option value="">Tất cả</option>
+                                <option value="">--- Chọn Quận ---</option>
                                 <option ng-repeat="district in districts" value="{{district._id}}">
                                     {{district.name}}
                                 </option>
                             </select>
                             <select style="width: 15%" class="selected" id="selectedWard" ng-model="selectedWard" ng-change="generateFindObj()">
-                                <option value="">Tất cả</option>
+                                <option value="">--- Chọn Phường ---</option>
                                 <option ng-repeat="ward in wards" value="{{ward._id}}">
                                     {{ward.name}}
                                 </option>

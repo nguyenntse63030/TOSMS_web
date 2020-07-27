@@ -36,6 +36,7 @@ async function createNotification(data) {
 
 async function getListNotification(req) {
   let query = req.query;
+  let user = req.session.user
   let regex = new RegExp(query.search.value, "i");
   let sort = optSortNotification(query.order[0]);
   let queryOpt = {
@@ -44,15 +45,15 @@ async function getListNotification(req) {
         constant.priorityStatus.DANG_XU_LY,
         constant.priorityStatus.CHUA_XU_LY,
       ],
-    },  
-    $or: [{ name: regex }, { status: regex }],  
+    },
+    $or: [{ name: regex }, { status: regex }],
   };
   if (query.queryProblems && !query.queryProblems.includes(constant.ALL)) {
     let filter = []
-    query.queryProblems.map( (problem) => {
-      filter.push({name: new RegExp(problem, 'i')}) 
-    }) 
-    
+    query.queryProblems.map((problem) => {
+      filter.push({ name: new RegExp(problem, 'i') })
+    })
+
     queryOpt.$or = filter
   }
   let queryCount = {};
@@ -79,11 +80,26 @@ async function getListNotification(req) {
     }
     queryOpt.tree = { $in: trees }
   }
-  // queryOpt = Object.assign({}, queryOpt, query.find);
-  let notifications = await Notification.find(queryOpt)
-    .skip(start)
-    .limit(length)
-    .sort(sort);
+  let notifications
+  if (user.role !== constant.userRoles.ADMIN) {
+    notifications = await Notification.find(queryOpt)
+      .populate({
+        path: 'tree',
+        match: { district: user.district},
+        select: 'district'
+      })
+      .skip(start)
+      .limit(length)
+      .sort(sort);
+      notifications = notifications.filter(notification => {
+        return notification.tree !== null
+      })
+  } else {
+    notifications = await Notification.find(queryOpt)
+      .skip(start)
+      .limit(length)
+      .sort(sort);
+  }
   let recordsTotal = await Notification.countDocuments(queryCount);
   let recordsFiltered = await Notification.countDocuments(queryOpt);
   let result = {
