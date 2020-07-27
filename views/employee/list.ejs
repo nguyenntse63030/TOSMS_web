@@ -40,7 +40,7 @@
                         <div class="col-md-10">
                             <select style="width: 15%;" class="selected" id="selectedDistrict"
                                 ng-model="selectedDistrict" ng-change="generateFindObj()">
-                                <option value="">Tất cả</option>
+                                <option value="">--- Chọn Quận ---</option>
                                 <option ng-repeat="district in districts" value="{{district._id}}">
                                     {{district.name}}
                                 </option>

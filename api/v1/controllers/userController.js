@@ -70,7 +70,7 @@ async function getUser(req, id) {
 
 async function getListWorker() {
   let queryOpt = { role: constant.userRoles.WORKER, isActive: true };
-  let users = await User.find(queryOpt);
+  let users = await User.find(queryOpt).populate('district', 'name');
   return responseStatus.Code200({ users });
 }
 

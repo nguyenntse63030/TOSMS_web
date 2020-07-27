@@ -81,7 +81,7 @@ async function getListNotification(req) {
     queryOpt.tree = { $in: trees }
   }
   let notifications
-  if (user.role !== constant.userRoles.ADMIN) {
+  if (user.role === constant.userRoles.MANAGER) {
     notifications = await Notification.find(queryOpt)
       .populate({
         path: 'tree',
@@ -94,7 +94,7 @@ async function getListNotification(req) {
       notifications = notifications.filter(notification => {
         return notification.tree !== null
       })
-  } else {
+  } else{
     notifications = await Notification.find(queryOpt)
       .skip(start)
       .limit(length)
@@ -152,7 +152,9 @@ async function getNotification(req, id) {
   if (req.user.role === constant.userRoles.WORKER) {
     queryOpt = { _id: id, worker: req.user.id };
   }
-  let notification = await Notification.findOne(queryOpt).populate("worker").populate('tree', 'code treeType');
+  let notification = await Notification.findOne(queryOpt)
+  .populate("worker")
+  .populate('tree', 'code treeType')
   if (!notification) {
     throw responseStatus.Code400({
       errorMessage: responseStatus.NOTIFICATION_IS_NOT_FOUND,
