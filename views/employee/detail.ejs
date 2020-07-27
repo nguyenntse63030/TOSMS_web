@@ -97,24 +97,20 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label class="bmd-label-floating" style=" color: black; font-weight: bold;">Địa
-                                        chỉ</label>
-                                    <input type="text" class="form-control" ng-model="employee.address"
-                                        value="{{employee.address}} " ng-disabled="isNotEditing">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="note" style=" color: black; font-weight: bold;">Quận</label>
                                     <input type="text" class="form-control" ng-model="employee.district.name"
                                         value="{{employee.district.name}} "
                                         ng-disabled="isNotEditing || role !== 'admin'">
-                                    <!-- <textarea type="text" rows="3" class="form-control" ng-model="employee.note"
-                                        ng-disabled="isNotEditing" id="note"></textarea> -->
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="bmd-label-floating" style=" color: black; font-weight: bold;">Địa
+                                        chỉ</label>
+                                    <input type="text" class="form-control" ng-model="employee.address"
+                                        value="{{employee.address}} " ng-disabled="isNotEditing">
                                 </div>
                             </div>
                         </div>
