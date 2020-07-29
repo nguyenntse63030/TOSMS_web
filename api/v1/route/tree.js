@@ -49,7 +49,7 @@ router.delete('/:id', authorize([constants.userRoles.ADMIN, constants.userRoles.
 
 router.get('/', authorize([constants.userRoles.ADMIN, constants.userRoles.MANAGER]), async (req, res, next) => {
     try {
-        let response = await treeController.getListTree(req.query);
+        let response = await treeController.getListTree(req.query, req.session.user);
         return res.send(response);
     } catch (error) {
         console.log(error);

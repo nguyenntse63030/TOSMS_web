@@ -62,7 +62,7 @@ router.get("/camera/:id", function (req, res, next) {
 });
 
 router.get("/notification", function (req, res, next) {
-  res.render("notification/list", { title: "Notification" });
+  res.render("notification/list", { title: "Thông Báo" });
 });
 
 router.get("/notification/:id", function (req, res, next) {

@@ -2,6 +2,18 @@ var app = angular.module("TOSMS");
 app.controller("listController", ["$scope", "apiService", function ($scope, apiService) {
   let findObj = {}
   let table
+  let user = COMMON.getCookie('user')
+  if (user) {
+    $scope.user = JSON.parse(user)
+    if ($scope.user.role !== COMMON.userRoles.ADMIN) {
+      setTimeout(() => {
+        $scope.selectedDistrict = $scope.user.district
+        $scope.getWardByDistrict()
+        $('#selectedDistrict').select2().next().hide()
+      }, 100);
+    }
+  }
+
 
   apiService.getListDistrict('HCM').then(function (res) {
     $scope.districts = res.data.districts

@@ -20,9 +20,9 @@
         object-fit: scale-down;
         margin-bottom: 10px;
     }
-    .select2-container{
+    /* .select2-container{
         top: 12px;
-    }
+    } */
 </style>
 <div class="container-fluid" ng-controller="listController">
     <div class="row">
@@ -40,7 +40,7 @@
                         <div class="col-md-10">
                             <select style="width: 15%;" class="selected" id="selectedDistrict"
                                 ng-model="selectedDistrict" ng-change="generateFindObj()">
-                                <option value="">Tất cả</option>
+                                <option value="">--- Chọn Quận ---</option>
                                 <option ng-repeat="district in districts" value="{{district._id}}">
                                     {{district.name}}
                                 </option>
@@ -201,6 +201,7 @@
             $('#role').select2().select2('val', $('#role option:eq(1)').val());
             $('#district').select2().select2('val', $('#district option:eq(1)').val());
             $('.selected').select2()
+            $("#selectedDistrict").select2().next().css('top','10px')
         }, 200);
     });
     function chooseFile() {

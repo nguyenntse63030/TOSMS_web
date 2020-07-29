@@ -36,6 +36,7 @@ async function createNotification(data) {
 
 async function getListNotification(req) {
   let query = req.query;
+  let user = req.session.user
   let regex = new RegExp(query.search.value, "i");
   let sort = optSortNotification(query.order[0]);
   let queryOpt = {
@@ -79,11 +80,26 @@ async function getListNotification(req) {
     }
     queryOpt.tree = { $in: trees }
   }
-  // queryOpt = Object.assign({}, queryOpt, query.find);
-  let notifications = await Notification.find(queryOpt)
-    .skip(start)
-    .limit(length)
-    .sort(sort);
+  let notifications
+  if (user.role === constant.userRoles.MANAGER) {
+    notifications = await Notification.find(queryOpt)
+      .populate({
+        path: 'tree',
+        match: { district: user.district},
+        select: 'district'
+      })
+      .skip(start)
+      .limit(length)
+      .sort(sort);
+      notifications = notifications.filter(notification => {
+        return notification.tree !== null
+      })
+  } else{
+    notifications = await Notification.find(queryOpt)
+      .skip(start)
+      .limit(length)
+      .sort(sort);
+  }
   let recordsTotal = await Notification.countDocuments(queryCount);
   let recordsFiltered = await Notification.countDocuments(queryOpt);
   let result = {
@@ -136,7 +152,9 @@ async function getNotification(req, id) {
   if (req.user.role === constant.userRoles.WORKER) {
     queryOpt = { _id: id, worker: req.user.id };
   }
-  let notification = await Notification.findOne(queryOpt).populate("worker").populate('tree', 'code treeType');
+  let notification = await Notification.findOne(queryOpt)
+  .populate("worker")
+  .populate('tree', 'code treeType')
   if (!notification) {
     throw responseStatus.Code400({
       errorMessage: responseStatus.NOTIFICATION_IS_NOT_FOUND,
@@ -261,13 +279,15 @@ let optSortNotification = (sortOpt) => {
   switch (sortOpt.column) {
     case "0":
       sort = { createdTime: sortOpt.dir };
+      break;
     case "1":
       sort = { name: sortOpt.dir };
+      break;
     case "2":
       sort = { status: sortOpt.dir };
+      break;
     case "3":
       sort = { createdTime: sortOpt.dir };
-
       break;
   }
   return sort;

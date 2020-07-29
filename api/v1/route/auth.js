@@ -23,7 +23,7 @@ router.post('/sign_in', async function(req, res, next) {
         passport.authenticate('local', function(err, user, info) {
             if (err) return res.status(err.status || 500).send(err)
             if (!user) {
-                return res.status(401).send(responseStatus.Code401({ errorMessage: responseStatus.IVALID_PHONE_OR_PASSWORD }))
+                return res.status(401).send(responseStatus.Code401({ errorMessage: responseStatus.IVALID_USERNAME_OR_PASSWORD }))
             }
             let objectReturnn = { token: info.token }
 

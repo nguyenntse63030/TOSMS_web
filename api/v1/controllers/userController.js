@@ -70,7 +70,7 @@ async function getUser(req, id) {
 
 async function getListWorker() {
   let queryOpt = { role: constant.userRoles.WORKER, isActive: true };
-  let users = await User.find(queryOpt);
+  let users = await User.find(queryOpt).populate('district', 'name');
   return responseStatus.Code200({ users });
 }
 
@@ -247,16 +247,18 @@ let optSortUser = (sortOpt) => {
   switch (sortOpt.column) {
     case "0":
       sort = { createdTime: sortOpt.dir };
+      break;
     case "1":
       sort = { fullname: sortOpt.dir };
-
+      break;
     case "2":
       sort = { role: sortOpt.dir };
+      break;
     case "3":
       sort = { address: sortOpt.dir };
+      break;
     case "4":
       sort = { createdTime: sortOpt.dir };
-
       break;
   }
   return sort;

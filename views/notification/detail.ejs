@@ -96,7 +96,7 @@
                 <h4 class="card-title"><%= title %></h4>
                 <div class="d-flex">
                     <button class="btn btn-primary btn-change-tab d-none" ng-class="{'d-block': user.role !== 'worker'}"
-                        ng-click="showModal()" ng-show="notification.status !== 'Đã Xử Lý'">Chọn Công Nhân</button>
+                        ng-click="showModal()" ng-show="!notification.worker">Chọn Công Nhân</button>
                     <button class="btn btn-primary btn-change-tab d-none"
                         ng-class="{'d-block': user.role !== 'worker' && notification.worker._id}"
                         ng-click="linkToWorker()">Xem Hồ Sơ Công Nhân</button>
@@ -195,7 +195,7 @@
                                         height="50px" />
                                 </td>
                                 <td>{{worker.name}}</td>
-                                <td>{{worker.district}}</td>
+                                <td>{{worker.district.name}}</td>
                             </tr>
                         </tbody>
                     </table>

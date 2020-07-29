@@ -1,4 +1,5 @@
 <% layout('../layouts/layout.ejs') -%>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" rel="stylesheet" />
 <style>
     .table-row-link {
         color: #000000;
@@ -76,48 +77,62 @@
                                     onchange="onChangeImage(event)" />
                             </div>
                             <div class="row">
-                                <div class="form-group col-md-4">
-                                    <label for="treeType">Loại Cây</label>
-                                    <input type="text" class="form-control" id="treeType" placeholder="Nhập loại cây">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="">Loại Cây</label>
+                                        <input type="text" class="form-control" id="treeType"
+                                            placeholder="Nhập loại cây">
+                                    </div>
                                 </div>
-                                <div class="form-group col-md-4">
-                                    <label for="latitude">Vĩ Độ</label>
-                                    <input type="text" class="form-control" id="latitude" placeholder="Nhập vĩ độ">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="">Vĩ Độ</label>
+                                        <input type="text" class="form-control" id="latitude" placeholder="Nhập vĩ độ">
+                                    </div>
                                 </div>
-                                <div class="form-group col-md-4">
-                                    <label for="longtitude">Kinh Độ</label>
-                                    <input type="text" class="form-control" id="longitude" placeholder="Nhập kinh độ">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-md-4">
-                                    <label for="city">Thành Phố</label>
-                                    <select class="form-control" ng-change="getListDistrict()" ng-model="city"
-                                        id="city">
-                                        <option ng-repeat="city in cities" value="{{city._id}}">
-                                            {{city.name}}</option>
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label for="district">Quận</label>
-                                    <select class="form-control" ng-change="getListWard()" ng-model="district"
-                                        id="district">
-                                        <option ng-repeat="district in districts" value="{{district._id}}">
-                                            {{district.name}}</option>
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label for="ward">Phường</label>
-                                    <select class="form-control" ng-model="ward" id="ward">
-                                        <option ng-repeat="ward in wards" value="{{ward._id}}">
-                                            {{ward.name}}</option>
-                                    </select>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="">Kinh Độ</label>
+                                        <input type="text" class="form-control" id="longitude"
+                                            placeholder="Nhập kinh độ">
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="form-group col-md-8">
-                                    <label for="street">Đường</label>
-                                    <input type="text" class="form-control" id="street" placeholder="Nhập tên đường">
+                                <div class="col-md-4">
+                                    <div class="form-group" style="top: 14px;">
+                                        <label for="city">Thành Phố</label>
+                                        <input style="position: relative; top: 5px;" class="form-control" type="text" id="city" value="{{cities[0].name}}"
+                                            disabled>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Quận</label>
+                                        <select style="width: 100%;" class="form-control selected" ng-change="getListWard()" ng-model="district"
+                                            id="district">
+                                            <option ng-repeat="district in districts" value="{{district._id}}">
+                                                {{district.name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="ward">Phường</label>
+                                        <select style="width: 100%;" class="form-control selected" ng-model="ward" id="ward">
+                                            <option ng-repeat="ward in wards" value="{{ward._id}}">
+                                                {{ward.name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <label class="">Đường</label>
+                                        <input type="text" class="form-control" id="street"
+                                            placeholder="Nhập tên đường">
+                                    </div>
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="code"></label>
@@ -141,6 +156,9 @@
     clickSideBar('tree-page')
 </script>
 <script>
+    $(document).ready(function () {
+        $('.selected').select2()
+    })
     function onChangeAvatar() {
         if (!$('#file').val()) {
             showNotification('Bạn chưa chọn ảnh nào', 'error')
