@@ -6,7 +6,7 @@ const firebaseConfig = {
   projectId: "tosms-web-b75d4",
   storageBucket: "tosms-web-b75d4.appspot.com",
   messagingSenderId: "564659263879",
-  appId: "1:564659263879:web:8fb8b790b9fbdbc3ce9b22"  
+  appId: "1:564659263879:web:8fb8b790b9fbdbc3ce9b22"
 };
 
 // Initialize Firebase  
@@ -15,7 +15,7 @@ firebase.initializeApp(firebaseConfig);
 // khởi tạo hằng số
 const firestore = firebase.firestore();
 const COUNT_NUMBER_ELEMENT = $('#count-number');
-const COLLECTION_NAME = "manager";
+const COLLECTION_NAME = (JSON.parse(COMMON.getCookie("user"))).role;
 const LIST_NOTIES = $('#list-noti')
 const CONTAINER_LIST_NOTI = $('#container-list-noti');
 
@@ -25,51 +25,110 @@ var skip; //object làm flag cho mỗi lần query mỗi lần query firestore s
 let count = 0; //biến đếm số lượng noti chưa được đọc
 let the_first = true; //lần đầu load page mục đích để hàm load noti realtime ko thực hiện add lại các element vì hàm này lần đầu vào vấn chạy
 let scrollY = 1335; //biến cờ scroll mục đích nếu cuộn dọc lớn hơn thì thực hiện query tiếp
-
 // hàm load dữ liệu từ firestore với realtime khi có thay đổi
 function loadNotificationFromFirestore() {
-  firestore.collection('manager').orderBy("createdTime", "desc").onSnapshot(function (querySnapshot) {
-    querySnapshot.docChanges().forEach(function (change) {
-      if (!the_first) {
-        if (change.type === 'added') {
-          let notification = change.doc.data();
-          createNotiElement(notification, true)
-          count += 1;
+  if (COLLECTION_NAME === COMMON.userRoles.MANAGER) {
+    firestore.collection(COLLECTION_NAME).where('district', '==', (JSON.parse(COMMON.getCookie("user"))).district).orderBy("createdTime", "desc").onSnapshot(function (querySnapshot) {
+      querySnapshot.docChanges().forEach(function (change) {
+        if (!the_first) {
+          if (change.type === 'added') {
+            let notification = change.doc.data();
+            createNotiElement(notification, true)
+            count += 1;
+            showCountNumber(count)
+          }
+        }
+        if (change.type === 'modified' && (change.doc.data()).readed === true) {
+          count = 0;
           showCountNumber(count)
         }
-      }
-      if (change.type === 'modified') {
-        count = 0;
-        showCountNumber(count)
-      }
+      })
+      check = count
+      the_first = false;
     })
-    check = count
-    the_first = false;
-  })
+  } else if (COLLECTION_NAME === COMMON.userRoles.WORKER) {
+    firestore.collection(COLLECTION_NAME).where('userId', '==', (JSON.parse(COMMON.getCookie("user")))._id).orderBy("createdTime", "desc").onSnapshot(function (querySnapshot) {
+      querySnapshot.docChanges().forEach(function (change) {
+        if (!the_first) {
+          if (change.type === 'added') {
+            let notification = change.doc.data();
+            createNotiElement(notification, true)
+            count += 1;
+            showCountNumber(count)
+          }
+        }
+        if (change.type === 'modified') {
+          count = 0;
+          showCountNumber(count)
+        }
+      })
+      check = count
+      the_first = false;
+    })
+  } else {
+    firestore.collection(COMMON.userRoles.MANAGER).orderBy("createdTime", "desc").onSnapshot(function (querySnapshot) {
+      querySnapshot.docChanges().forEach(function (change) {
+        if (!the_first) {
+          if (change.type === 'added') {
+            let notification = change.doc.data();
+            createNotiElement(notification, true)
+            count += 1;
+            showCountNumber(count)
+          }
+        }
+        if (change.type === 'modified' && (change.doc.data()).readAdmin === true) {
+          count = 0;
+          showCountNumber(count)
+        }
+      })
+      check = count
+      the_first = false;
+    })
+  }
 } //kết thúc hàm
 
 loadNotificationFromFirestore()
 
 let loadNotifications = (sk) => {
   let queryConfig;
-  // nếu có sk thì mới thực hiện query starAfter vì lần đầu query không có object để thực hiện sẻ bị lỗi
-  if (sk) {
-    queryConfig = firestore.collection(COLLECTION_NAME).orderBy("createdTime", "desc").startAfter(sk).limit(limit);
+  if (COLLECTION_NAME === COMMON.userRoles.MANAGER) {
+    // nếu có sk thì mới thực hiện query starAfter vì lần đầu query không có object để thực hiện sẻ bị lỗi
+    if (sk) {
+      queryConfig = firestore.collection(COLLECTION_NAME).where('district', '==', (JSON.parse(COMMON.getCookie("user"))).district).orderBy("createdTime", "desc").startAfter(sk).limit(limit);
+    } else {
+      queryConfig = firestore.collection(COLLECTION_NAME).where('district', '==', (JSON.parse(COMMON.getCookie("user"))).district).orderBy("createdTime", "desc").limit(limit);
+    }
+  } else if (COLLECTION_NAME === COMMON.userRoles.WORKER) {
+    if (sk) {
+      queryConfig = firestore.collection(COLLECTION_NAME).where('userId', '==', (JSON.parse(COMMON.getCookie("user")))._id).orderBy("createdTime", "desc").startAfter(sk).limit(limit);
+    } else {
+      queryConfig = firestore.collection(COLLECTION_NAME).where('userId', '==', (JSON.parse(COMMON.getCookie("user")))._id).orderBy("createdTime", "desc").limit(limit);
+    }
   } else {
-    queryConfig = firestore.collection(COLLECTION_NAME).orderBy("createdTime", "desc").limit(limit);
+    if (sk) {
+      queryConfig = firestore.collection(COMMON.userRoles.MANAGER).orderBy("createdTime", "desc").startAfter(sk).limit(limit);
+    } else {
+      queryConfig = firestore.collection(COMMON.userRoles.MANAGER).orderBy("createdTime", "desc").limit(limit);
+    }
   }
   //thực hiện query
   queryConfig.get().then(function (querySnapshot) {
     if (querySnapshot.docs.length) {
-     
+
       querySnapshot.docs.map((doc, i) => {
         let notification = doc.data();
         //tạo noti element
         createNotiElement(notification);
         /* với mỗi noti mới đến chưa được đọc (readed=false) thì sẽ
         cộng vào count để hiên thị số lượng noti chưa được đọc cho người dùng */
-        if (notification.readed === false) {
-          count += 1;
+        if (COLLECTION_NAME !== COMMON.userRoles.ADMIN) {
+          if (notification.readed === false) {
+            count += 1;
+          }
+        } else {
+          if (notification.readAdmin === false) {
+            count += 1;
+          }
         }
       })
       showCountNumber(count);
@@ -78,7 +137,7 @@ let loadNotifications = (sk) => {
       skip = querySnapshot.docs[querySnapshot.docs.length - 1];
 
       hideLoading();
-    } else{
+    } else {
       showCountNumber(0);
       hideLoading();
     }
@@ -97,7 +156,7 @@ let showCountNumber = (count) => {
   }
 }
 
-LIST_NOTIES.scroll(function () { 
+LIST_NOTIES.scroll(function () {
   if (LIST_NOTIES.scrollTop() >= scrollY) {
     showLoading()
     loadNotifications(skip)
@@ -106,8 +165,8 @@ LIST_NOTIES.scroll(function () {
 })
 
 let createNotiElement = (notification, appendBefore) => {
-  let timestamp = notification.createdTime.seconds*1000;
-  let date = formatDate(new Date(timestamp)); 
+  let timestamp = notification.createdTime.seconds * 1000;
+  let date = formatDate(new Date(timestamp));
 
   let notiElement = '<div class="row menu-item" onclick="visitLink(\'' + notification.link + '\')"><div class="col-3 align-self-center"><div class="card card-body"><img src="' + notification.icon + '"/></div></div><div class="col-9"><div class="card text-noti-content"><div class="card-body"><h5 class="card-title">' + notification.title + '</h5>' + '<p class="card-text mt-1">' + notification.body + '</p></div><p class="card-body my-1">' + date + '</p></div></div></div>';
   if (!appendBefore) {
@@ -115,7 +174,7 @@ let createNotiElement = (notification, appendBefore) => {
   } else {
     $(notiElement).prependTo(LIST_NOTIES);
   }
-} 
+}
 
 $('.container-noti').click(() => {
   if (check > 0) {

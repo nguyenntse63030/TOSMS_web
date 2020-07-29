@@ -37,7 +37,7 @@ router.get('/:id', authorize(), async (req, res, next) => {
 
 router.put('/', authorize(), (req, res, next) => {
     try {
-        let response = notificationController.setNotificationReaded();
+        let response = notificationController.setNotificationReaded(req);
         return res.send(response)
     } catch (error) {
         console.log(error);

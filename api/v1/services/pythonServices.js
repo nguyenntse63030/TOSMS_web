@@ -98,7 +98,7 @@ async function processDataFromPython(data, files) {
     let fileURLs = await processImage(files)
     data = Object.assign({}, data, fileURLs);
     let result = await processData(data)
-    notificationController.sendNotification(result);
+    notificationController.sendNotification(result, constant.notiCollection.MANAGER);
     return responseStatus.Code200({ message: responseStatus.PROCESS_DATA_FROM_PYTHON_SUCCESSFULLY })
 }
 

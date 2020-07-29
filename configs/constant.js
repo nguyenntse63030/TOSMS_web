@@ -50,5 +50,9 @@ module.exports = {
   type_func: {
     CREATE: 'create',
     UPDATE: 'update'
+  },
+  notiCollection: {
+    MANAGER: "manager",
+    WORKER: "worker"
   }
 };

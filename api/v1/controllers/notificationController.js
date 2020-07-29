@@ -19,7 +19,7 @@ firestore.settings({ timestampsInSnapshots: true });
 async function createNotification(data) {
   let camera = await Camera.findById({ _id: data.cameraId }).populate("tree");
   if (!camera) {
-    throw responseStatus.Code400({ errorMessage: "Camera không tồn tại" });
+    throw responseStatus.Code400({ errorMessage: responseStatus.CAMERA_IS_NOT_FOUND });
   }
   data.tree = camera.tree._id;
   camera.tree.note = constant.priorityStatus.CHUA_XU_LY;
@@ -44,15 +44,15 @@ async function getListNotification(req) {
         constant.priorityStatus.DANG_XU_LY,
         constant.priorityStatus.CHUA_XU_LY,
       ],
-    },  
-    $or: [{ name: regex }, { status: regex }],  
+    },
+    $or: [{ name: regex }, { status: regex }],
   };
   if (query.queryProblems && !query.queryProblems.includes(constant.ALL)) {
     let filter = []
-    query.queryProblems.map( (problem) => {
-      filter.push({name: new RegExp(problem, 'i')}) 
-    }) 
-    
+    query.queryProblems.map((problem) => {
+      filter.push({ name: new RegExp(problem, 'i') })
+    })
+
     queryOpt.$or = filter
   }
   let queryCount = {};
@@ -145,25 +145,42 @@ async function getNotification(req, id) {
   return responseStatus.Code200({ notification });
 }
 
-let sendNotification = (result) => {
+let sendNotification = async (result, receiver) => {
   let notification = {
-    title: "Cảnh Báo Vấn Đề",
+    title: config.NOTI_CONFIG.title,
     body: result.name,
     icon: result.image,
-    link: "/notification/" + result.id,
+    link: config.NOTI_CONFIG.link + result.id,
     readed: false,
+    readAdmin: false,
     createdTime: admin.firestore.FieldValue.serverTimestamp(),
   };
-  let userRef = firestore.collection("manager");
+  if (receiver === constant.notiCollection.WORKER) {
+    notification.userId = result.worker.id
+  } else {
+    let tree = await Tree.findOne({_id: result.tree});
+    notification.district = tree.district.toString();
+  }
+  let userRef = firestore.collection(receiver);
   let response = userRef.add(notification);
   return;
 };
 
-let setNotificationReaded = async () => {
-  let snapshot = await firestore.collection("manager").get();
+let setNotificationReaded = async (req) => {
+  let collection = constant.notiCollection.MANAGER;
+  let optUpdate = { readed: true };
+  if (req.user.role === constant.userRoles.WORKER) {
+    collection = constant.notiCollection.WORKER;
+    snapshot = await firestore.collection(collection).where('userId', '==', req.user.id).get();
+  } else if(req.user.role === constant.userRoles.MANAGER) {
+    snapshot = await firestore.collection(collection).where('district', '==',req.user.district).get();
+  } else {
+    snapshot = await firestore.collection(collection).get()
+    optUpdate = {readAdmin: true}
+  }
   snapshot.forEach(async (doc) => {
-    let docUpdate = firestore.collection("manager").doc(doc.id);
-    let result = await docUpdate.update({ readed: true });
+    let docUpdate = firestore.collection(collection).doc(doc.id);
+    let result = await docUpdate.update(optUpdate);
   });
   return { result: true };
 };
@@ -183,7 +200,7 @@ let setWorkerToNoti = async (req) => {
   notification.worker = workerId;
   let _notification = await notification.save();
   await notification.tree.save();
-
+  sendNotification(_notification, constant.notiCollection.WORKER);
   return responseStatus.Code200({
     notification: _notification,
     message: responseStatus.SET_WORKER_TO_NOTI_SUCCESS,

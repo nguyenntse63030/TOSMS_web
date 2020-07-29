@@ -29,6 +29,7 @@ async function createPassportConfig(app) {
                     phone: user.phone,
                     name: user.name,
                     role: user.role,
+                    district: user.district,
                     loggedInTimestamp: Date.now()
                 }
                 token = jwt.sign(userData, config.secret, {
