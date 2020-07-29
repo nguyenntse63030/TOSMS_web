@@ -293,6 +293,7 @@ let optSortTree = (sortOpt) => {
   switch (sortOpt.column) {
     case "0":
       sort = { createdTime: sortOpt.dir };
+      break;
     case "1":
       sort = {
         street: sortOpt.dir,
@@ -300,11 +301,13 @@ let optSortTree = (sortOpt) => {
         district: sortOpt.dir,
         city: sortOpt.dir,
       };
-
+      break;
     case "2":
       sort = { note: sortOpt.dir };
+      break;
     case "3":
       sort = { code: sortOpt.dir };
+      break;
     case "4":
       sort = { createdTime: sortOpt.dir };
       break;
