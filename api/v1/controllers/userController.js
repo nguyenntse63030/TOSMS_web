@@ -249,7 +249,7 @@ let optSortUser = (sortOpt) => {
       sort = { createdTime: sortOpt.dir };
       break;
     case "1":
-      sort = { fullname: sortOpt.dir };
+      sort = { name: sortOpt.dir };
       break;
     case "2":
       sort = { role: sortOpt.dir };
