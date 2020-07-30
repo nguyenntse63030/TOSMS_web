@@ -23,12 +23,7 @@ app.controller("listController", [
                     thousands: ",",
                     url: "//cdn.datatables.net/plug-ins/1.10.19/i18n/Vietnamese.json",
                 },
-                order: [
-                    [1, "desc"],
-                    [2, "desc"],
-                    [3, "desc"],
-                    [4, "desc"],
-                ],
+                order: [[4, "desc"]],
                 search: {
                     caseInsensitive: true,
                 },
