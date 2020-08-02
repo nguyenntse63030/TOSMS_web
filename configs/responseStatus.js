@@ -145,8 +145,8 @@ module.exports = {
     );
   },
 
-  IVALID_USERNAME_OR_PASSWORD: "Username hoặc Password không đúng",
-  INVALID_REQUEST: "Yêu cầu không hợp lệ",
+  IVALID_USERNAME_OR_PASSWORD: "Tài khoản hoặc mật khẩu không đúng",
+  INVALID_REQUEST: "Tài khoản không tồn tại",
   UPLOAD_IMAGE_FAIL: "Upload Image To S3 Faild",
   UPLOAD_IMAGE_SUCCESSFULLY: "Upload Image To S3 Successfully",
   FILES_IS_NOT_FOUND: "Files is not found",
@@ -172,7 +172,8 @@ module.exports = {
   DELETE_TREE_SUCCESS: "Xóa cây thành công",
   UPDATE_TREE_SUCCESS: "Cập nhật thông tin cây thành công",
   CAMERA_CODE_IS_CANT_EMPTY: "Camera code không thể bỏ trống",
-  CAMERA_CODE_IS_CANT_DUPLICATE: "Camera code đã tồn tại vui lòng dổi tên code khác.",
+  CAMERA_CODE_IS_CANT_DUPLICATE:
+    "Camera code đã tồn tại vui lòng dổi tên code khác.",
   CAMERA_IP__IS_CANT_EMPTY: "Camera IP không thể bỏ trống",
   CAMERA_IMAGE__IS_CANT_EMPTY: "Bạn phải chọn ảnh của camera trước khi tạo.",
   CAMERA_CREATE_FAIL: "Có lỗi trong quá trình tạo, vui lòng thử lại.",
@@ -204,8 +205,11 @@ module.exports = {
   USER_IMAGE_IS_CANT_EMPTY: "Bạn phải chọn ảnh của người dùng trước khi tạo.",
   USER_USERNAME_IS_CANT_EMPTY: "Tên tài khoản không thể bỏ trống",
   USER_PASSWORD_IS_CANT_EMPTY: "Mật khẩu không thể bỏ trống",
-  SET_WORKER_TO_NOTI_SUCCESS: "Lựa chọn công nhân phụ trách vấn đề được thông báo thành công.",
+  SET_WORKER_TO_NOTI_SUCCESS:
+    "Lựa chọn công nhân phụ trách vấn đề được thông báo thành công.",
   SET_NOTI_STATUS_SUCCESS: "Công việc đã được xác nhận bởi hệ thống.",
-  ERRO_SET_NOTI_STATUS: "Thông báo này không dành cho bạn hoặc đã được hoàn thành.",
-  CREATE_TREE_DETECT_LOCATION_SUCCESSFULLY: 'Create Tree Detect Location Successfully'
+  ERRO_SET_NOTI_STATUS:
+    "Thông báo này không dành cho bạn hoặc đã được hoàn thành.",
+  CREATE_TREE_DETECT_LOCATION_SUCCESSFULLY:
+    "Create Tree Detect Location Successfully",
 };
