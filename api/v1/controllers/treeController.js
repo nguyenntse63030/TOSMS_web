@@ -159,12 +159,13 @@ let getDetailTree = async (id) => {
 
 let getListTree = async (query, user) => {
   let result = {};
+  let treeQuery = {};
   if (query.start && query.length) {
     let start = parseInt(query.start);
     let length = parseInt(query.length);
     let regex = new RegExp(query.search.value, "i");
     let sort = optSortTree(query.order[0]);
-    let treeQuery = {
+    treeQuery = {
       $or: [
         { code: regex },
         { note: regex },
@@ -192,8 +193,10 @@ let getListTree = async (query, user) => {
     //     { isActive: true },
     //   ],
     // }
+    let treeCount = { isActive: true };
     if (user.role !== constant.userRoles.ADMIN) {
-      treeQuery.district = user.district
+      treeQuery.district = user.district;
+      treeCount.district = user.district;
     }
     let trees = await Tree.find(treeQuery)
       .skip(start)
@@ -203,23 +206,8 @@ let getListTree = async (query, user) => {
       .populate("ward")
       .populate("city", { city: 0 })
       .exec();
-    let recordsTotal = await Tree.countDocuments({ isActive: true });
-    let recordsFiltered = await Tree.countDocuments({
-      $and: [
-        {
-          $or: [
-            { code: regex },
-            { note: regex },
-            { treeType: regex },
-            { street: regex },
-            { wardName: regex },
-            { districtName: regex },
-            { cityName: regex },
-          ],
-        },
-        { isActive: true },
-      ],
-    });
+    let recordsTotal = await Tree.countDocuments(treeCount);
+    let recordsFiltered = await Tree.countDocuments(treeQuery);
 
     result = {
       recordsTotal: recordsTotal,
@@ -228,7 +216,11 @@ let getListTree = async (query, user) => {
       sort: query.order[0].column !== "0" ? "asc" : query.order[0].dir,
     };
   } else {
-    let trees = await Tree.find({ isActive: true, camera: null }).sort({
+    treeQuery = { isActive: true, camera: null };
+    if (user.role === constant.userRoles.MANAGER) {
+      treeQuery.district = user.district
+    }
+    let trees = await Tree.find(treeQuery).sort({
       createdTime: -1,
     });
     result.data = trees;

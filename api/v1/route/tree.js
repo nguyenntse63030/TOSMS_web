@@ -8,7 +8,7 @@ const constants = require('../../../configs/constant')
 
 router.post('/', authorize([constants.userRoles.ADMIN, constants.userRoles.MANAGER]), multipartMiddleware, async (req, res, next) => {
     try {
-        let response = await treeController.createTree(req.body, req.files);
+        let response = await treeController.createTree(req.body, req.files, req.user);
         return res.send(response);
     } catch (error) {
         console.log(error);
@@ -19,7 +19,7 @@ router.post('/', authorize([constants.userRoles.ADMIN, constants.userRoles.MANAG
 
 router.put('/:id', authorize([constants.userRoles.ADMIN, constants.userRoles.MANAGER]), async (req, res, next) => {
     try {
-        let response = await treeController.updateTree(req.params.id, req.body);
+        let response = await treeController.updateTree(req.params.id, req.body, req.user);
         return res.send(response);
     } catch (error) {
         console.log(error);
