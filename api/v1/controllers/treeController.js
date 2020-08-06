@@ -12,8 +12,15 @@ const config = require("../../../config");
 const awsServices = require("../services/awsServices");
 const constant = require("../../../configs/constant");
 
-let createTree = async (data, file) => {
+let createTree = async (data, file, user) => {
   let tree = data;
+  if(user.role === constant.userRoles.MANAGER) {
+    if (data.district != user.district) {
+      throw responseStatus.Code400({
+        errorMessage: responseStatus.LOCATION_WRONG,
+      });;
+    } 
+  }
   let ward = await Ward.findById({ _id: data.ward });
   let district = await District.findById({ _id: data.district });
   let city = await City.findOne()
