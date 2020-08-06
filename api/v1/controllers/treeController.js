@@ -47,8 +47,9 @@ let createTree = async (data, file) => {
   return responseStatus.Code200({ message: "Tạo cây thành công." });
 };
 
-let updateTree = async (id, data) => {
+let updateTree = async (id, data, user) => {
   let tree = await Tree.findOne({ _id: id, isActive: true }).populate("camera");
+  let changeDistrict = false;
   if (!tree) {
     throw responseStatus.Code400({
       errorMessage: responseStatus.TREE_IS_NOT_FOUND,
@@ -61,6 +62,11 @@ let updateTree = async (id, data) => {
     throw responseStatus.Code400({
       errorMessage: responseStatus.LOCATION_WRONG,
     });
+  }
+  if (user.role === constant.userRoles.ADMIN) {
+    if (data.district && tree.district !== data.district) {
+      changeDistrict = true;
+    }
   }
   tree.treeType = data.treeType || tree.treeType;
   tree.street = data.street || tree.street;
@@ -81,6 +87,12 @@ let updateTree = async (id, data) => {
     throw responseStatus.Code400({
       errorMessage: responseStatus.UPDATE_TREE_FAIL,
     });
+  }
+  if (changeDistrict) {
+    tree.camera.district = _tree.district;
+    tree.camera.districtName = _tree.districtName;
+    let camera = await tree.camera.save();
+    console.log(camera);
   }
   return responseStatus.Code200({
     message: responseStatus.UPDATE_TREE_SUCCESS,
