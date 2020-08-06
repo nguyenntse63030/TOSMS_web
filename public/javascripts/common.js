@@ -203,7 +203,7 @@ function validateCreateTree(file, treeType, street) {
   return check;
 }
 
-function loadLocation($scope, apiService) {
+function loadLocation($scope, apiService, change) {
   $scope.getListCities = () => {
     apiService
       .getListCities()
@@ -220,7 +220,9 @@ function loadLocation($scope, apiService) {
   $scope.getListDistrict = () => {
     apiService.getListDistrict($scope.city).then((res) => {
       $scope.districts = res.data.districts;
+      if (!change){
       $scope.district = $scope.districts[0]._id;
+      }
       $scope.getListWard();
     });
   };

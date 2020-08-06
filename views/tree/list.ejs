@@ -110,7 +110,7 @@
                                     <div class="form-group">
                                         <label>Quận</label>
                                         <select style="width: 100%;" class="form-control selected" ng-change="getListWard()" ng-model="district"
-                                            id="district">
+                                            id="district" ng-disabled="user.role ==='manager'">
                                             <option ng-repeat="district in districts" value="{{district._id}}">
                                                 {{district.name}}</option>
                                         </select>

@@ -2,6 +2,12 @@ app.controller("listController", [
   "$scope",
   "apiService",
   function ($scope, apiService) {
+    $scope.user = JSON.parse(COMMON.getCookie("user"));
+    let change = false;
+    if ($scope.user.role === COMMON.userRoles.MANAGER) {
+      $scope.district = $scope.user.district;
+      change = true;
+    } 
     let initDatatale = () => {
       let options = {
         processing: true,
@@ -40,7 +46,7 @@ app.controller("listController", [
         ],
       };
       $("#tree-table").DataTable(options);
-      loadLocation($scope, apiService);
+      loadLocation($scope, apiService, change);
       $scope.getListCities();
     };
 
