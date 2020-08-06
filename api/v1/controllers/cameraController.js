@@ -4,35 +4,36 @@ const Tree = mongoose.model("Tree");
 const awsServices = require("../services/awsServices");
 const responseStatus = require("../../../configs/responseStatus");
 const RTSPStream = require("node-rtsp-stream");
+const constant = require("../../../configs/constant");
+
 let WebSocketServer = require("ws").Server;
 
-let getListCamera = async (query) => {
+let getListCamera = async (query, user) => {
   let result = {};
   if (query.start && query.length) {
     let start = parseInt(query.start);
     let length = parseInt(query.length);
     let regex = new RegExp(query.search.value, "i");
     let sort = optSortCamera(query.order[0]);
-    let cameras = await Camera.find({
+    let queryOpt = {
       $and: [
         {
           $or: [{ code: regex }, { status: regex }],
         },
         { isActive: true },
       ],
-    })
+    }
+    let queryCount = { isActive: true };
+    if (user.role === constant.userRoles.MANAGER) {
+      queryOpt.$and.push({district: user.district});
+      queryCount.district = user.district;
+    }
+    let cameras = await Camera.find(queryOpt)
       .skip(start)
       .limit(length)
       .sort(sort);
-    let recordsTotal = await Camera.countDocuments({ isActive: true });
-    let recordsFiltered = await Camera.countDocuments({
-      $and: [
-        {
-          $or: [{ code: regex }, { status: regex }],
-        },
-        { isActive: true },
-      ],
-    });
+    let recordsTotal = await Camera.countDocuments(queryCount);
+    let recordsFiltered = await Camera.countDocuments(queryOpt);
     result = {
       recordsTotal: recordsTotal,
       recordsFiltered: recordsFiltered,
@@ -40,7 +41,11 @@ let getListCamera = async (query) => {
       sort: query.order[0].column !== "0" ? "asc" : query.order[0].dir,
     };
   } else {
-    let cameras = await Camera.find({ isActive: true }).sort({
+    queryOpt = { isActive: true };
+    if (user.role === constant.userRoles.MANAGER) {
+      queryOpt.district = user.district;
+    }
+    let cameras = await Camera.find(queryOpt).sort({
       createdTime: -1,
     });
     result.data = cameras;
