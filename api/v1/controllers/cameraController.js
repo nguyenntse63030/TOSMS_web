@@ -129,7 +129,7 @@ let deleteCamera = async (id) => {
   });
 };
 
-async function updateCamera(id, data) {
+async function updateCamera(id, data, user) {
   let camera = await Camera.findOne({ _id: id, isActive: true })
   if (!camera) {
     throw responseStatus.Code400({
@@ -161,6 +161,11 @@ async function updateCamera(id, data) {
     newTree.camera = camera._id
     await newTree.save();
     camera.tree = newTree._id
+    if (user.role === constant.userRoles.ADMIN) {
+      camera.district = newTree.district;
+      camera.districtName = newTree.districtName;
+    
+    }
   }
   let _camera = await camera.save();
 
@@ -229,6 +234,10 @@ let validateDataCamera = (camera, tree, file) => {
         errorMessage: responseStatus.TREE_ONLY_HAVE_ONE_CAMERA,
       });
     }
+  } else {
+    throw responseStatus.Code400({
+      errorMessage: responseStatus.TREE_IS_NOT_FOUND,
+    });
   }
 };
 
