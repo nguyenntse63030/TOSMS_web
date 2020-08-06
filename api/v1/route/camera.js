@@ -8,7 +8,7 @@ const constants = require('../../../configs/constant')
 
 router.get("/", authorize([constants.userRoles.ADMIN, constants.userRoles.MANAGER]), async (req, res, next) => {
   try {
-    let response = await cameraController.getListCamera(req.query);
+    let response = await cameraController.getListCamera(req.query, req.user);
     return res.send(response);
   } catch (error) {
     console.log(error);
@@ -38,7 +38,7 @@ router.get("/:id", authorize([constants.userRoles.ADMIN, constants.userRoles.MAN
 
 router.post("/", authorize([constants.userRoles.ADMIN, constants.userRoles.MANAGER]), multipartMiddleware, async (req, res, next) => {
   try {
-    let response = await cameraController.createCamera(req.body, req.files);
+    let response = await cameraController.createCamera(req.body, req.files, req.user);
     return res.send(response);
   } catch (error) {
     console.log(error);
@@ -56,7 +56,7 @@ router.delete("/:id", authorize([constants.userRoles.ADMIN, constants.userRoles.
 });
 router.put("/:id", authorize([constants.userRoles.ADMIN, constants.userRoles.MANAGER]), async (req, res, next) => {
   try {
-    let response = await cameraController.updateCamera(req.params.id, req.body);
+    let response = await cameraController.updateCamera(req.params.id, req.body, req.user);
     return res.send(response);
   } catch (error) {
     console.log(error);
