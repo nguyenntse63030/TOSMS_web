@@ -66,9 +66,13 @@ let getDetailCamera = async (id) => {
   return responseStatus.Code200({ camera });
 };
 
-let createCamera = async (data, file) => {
+let createCamera = async (data, file, user) => {
   let camera = data;
-  let tree = await Tree.findOne({ _id: camera.tree }).populate("camera");
+  let queryOpt = { _id: camera.tree};
+  if (user.role === constant.userRoles.MANAGER) {
+    queryOpt.district = user.district;
+  }
+  let tree = await Tree.findOne(queryOpt).populate("camera");
 
   await validateDataCamera(camera, tree, file);
   let regex = new RegExp(camera.code, "i");
@@ -82,7 +86,8 @@ let createCamera = async (data, file) => {
 
   let pathImg = await awsServices.uploadImageToS3("cameraImg", file.image);
   camera.image = pathImg;
-
+  camera.district = tree.district
+  camera.districtName = tree.districtName;
   let result = await Camera.create(camera);
   if (!result) {
     throw responseStatus.Code400({
