@@ -19,6 +19,14 @@ var CameraSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Tree'
     },
+    district: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'District'
+    },
+    districtName: {
+        type: String,
+        default: ''
+    },
     ipAddress: {
         type: String,
         default: ''
