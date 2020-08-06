@@ -23,8 +23,7 @@
 <div class="container-fluid" ng-controller="listController">
     <div class="row">
         <div class="col-md-12">
-            <button type="button" id="openModelCreateCam" ng-click="getListTree()" class="btn btn-primary"
-                data-toggle="modal" data-target="#modalCreateCamera">
+            <button type="button" id="openModelCreateCam" ng-click="getListTree()" class="btn btn-primary">
                 Tạo Camera
             </button>
             <div class="card">
@@ -91,10 +90,10 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6" ng-if="trees.length">
-                                    <div class="form-group">
-                                        <label for="tree">Cây</label>
-                                        <select class="form-control select-2" id="treeId">
+                                <div class="col-md-6">
+                                    <div class="form-group bmd-form-group">
+                                        <label class="bmd-label-static" for="tree">Cây</label>
+                                        <select class="form-control select-2" style="margin-top: -4.6px;" id="treeId">
                                             <option ng-repeat="tree in trees" ng-value="tree._id">
                                                 {{tree.code}}</option>
                                         </select>
@@ -107,42 +106,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="city">Thành Phố</label>
-                                        <select class="form-control select-2" ng-change="getListDistrict()" ng-model="city"
-                                            id="city">
-                                            <option ng-repeat="city in cities | orderBy:'name'" ng-value="city.id">
-                                                {{city.name}}</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="district">Quận</label>
-                                        <select class="form-control select-2" ng-change="getListWard()" ng-model="district"
-                                            id="district">
-                                            <option ng-repeat="district in districts | orderBy:'name'"
-                                                ng-value="district.id">
-                                                {{district.name}}</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="ward">Phường</label>
-                                        <select class="form-control select-2" ng-model="ward" id="ward">
-                                            <option ng-repeat="ward in wards | orderBy: 'name'" ng-value="ward.id">
-                                                {{ward.name}}</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="street">Đường</label>
-                                <input type="text" class="form-control" id="street" placeholder="Nhập tên đường">
-                            </div> -->
                         </form>
                     </div>
                 </div>

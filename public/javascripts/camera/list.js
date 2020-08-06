@@ -10,10 +10,11 @@ app.controller("listController", [
           $scope.trees = response.data.data;
           if (!$scope.trees.length) {
             return showNotification(
-              "Hiện tại bạn chưa tạo cây để theo dõi",
+              "Hiện tại bạn không có cây để theo dõi. Vui lòng tạo cây trước khi tạo camera.",
               "warning"
             );
           }
+          $('#modalCreateCamera').modal('show') 
         })
         .catch((err) => {
           showNotification(err, "warning");
