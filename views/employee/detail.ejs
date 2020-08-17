@@ -102,8 +102,8 @@
                                     <label for="note" style=" color: black; font-weight: bold;">Quận</label>
                                     <input type="text" class="form-control d-none" ng-class="{'d-block' : user.role !== 'admin'}" ng-model="employee.district.name"
                                         value="{{employee.district.name}} " ng-disabled="true">
-                                    <select  ng-disabled="isNotEditing" style="width: 100%" ng-class="{'d-block' : user.role === 'admin'}" class="form-control d-none" ng-model="employee.district._id" id="district">
-                                        <option ng-value="district._id" ng-repeat="district in districts">
+                                    <select ng-disabled="isNotEditing" style="width: 100%" ng-class="{'d-block' : user.role === 'admin'}" class="form-control d-none" ng-model="employee.district._id" id="district">
+                                        <option value="{{district._id}}" ng-repeat="district in districts">
                                             {{district.name}}</option>
                                     </select>
                                 </div>

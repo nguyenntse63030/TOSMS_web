@@ -50,8 +50,11 @@ app.controller("detailController", [
           if (res.data.status !== 200) {
             showNotification(res.data.errorMessage, "danger");
           } else {
-            $scope.employee = res.data.user;
+            $scope.employee = res.data.user;         
             showNotification(res.data.message, "success");
+            setTimeout(() => {
+              location.reload();
+            }, 1000);   
           }
         })
         .catch((error) => {

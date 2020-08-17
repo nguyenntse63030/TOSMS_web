@@ -182,12 +182,14 @@ let updateUser = async (req, id, data) => {
   if (req.user.role === constant.userRoles.ADMIN) {
     //kiểm tra nêu role là admin thì cho phép update role nêu không phải vẫn update nhưng ko đổi role
     user.role = data.role || user.role;
+    user.district = data.district._id || user.district._id;
   }
   user.name = data.name || user.name;
   user.gender = data.gender || user.gender;
   user.birthday = data.birthday || user.birthday;
   user.email = data.email || user.email;
   user.address = data.address || user.address;
+  
   let _user = await user.save();
   if (_user !== user) {
     throw responseStatus.Code400({
