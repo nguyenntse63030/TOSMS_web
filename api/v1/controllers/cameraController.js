@@ -25,7 +25,7 @@ let getListCamera = async (query, user) => {
     }
     let queryCount = { isActive: true };
     if (user.role === constant.userRoles.MANAGER) {
-      queryOpt.$and.push({district: user.district});
+      queryOpt.$and.push({ district: user.district });
       queryCount.district = user.district;
     }
     let cameras = await Camera.find(queryOpt)
@@ -68,7 +68,7 @@ let getDetailCamera = async (id) => {
 
 let createCamera = async (data, file, user) => {
   let camera = data;
-  let queryOpt = { _id: camera.tree};
+  let queryOpt = { _id: camera.tree };
   if (user.role === constant.userRoles.MANAGER) {
     queryOpt.district = user.district;
   }
@@ -143,28 +143,28 @@ async function updateCamera(id, data, user) {
   camera.ipAddress = data.ipAddress || camera.ipAddress;
   camera.modifiedTime = Date.now();
 
-  if (camera.tree) { // Nếu camera đã có cây thì phải bỏ cây đó ra khỏi camera
-    let oldTree = await Tree.findById(camera.tree)
-    if (!oldTree) {
-      throw responseStatus.Code400({ errorMessage: responseStatus.TREE_IS_NOT_FOUND })
-    }
-    oldTree.camera = undefined;
-    await oldTree.save()
-  }
+  if (camera.tree !== data.tree) {
+    if (data.tree) { // Thêm cây mới vào camera
+      if (camera.tree) { // Nếu camera đã có cây thì phải bỏ cây đó ra khỏi camera
+        let oldTree = await Tree.findById(camera.tree)
+        if (!oldTree) {
+          throw responseStatus.Code400({ errorMessage: responseStatus.TREE_IS_NOT_FOUND })
+        }
+        oldTree.camera = undefined;
+        await oldTree.save()
+      }
+      let newTree = await Tree.findById(data.tree)
+      if (!newTree) {
+        throw responseStatus.Code400({ errorMessage: responseStatus.TREE_IS_NOT_FOUND })
+      }
 
-  if (data.tree) { // Thêm cây mới vào camera
-    let newTree = await Tree.findById(data.tree)
-    if (!newTree) {
-      throw responseStatus.Code400({ errorMessage: responseStatus.TREE_IS_NOT_FOUND })
-    }
-
-    newTree.camera = camera._id
-    await newTree.save();
-    camera.tree = newTree._id
-    if (user.role === constant.userRoles.ADMIN) {
-      camera.district = newTree.district;
-      camera.districtName = newTree.districtName;
-    
+      newTree.camera = camera._id
+      await newTree.save();
+      camera.tree = newTree._id
+      if (user.role === constant.userRoles.ADMIN) {
+        camera.district = newTree.district;
+        camera.districtName = newTree.districtName;
+      }
     }
   }
   let _camera = await camera.save();
