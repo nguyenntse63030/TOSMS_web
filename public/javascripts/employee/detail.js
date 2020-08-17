@@ -35,6 +35,13 @@ app.controller("detailController", [
         showNotification("Co loi!", "danger");
       });
 
+    apiService.getListDistrict('HCM').then(function (res) {
+      $scope.districts = res.data.districts
+    }).catch(function (error) {
+      console.log(error)
+      showNotification(error.data.errorMessage, 'danger')
+    })
+    
     $scope.updateEmployee = () => {
       $scope.employee.birthday = getTimestampFromDatePicker($("#birthdate"));
       apiService
