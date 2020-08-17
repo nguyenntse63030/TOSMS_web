@@ -76,7 +76,7 @@ let createCamera = async (data, file, user) => {
 
   await validateDataCamera(camera, tree, file);
   let regex = new RegExp(camera.code, "i");
-  let checkExist = await Camera.findOne({ code: regex });
+  let checkExist = await Camera.findOne({ code: regex, isActive: true });
 
   if (checkExist) {
     throw responseStatus.Code400({
