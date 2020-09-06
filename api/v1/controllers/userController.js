@@ -58,6 +58,7 @@ async function getUser(req, id) {
   }
 
   if (user.role === req.user.role) {
+    //cùng role nhưng khac id vơi tài khoản hiện đang đăng nhập thì reject
     if (user.id !== req.user.id) {
       throw responseStatus.Code400({
         errorMessage: responseStatus.INVALID_REQUEST,
@@ -238,9 +239,13 @@ let uploadImage = async (req, id, file) => {
 function checkRoleGenerateQuery(user, id) {
   if (user.role === constant.userRoles.WORKER) {
     return { _id: user.id, isActive: true };
-  } else {
+  } else if(user.role === constant.userRoles.MANAGER) {
     return {
       $and: [{ _id: id }, { role: { $ne: "admin" } }, { isActive: true }],
+    };
+  } else {
+    return {
+      $and: [{ _id: id }, { isActive: true }],
     };
   }
 }

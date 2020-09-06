@@ -23,13 +23,14 @@
         color: #ffffff
     }
 </style>
-<p id="code" ng-hide="true"><%= code %></p>
+<p id="code" style="display: none;"><%= code %></p>
 <div class="container-fluid" ng-controller="detailController">
     <div class="row">
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header card-header-primary">
-                    <h4 class="card-title">Hồ Sơ Nhân Viên</h4>
+                    <h4 class="card-title d-none" ng-class="{'d-block' : (role === 'admin' && (user._id === employee._id))}">Hồ Sơ</h4>
+                    <h4 class="card-title d-none" ng-class="{'d-block' : (user._id !== employee._id) || role !== 'admin'}">Hồ Sơ Nhân Viên</h4>
                 </div>
                 <div class="card-body">
                     <form>
@@ -86,8 +87,8 @@
                                     <label class="bmd-label-floating" style=" color: black; font-weight: bold;">Chức
                                         vụ</label>
                                     <input type="text" class="form-control" value="{{employee.role}}" ng-disabled="true"
-                                        ng-if="role !== 'admin'">
-                                    <select ng-if="role === 'admin'" style="width: 100%;"
+                                        ng-if="role !== 'admin' || (role === 'admin' && (user._id === employee._id))">
+                                    <select ng-if="role === 'admin' && (user._id !== employee._id)" style="width: 100%;"
                                         class="form-control select2-single" ng-model="employee.role" id="role"
                                         ng-disabled="isNotEditing">
                                         <option value="manager">Giám Sát</option>
@@ -100,9 +101,12 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="note" style=" color: black; font-weight: bold;">Quận</label>
-                                    <input type="text" class="form-control d-none" ng-class="{'d-block' : user.role !== 'admin'}" ng-model="employee.district.name"
+                                    <input type="text" class="form-control d-none"
+                                        ng-class="{'d-block' : user.role !== 'admin'}" ng-model="employee.district.name"
                                         value="{{employee.district.name}} " ng-disabled="true">
-                                    <select ng-disabled="isNotEditing" style="width: 100%" ng-class="{'d-block' : user.role === 'admin'}" class="form-control d-none" ng-model="employee.district._id" id="district">
+                                    <select ng-disabled="isNotEditing" style="width: 100%"
+                                        ng-class="{'d-block' : user.role === 'admin'}" class="form-control d-none"
+                                        ng-model="employee.district._id" id="district">
                                         <option value="{{district._id}}" ng-repeat="district in districts">
                                             {{district.name}}</option>
                                     </select>
