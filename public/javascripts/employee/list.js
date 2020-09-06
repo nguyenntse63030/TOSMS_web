@@ -78,6 +78,7 @@ app.controller("listController", [
             let check = validateUser(
                 file,
                 fullname,
+                email,
                 username,
                 password,
                 gender,
@@ -134,7 +135,7 @@ app.controller("listController", [
     },
 ]);
 
-function validateUser(file, fullname, username, password, gender, role) {
+function validateUser(file, fullname, email, username, password, gender, role) {
     let check = true;
     if (!file) {
         check = false;
@@ -143,6 +144,10 @@ function validateUser(file, fullname, username, password, gender, role) {
     if (!fullname) {
         check = false;
         return showNotification("Tên người dùng không thể bỏ trống.", "danger");
+    }
+    if (!validateEmail(email)) {
+        check = false;
+        return showNotification("Email không đúng định dạng.", "danger");
     }
     if (!username) {
         check = false;

@@ -66,6 +66,11 @@ function getTimestampEndOfMonth(timestamp) {
     return Math.round(now.getTime() - 1)
 }
 
+function validateEmail(email) {
+    const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+}
+
 function isEmptyObject(obj) {
     for (var key in obj) {
         if (obj.hasOwnProperty(key))
@@ -118,6 +123,7 @@ module.exports = {
     formatDateCode,
     getTimestampBeginOfMonth,
     getTimestampEndOfMonth,
+    validateEmail,
     isEmptyObject,
     validateDataTree,
     createMapsUrl,
