@@ -2,11 +2,13 @@ const mongoose = require('mongoose')
 const Notification = mongoose.model('Notification')
 const Camera = mongoose.model('Camera')
 const Tree = mongoose.model('Tree')
+const User = mongoose.model("User");
 const responseStatus = require('../../../configs/responseStatus')
 const common = require('../../common')
 const jwt = require('jsonwebtoken')
 const config = require('../../../config')
 const constant = require('../../../configs/constant')
+const mailServices = require('../services/mailServices');
 const admin = require('firebase-admin');
 const serviceAccount = require('../../../tosms-web-b75d4-firebase-adminsdk-784qt-6769504989.json')
 admin.initializeApp({
@@ -207,6 +209,10 @@ let setWorkerToNoti = async (req) => {
   let id = req.params.id;
   let workerId = req.body.workerId;
   let queryOpt = { _id: id };
+  let worker = await User.findOne({_id: workerId});
+  if (!worker) {
+    throw responseStatus.Code400({errorMessage: responseStatus.USER_IS_NOT_FOUND});
+  }
   let notification = await Notification.findOne(queryOpt).populate("tree");
   if (!notification) {
     throw responseStatus.Code400({
@@ -218,6 +224,7 @@ let setWorkerToNoti = async (req) => {
   notification.worker = workerId;
   let _notification = await notification.save();
   await notification.tree.save();
+  mailServices.sendMailToWorker(worker, notification);
   sendNotification(_notification, constant.notiCollection.WORKER);
   return responseStatus.Code200({
     notification: _notification,

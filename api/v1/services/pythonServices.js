@@ -1,7 +1,8 @@
-const common = require('../../common')
+const common = require('../../common');
 const responseStatus = require('../../../configs/responseStatus');
-const awsServices = require('../services/awsServices')
-const constant = require('../../../configs/constant')
+const awsServices = require('../services/awsServices');
+const mailServices = require('../services/mailServices');
+const constant = require('../../../configs/constant');
 const notificationController = require('../controllers/notificationController')
 const treeDetectLocationServices = require('./treeDetectLocationServices');
 const { NotExtended } = require('http-errors');
@@ -95,9 +96,11 @@ async function processDataFromPython(data, files) {
     //     // throw responseStatus.Code400({ errorMessage: responseStatus.DATA_IS_NOT_FOUND })
     //     return responseStatus.Code200({ message: responseStatus.PROCESS_DATA_FROM_PYTHON_SUCCESSFULLY })
     // }
+ 
     let fileURLs = await processImage(files)
     data = Object.assign({}, data, fileURLs);
-    let result = await processData(data)
+    let result = await processData(data);
+    mailServices.sendMailToManager(result);
     notificationController.sendNotification(result, constant.notiCollection.MANAGER);
     return responseStatus.Code200({ message: responseStatus.PROCESS_DATA_FROM_PYTHON_SUCCESSFULLY })
 }

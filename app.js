@@ -7,6 +7,7 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var session = require("express-session");
 const config = require("./config");
+require('dotenv').config();
 require("./configs/loadModelsMongoose");
 
 var indexRouter = require("./routes/index");
