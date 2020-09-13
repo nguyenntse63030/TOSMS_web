@@ -385,10 +385,10 @@
                             đồ</a></button>
                 </div>
             </div>
-            <div class="card-camera" ng-show="tree.camera">
+            <div class="card-camera" ng-show="tree.camera && user.role !== 'worker'">
                 <div class="card card-profile">
                     <div class="card-avatar">
-                        <a href="">
+                        <a href="/camera/{{tree.camera._id}}">
                             <img class="img"
                                 src="{{tree.camera.image || 'https://iweb.tatthanh.com.vn/pic/3/blog/logo-cay-xanh.jpg'}}" />
                         </a>
