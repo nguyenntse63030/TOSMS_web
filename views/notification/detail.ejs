@@ -51,12 +51,13 @@
     } */
 
     .modal-body .active {
-        background-color: #49acd9;
+        background-color: #0db366;
         color: white;
     }
 
     .worker-records {
-        color: #5d5b5b
+        color: #5d5b5b;
+        border-bottom: 1px solid #ddd;
     }
 
     .card-header .btn-change-tab,
@@ -65,6 +66,11 @@
     .card-header .btn-change-tab:active:focus {
         background-color: white;
         color: #0db366;
+    }
+
+    #workers-selected .table tr:hover td {
+        background-color: #ffffff;
+        color: #5d5b5b
     }
 
 </style>
@@ -96,7 +102,7 @@
                 <h4 class="card-title"><%= title %></h4>
                 <div class="d-flex">
                     <button class="btn btn-primary btn-change-tab d-none" ng-class="{'d-block': user.role !== 'worker'}"
-                        ng-click="showModal()" ng-show="!notification.worker">Chọn Công Nhân</button>
+                        ng-click="showModal()" ng-show="notification.worker.length === 0">Chọn Công Nhân</button>
                     <button class="btn btn-primary btn-change-tab d-none"
                         ng-class="{'d-block': user.role !== 'worker' && notification.worker._id}"
                         ng-click="linkToWorker()">Xem Hồ Sơ Công Nhân</button>
@@ -142,13 +148,13 @@
                                 <input type="text" class="form-control" value="{{notification.status}}" disabled>
                             </div>
                         </div>
-                        <div class="col-md-6" ng-show="notification.worker">
+                        <!-- <div class="col-md-6" ng-show="notification.worker">
                             <div class="form-group">
                                 <label class="bmd-label-floating" style=" color: black; font-weight: bold;">Công
                                     Nhân</label>
                                 <input type="text" class="form-control" value="{{notification.worker.name}}" disabled>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="row">
                         <div class="col-md-12">
@@ -159,6 +165,9 @@
                             </div>
                         </div>
                     </div>
+                    <button type="submit" class="btn btn-primary pull-left d-none"
+                        ng-class="{'d-block': notification.status === 'Đang Xử Lý'}" data-toggle="modal"
+                        data-target="#workers-selected" ng-click="">Danh Sách Công Nhân</button>
                     <button type="submit" class="btn btn-primary pull-right d-none"
                         ng-class="{'d-block': notification.status === 'Đang Xử Lý'}" data-toggle="modal"
                         data-target="#confirm-success" ng-click="">Hoàn Thành</button>
@@ -202,6 +211,43 @@
                 </div>
                 <button type="button" class="btn btn-danger float-left" data-dismiss="modal">Đóng</button>
                 <button type="button" class="btn btn-primary float-right" ng-click="setWorkerToNoti()">Chọn</button>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade model-center" id="workers-selected" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content card">
+                <div class="modal-header card-header card-header-primary">
+                    <h3 class="modal-title" id="addRoomModelLabel">Công Nhân Được Chọn</h3>
+                    <button type="button" class="close btn-close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Ảnh Đại Diện</th>
+                                <th scope="col">Tên</th>
+                                <th scope="col">Liên Hệ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="worker in notification.worker" class="worker-records">
+                                <td scope="row">{{$index + 1}}</th>
+                                <td>
+                                    <img src="{{worker.avatar}}" style="object-fit: scale-down;" width="50px"
+                                        height="50px" />
+                                </td>
+                                <td>{{worker.name}}</td>
+                                <td>{{worker.email}}</td>
+                            </tr>
+                            
+                        </tbody>
+                    </table>
+                    <button type="button" class="btn btn-danger my-2 float-right" data-dismiss="modal">Đóng</button>
+                </div>
             </div>
         </div>
     </div>
