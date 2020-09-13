@@ -14,43 +14,44 @@ async function sendMailToManager(notification) {
         if (err) {
             console.log(err);
         } else {
-            let result = await getListEmailManager(notification);
-            let data = await readTeamplate();
-            let admin = await User.findOne({role: constant.userRoles.ADMIN});
-            data = data.replace(/DISTRICT/g, result.district);
-            data = data.replace(/LINK_DETAIL/g, process.env.LINK_NOTI_DETAIL + notification._id);
-            data = data.replace(/LINK_IMAGE_DETECTED/g, notification.imageDetected);
+            let tree = await Tree.findOne({ _id: notification.tree });
+            let queryConfig = {role: constant.userRoles.MANAGER, district: tree.district, isActive: true};
+            let result = await Promise.all([getListEmailForSend(queryConfig), readTeamplate(), User.findOne({role: constant.userRoles.ADMIN})]);
+            let teamplate = result[1];
+            let admin = result[2];
+            teamplate = teamplate.replace(/TREECODE/g, tree.code);
+            teamplate = teamplate.replace(/DISTRICT/g, tree.districtName);
+            teamplate = teamplate.replace(/TREEPROBLEMS/g, tree.description);
+            teamplate = teamplate.replace(/LINK_DETAIL/g, process.env.LINK_NOTI_DETAIL + notification._id);
+            teamplate = teamplate.replace(/LINK_IMAGE_DETECTED/g, notification.imageDetected);
             let emailOption = {
                 from: config.MAIL_OPTION.FROM,
                 to: '',
                 cc: admin.email,
                 subject: config.MAIL_OPTION.SUBJECT,
-                html: data
+                html: teamplate
             }
-            let arrayErr = []
+            let arrayErr = [];
+            let num = 1;
             do {
                 try {
                     if (arrayErr.length > 0) {
                         arrayErr = await sendMail(transporter, arrayErr, emailOption);
                     } else {
-                        arrayErr = await sendMail(transporter, result.listEmail, emailOption);
+                        arrayErr = await sendMail(transporter, result[0], emailOption);
                     }
+                    num = ++num;
                 } catch (error) {
                     console.log(error);
                 }
-            } while (arrayErr.length > 0);
+            } while (arrayErr.length > 0 && num < 3);
         }
     })
 }
 
-async function getListEmailManager(notification) {
-    let tree = await Tree.findOne({ _id: notification.tree })
-    let listEmail = await User.find({ $or: [{ role: constant.userRoles.MANAGER, district: tree.district, isActive: true }, { role: constant.userRoles.ADMIN }] }, { email: 1 });
-    let infor = {
-        district: tree.districtName,
-        listEmail: listEmail
-    }
-    return infor;
+async function getListEmailForSend(queryConfig) {
+    let listEmail = await User.find(queryConfig, {email: 1});
+    return listEmail;
 }
 
 async function sendMailToWorker(worker, notification) {
@@ -59,26 +60,37 @@ async function sendMailToWorker(worker, notification) {
         if (err) {
             console.log(err);
         } else {
-            let data = await readTeamplate();
-            let admin = await User.findOne({role: constant.userRoles.ADMIN});
-            data = data.replace(/DISTRICT/g, notification.tree.districtName);
-            data = data.replace(/LINK_DETAIL/g, process.env.LINK_NOTI_DETAIL + notification._id);
-            data = data.replace(/LINK_IMAGE_DETECTED/g, notification.imageDetected);
+            let queryConfig = {role: constant.userRoles.WORKER, isActive: true};
+            let result = await Promise.all([readTeamplate(), User.findOne({role: constant.userRoles.ADMIN})]);
+            let teamplate = result[0];
+            let admin = result[1];
+            teamplate = teamplate.replace(/TREECODE/g, notification.tree.code);
+            teamplate = teamplate.replace(/TREEPROBLEMS/g, notification.tree.description);
+            teamplate = teamplate.replace(/LINK_DETAIL/g, process.env.LINK_NOTI_DETAIL + notification._id);
+            teamplate = teamplate.replace(/LINK_IMAGE_DETECTED/g, notification.imageDetected);
+            teamplate = teamplate.replace(/DISTRICT/g, notification.tree.districtName);
+
             let emailOption = {
                 from: config.MAIL_OPTION.FROM,
-                to: worker.email,
+                to: '',
                 cc: admin.email,
                 subject: config.MAIL_OPTION.WORKER_SUBJECT,
-                html: data
+                html: teamplate
             }
-            try {
-                let result = false;
-                while (result === false) {
-                    result = await sendMailWrapper(transporter, emailOption)
-                } 
-            } catch (error) {
-                console.log(error)
-            }
+            let arrayErr = [];
+            let num = 1;
+            do {
+                try {
+                    if (arrayErr.length > 0) {
+                        arrayErr = await sendMail(transporter, arrayErr, emailOption);
+                    } else {
+                        arrayErr = await sendMail(transporter, worker, emailOption);
+                    }
+                    num = ++num;
+                } catch (error) {
+                    console.log(error);
+                }
+            } while (arrayErr.length > 0 && num < 3);
         }
     })
 }
@@ -100,7 +112,6 @@ async function sendMail(transporter, listEmail, emailOption) {
             }
             if (index === (listEmail.length - 1)) {
                 resolve(arrayErr);
-                console.log('thanh cong');
             }
         })
     })

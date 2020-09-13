@@ -2,6 +2,7 @@ var app = angular.module('TOSMS')
 app.controller('detailController', ['$scope', 'apiService', function ($scope, apiService) {
     $scope.notificationId = $('#notificationId').text().trim();
     $scope.user = JSON.parse(COMMON.getCookie('user'))
+    $scope.workerId = [];
     apiService.getDetailNotification($scope.notificationId).then((res) => {
         $scope.notification = res.data.notification;
     }).catch((err) => {
@@ -10,7 +11,7 @@ app.controller('detailController', ['$scope', 'apiService', function ($scope, ap
         setTimeout(function () {
             location.href = "/notification";
         }, 1000);
-    }); 
+    });
 
     apiService.getListWorker().then(res => {
         $scope.workers = res.data.users
@@ -24,9 +25,14 @@ app.controller('detailController', ['$scope', 'apiService', function ($scope, ap
     }
 
     $scope.active = ($event, worker) => {
-        $('.active').removeClass()
-        $event.currentTarget.className = $event.currentTarget.className + ' active';
-        $scope.workerId = worker._id;
+        if ($event.currentTarget.className.includes('active')) {
+            $event.currentTarget.className = $event.currentTarget.className.replace(/ active/g, '');
+            $scope.workerId.splice($scope.workerId.indexOf(worker._id), 1);
+        } else {
+            $event.currentTarget.className = $event.currentTarget.className + ' active';
+            $scope.workerId.push(worker._id);
+        }
+        console.log($scope.workerId)
     }
 
     $scope.setWorkerToNoti = () => {

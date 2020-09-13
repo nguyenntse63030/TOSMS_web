@@ -87,16 +87,16 @@ async function getListNotification(req) {
     notifications = await Notification.find(queryOpt)
       .populate({
         path: 'tree',
-        match: { district: user.district},
+        match: { district: user.district },
         select: 'district'
       })
       .skip(start)
       .limit(length)
       .sort(sort);
-      notifications = notifications.filter(notification => {
-        return notification.tree !== null
-      })
-  } else{
+    notifications = notifications.filter(notification => {
+      return notification.tree !== null
+    })
+  } else {
     notifications = await Notification.find(queryOpt)
       .skip(start)
       .limit(length)
@@ -155,8 +155,8 @@ async function getNotification(req, id) {
     queryOpt = { _id: id, worker: req.user.id };
   }
   let notification = await Notification.findOne(queryOpt)
-  .populate("worker")
-  .populate('tree', 'code treeType')
+    .populate("worker")
+    .populate('tree', 'code treeType districtName')
   if (!notification) {
     throw responseStatus.Code400({
       errorMessage: responseStatus.NOTIFICATION_IS_NOT_FOUND,
@@ -166,23 +166,46 @@ async function getNotification(req, id) {
 }
 
 let sendNotification = async (result, receiver) => {
-  let notification = {
-    title: config.NOTI_CONFIG.title,
-    body: result.name,
-    icon: result.image,
-    link: config.NOTI_CONFIG.link + result.id,
-    readed: false,
-    readAdmin: false,
-    createdTime: admin.firestore.FieldValue.serverTimestamp(),
-  };
+  let response = {};
+  let userRef;
+  //bắt điều kiện nếu người nhận là worker thì thêm vào userId để phân loại noti 
+  //của người đó tránh việc mất thông báo
   if (receiver === constant.notiCollection.WORKER) {
-    notification.userId = result.worker.id
+    //vòng lặp gan
+    let batch = firestore.batch();
+    result.worker.forEach((worker) => {
+      let notification = {
+        title: config.NOTI_CONFIG.title,
+        body: result.name,
+        icon: result.image,
+        link: config.NOTI_CONFIG.link + result.id,
+        readed: false,
+        readAdmin: false,
+        createdTime: admin.firestore.FieldValue.serverTimestamp()
+      };
+      workerId = worker._id.toString();
+      notification.userId = workerId;
+      userRef = firestore.collection(receiver).doc();
+      batch.set(userRef, notification);
+    })
+    response = await batch.commit()
   } else {
-    let tree = await Tree.findOne({_id: result.tree});
+    let notification = {
+      title: config.NOTI_CONFIG.title,
+      body: result.name,
+      icon: result.image,
+      link: config.NOTI_CONFIG.link + result.id,
+      readed: false,
+      readAdmin: false,
+      createdTime: admin.firestore.FieldValue.serverTimestamp()
+    };
+    //nêu người nhận là manager và admin thì 
+    //thêm quận vào manager đó để phân loại notification theo quận
+    let tree = await Tree.findOne({ _id: result.tree });
     notification.district = tree.district.toString();
+    userRef = firestore.collection(receiver);
+    response = userRef.add(notification);
   }
-  let userRef = firestore.collection(receiver);
-  let response = userRef.add(notification);
   return;
 };
 
@@ -192,11 +215,11 @@ let setNotificationReaded = async (req) => {
   if (req.user.role === constant.userRoles.WORKER) {
     collection = constant.notiCollection.WORKER;
     snapshot = await firestore.collection(collection).where('userId', '==', req.user.id).get();
-  } else if(req.user.role === constant.userRoles.MANAGER) {
-    snapshot = await firestore.collection(collection).where('district', '==',req.user.district).get();
+  } else if (req.user.role === constant.userRoles.MANAGER) {
+    snapshot = await firestore.collection(collection).where('district', '==', req.user.district).get();
   } else {
     snapshot = await firestore.collection(collection).get()
-    optUpdate = {readAdmin: true}
+    optUpdate = { readAdmin: true }
   }
   snapshot.forEach(async (doc) => {
     let docUpdate = firestore.collection(collection).doc(doc.id);
@@ -207,12 +230,10 @@ let setNotificationReaded = async (req) => {
 
 let setWorkerToNoti = async (req) => {
   let id = req.params.id;
-  let workerId = req.body.workerId;
+  let workerIdArr = req.body.workerId;
+  let result = await checkUserExist(workerIdArr);
   let queryOpt = { _id: id };
-  let worker = await User.findOne({_id: workerId});
-  if (!worker) {
-    throw responseStatus.Code400({errorMessage: responseStatus.USER_IS_NOT_FOUND});
-  }
+
   let notification = await Notification.findOne(queryOpt).populate("tree");
   if (!notification) {
     throw responseStatus.Code400({
@@ -221,16 +242,31 @@ let setWorkerToNoti = async (req) => {
   }
   notification.tree.note = constant.priorityStatus.DANG_XU_LY;
   notification.status = constant.priorityStatus.DANG_XU_LY;
-  notification.worker = workerId;
+  notification.worker = workerIdArr;
+  notification.modifiedTime = Date.now();
   let _notification = await notification.save();
   await notification.tree.save();
-  mailServices.sendMailToWorker(worker, notification);
+  mailServices.sendMailToWorker(result, notification);
   sendNotification(_notification, constant.notiCollection.WORKER);
   return responseStatus.Code200({
     notification: _notification,
     message: responseStatus.SET_WORKER_TO_NOTI_SUCCESS,
   });
 };
+
+let checkUserExist = async (workerIdArr) => {
+  let worker = {};
+  let promise = workerIdArr.map(async (workerId) => {
+    let id = workerId;
+    worker = await User.findOne({ _id: id, isActive: true, role: constant.userRoles.WORKER}, {email: 1});
+    if (!worker) {
+      throw responseStatus.Code400({ errorMessage: responseStatus.USER_IS_NOT_FOUND });
+    } else {
+      return worker
+    }
+  })
+  return await Promise.all(promise);
+}
 
 let setStatusNotiSuccess = async (req) => {
   let id = req.params.id;
@@ -294,7 +330,7 @@ let optSortNotification = (sortOpt) => {
       sort = { status: sortOpt.dir };
       break;
     case "3":
-      sort = { createdTime: sortOpt.dir };
+      sort = { modifiedTime: sortOpt.dir };
       break;
   }
   return sort;

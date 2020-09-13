@@ -22,10 +22,10 @@ var NotificationSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Tree'
     },
-    worker: {
+    worker: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
-    },
+    }],
     status: {
         type: String,
         default: constants.priorityStatus.CHUA_XU_LY,
