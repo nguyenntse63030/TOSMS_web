@@ -63,7 +63,7 @@ app.controller("listController", ["$scope", "apiService", function ($scope, apiS
               id: ++i,
               name: generateATag(notification, "name"),
               status: generateATag(notification, "status"),
-              createdTime: generateATag(notification, "createdTime"),
+              modifiedTime: generateATag(notification, "modifiedTime"),
             };
           });
         },
@@ -76,7 +76,7 @@ app.controller("listController", ["$scope", "apiService", function ($scope, apiS
         { data: "id", name: "id", orderable: false },
         { data: "name", name: "name" },
         { data: "status", name: "status" },
-        { data: "createdTime", name: "createdTime" },
+        { data: "modifiedTime", name: "modifiedTime" },
       ],
     };
     return options;
@@ -102,7 +102,7 @@ app.controller("listController", ["$scope", "apiService", function ($scope, apiS
 
 function generateATag(notification, property) {
   let data = notification[property];
-  if (property === "createdTime") {
+  if (property === "modifiedTime") {
     data = parseInt(data);
     data = formatDate(data);
   } else if (property === "img") {
