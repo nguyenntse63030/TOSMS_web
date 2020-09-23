@@ -1,3 +1,16 @@
 .card .table tr td a {
     padding-left: 0px;
 }
+
+@media (min-width: 320px) and (max-width: 480px) {
+    button.res {
+        top: -50px;
+    }
+    button.res>p {
+        width: max-content;
+    }
+    .select2-container{
+        width: 100px !important;
+        left: -20px;
+    }
+}

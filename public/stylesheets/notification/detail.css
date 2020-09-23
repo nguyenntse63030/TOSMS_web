@@ -1,0 +1,12 @@
+@media (min-width: 320px) and (max-width: 480px) {
+    div.card.card-profile.res {
+        width: 100%;
+        height: fit-content;
+    }
+    div.noti-card.res {
+        height: 120px;
+    }
+    button.res {
+        float: right;
+    }
+}

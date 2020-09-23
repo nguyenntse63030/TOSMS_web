@@ -24,6 +24,7 @@ async function createAdmin() {
         admin.username = username
         admin.role = constants.userRoles.ADMIN
         admin.password = password
+        admin.isActive = true
         admin = await admin.save()
         console.log('Tạo tài khoản ADMIN thành công')
         console.log('Username: ', username)

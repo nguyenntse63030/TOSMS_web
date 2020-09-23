@@ -35,7 +35,8 @@
         -webkit-text-fill-color: transparent;
         margin: 0;
     }
-    .select2-container{
+
+    .select2-container {
         top: 12px;
     }
 </style>
@@ -49,23 +50,25 @@
                             <h4 class="card-title" style="line-height: 50px">Notification</h4>
                         </div>
                         <div class="col-md-10">
-                            <select style="width: 15%;" class="selected" id="selectedDistrict" ng-model="selectedDistrict" ng-change="getWardByDistrict();generateFindObj()">
+                            <select style="width: 15%;" class="selected" id="selectedDistrict"
+                                ng-model="selectedDistrict" ng-change="getWardByDistrict();generateFindObj()">
                                 <option value="">--- Chọn Quận ---</option>
                                 <option ng-repeat="district in districts" value="{{district._id}}">
                                     {{district.name}}
                                 </option>
                             </select>
-                            <select style="width: 15%" class="selected" id="selectedWard" ng-model="selectedWard" ng-change="generateFindObj()">
+                            <select style="width: 15%" class="selected" id="selectedWard" ng-model="selectedWard"
+                                ng-change="generateFindObj()">
                                 <option value="">--- Chọn Phường ---</option>
                                 <option ng-repeat="ward in wards" value="{{ward._id}}">
                                     {{ward.name}}
                                 </option>
                             </select>
-                            <button class="btn btn-primary btn-change-tab d-none pull-right"
+                            <button class="btn btn-primary btn-change-tab d-none pull-right res"
                                 ng-class="{'d-block': done !== false}" ng-click="initNotificationTable()">
                                 <p>Chưa Xử Lý</p>
                             </button>
-                            <button class="btn btn-primary btn-change-tab pull-right" ng-hide="done"
+                            <button class="btn btn-primary btn-change-tab pull-right res" ng-hide="done"
                                 ng-click="initTableDoneStatus()">
                                 <p>Đã Xử Lý</p>
                             </button>
@@ -98,6 +101,6 @@
     clickSideBar('notification-page')
     $(document).ready(function () {
         $('.selected').select2()
-        $("#selectedWard").select2().next().css('margin-left','20px');
+        $("#selectedWard").select2().next().css('margin-left', '20px');
     })
 </script>

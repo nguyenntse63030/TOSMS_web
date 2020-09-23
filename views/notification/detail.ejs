@@ -1,5 +1,7 @@
 <% layout('../layouts/layout.ejs') -%>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" rel="stylesheet" />
+<link href="/stylesheets/notification/detail.css" rel="stylesheet" />
+
 <style>
     .card-profile {
         margin-top: 30px;
@@ -72,27 +74,26 @@
         background-color: #ffffff;
         color: #5d5b5b
     }
-
 </style>
 <p id="notificationId" class="d-none"><%= notificationId %></p>
 <div class="container-fluid" ng-controller="detailController">
 
     <div class="row flex">
         <div class="col-md-12 d-flex justify-content-between tree-image">
-            <div class="col-md-5 d-none d-lg-block card card-profile">
-                <div class="noti-card">
+            <div class="col-md-5 card card-profile res">
+                <div class="noti-card res">
                     <a ng-href="/tree/{{notification.tree._id}}">
                         <img class="img" src="{{notification.image || '/images/logo/tree-avatar.jpg'}}" />
                     </a>
                 </div>
             </div>
-            <div class="col-md-5 mx-sm-auto mx-lg-0 card card-profile">
-                <div class="noti-card">
+            <div class="col-md-5 card card-profile res">
+                <div class="noti-card res">
                     <a ng-href="/tree/{{notification.tree._id}}">
                         <img class="img" src="{{notification.imageDetected || '/images/logo/tree-avatar.jpg'}}" />
                     </a>
                 </div>
-            </div>  
+            </div>
         </div>
     </div>
     <div class="col-md-12 mg-0-auto">
@@ -165,7 +166,7 @@
                             </div>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary pull-left d-none"
+                    <button type="submit" class="btn btn-primary pull-left d-none res"
                         ng-class="{'d-block': notification.status === 'Đang Xử Lý'}" data-toggle="modal"
                         data-target="#workers-selected" ng-click="">Danh Sách Công Nhân</button>
                     <button type="submit" class="btn btn-primary pull-right d-none"
@@ -243,7 +244,7 @@
                                 <td>{{worker.name}}</td>
                                 <td>{{worker.email}}</td>
                             </tr>
-                            
+
                         </tbody>
                     </table>
                     <button type="button" class="btn btn-danger my-2 float-right" data-dismiss="modal">Đóng</button>
